@@ -96,7 +96,7 @@ public class Piece : MonoBehaviour
 
     private bool InBoard(int x, int y)
     {
-        return !(x < 0 || x > CheckersBoard.taillePlateau - 1 || y < 0 || y > CheckersBoard.taillePlateau - 1);
+        return !(x < 0 || x >= CheckersBoard.taillePlateau || y < 0 || y >= CheckersBoard.taillePlateau);
     }
 
     private bool Unnocupied(Piece[,] board, int x, int y)

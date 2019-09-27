@@ -29,6 +29,7 @@ public class CheckersBoard : MonoBehaviour
     public static bool hasToKill = false;
     private int x;
     private int y;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -240,7 +241,7 @@ public class CheckersBoard : MonoBehaviour
 
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 25.0f, LayerMask.GetMask("Board")))
         {
-            p.transform.position = hit.point + Vector3.up;
+            p.transform.position = hit.point + (Vector3.up / 2);
         }
     }
 
