@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class ValidMoveMethods : MonoBehaviour
 {
-    private static bool killed = false;
-
-    // Validate the move and returns a code:
-    // Normal move -> 2
-    // Killed a piece -> 1
-    // Invalid move -> -1
-    // Didn't move -> 0
-    public static int ValidMove(Piece[,] board, Deplacement d)
+    // Validate the move
+    public static InformationsValidation ValidMove(Piece[,] board, Deplacement d)
     {
         // Pas dans le plateau | probleme - destination occupee
-        if (Plateau.OutOfBounds(d.Destination.x, d.Destination.y) || Plateau.Occupied(board, d.Destination.x, d.Destination.y))
+        if (Plateau.OutOfBounds(d.Destination.x, d.Destination.y))
         {
-            return -1;
+            return InformationsValidation.CreateWrongMove("The target zone is outside the board!");
+        }
+        if (Plateau.Occupied(board, d.Destination.x, d.Destination.y))
+        {
+            return InformationsValidation.CreateWrongMove("The target zone is occupied!");
         }
         Piece selected = board[d.Destination.x, d.Destination.y];
         Dictionary<int, Tuple<int, int>> hasToKill = KillerPlayAgain(board, d.Origin.x, d.Origin.y);
@@ -24,7 +22,8 @@ public class ValidMoveMethods : MonoBehaviour
         // The player has to kill and is actually killing a piece
         if (HasSomethingToEat(board, selected.isWhite) && IsKillingAgain(hasToKill, d.Destination.x, d.Destination.y))
         {
-            return 1;
+            Vector2Int v = d.EatenPiece();
+            return InformationsValidation.CreateKillMove(new Tuple<int, int>(v.x, v.y));
         }
 
         if (selected != null)
@@ -32,12 +31,12 @@ public class ValidMoveMethods : MonoBehaviour
             // Didn't move
             if (d.NullMove())
             {
-                return 0;
+                return InformationsValidation.CreateNotMove();
             }
             // Invalid move
             if (!ValidRules(board, d))
             {
-                return -1;
+                return InformationsValidation.CreateWrongMove("");
             }
             // Killed a piece
             //if (killed)
@@ -45,9 +44,9 @@ public class ValidMoveMethods : MonoBehaviour
             //    return 1;
             //}
             // Normal move
-            return 2;
+            return InformationsValidation.CreateNormalMove();
         }
-        return -1;
+        return InformationsValidation.CreateWrongMove("Something went wrong...");
     }
 
     // Validate the rules of the game.

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,5 +17,11 @@ public class Deplacement : MonoBehaviour
     public bool NullMove()
     {
         return Origin == Destination;
+    }
+
+    // Returns the position of the eaten piece, if there is no, the return is very bad
+    public Vector2Int EatenPiece()
+    {
+        return Vector2Int.Max(Origin, Destination) - Vector2Int.one;
     }
 }

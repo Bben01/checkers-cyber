@@ -5,6 +5,7 @@ using UnityEngine;
 public class Graphiques : MonoBehaviour
 {
     public static readonly int taillePlateau = 8;
+    public Plateau plateau;
 
     public GameObject whitePiecePrefab;
     public GameObject blackPiecePrefab;
@@ -23,6 +24,7 @@ public class Graphiques : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        plateau = new Plateau();
         GenerateBoard();
         clicked = false;
     }
@@ -44,7 +46,7 @@ public class Graphiques : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0) && clicked)
         {
-            Plateau.TryMove(new Deplacement((int)startClick.x, (int)startClick.y, x, y));
+            plateau.TryMove(new Deplacement((int)startClick.x, (int)startClick.y, x, y));
             clicked = false;
         }
     }
@@ -159,22 +161,22 @@ public class Graphiques : MonoBehaviour
         }
     }
 
-    public static void EndTurn()
+    public void EndTurn()
     {
         // TODO: a implementer
     }
 
-    public static void Reset()
+    public void Reset()
     {
         // TODO: a implementer
     }
 
-    public static void AnimateQueen()
+    public void AnimateQueen()
     {
         // TODO: a implementer
     }
 
-    public static void AfficherError(string errorMessage)
+    public void AfficherError(string errorMessage)
     {
         // TODO: a implementer
     }

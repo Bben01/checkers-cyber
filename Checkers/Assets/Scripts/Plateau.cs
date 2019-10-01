@@ -9,8 +9,8 @@ public class Plateau : MonoBehaviour
 
     public static Stack<TourDeJeu> historique = new Stack<TourDeJeu>();
 
-    // TODO: voir quend est ce que tour de jeu peut servir (pour rejouer par ewample) et ducoup quend est ce que il va reelement etre instancie
-    public static TourDeJeu tourDeJeu;
+    // TODO: voir quend est ce que tour de jeu peut servir (pour rejouer par example) et du coup quand est ce que il va reelement etre instancie
+    public static TourDeJeu currentTourDeJeu;
 
     public static bool isWhiteTurn;
 
@@ -18,16 +18,9 @@ public class Plateau : MonoBehaviour
     private static int numWhite;
     private static int numBlack;
 
-    // Start is called before the first frame update
-    void Start()
+    public Plateau ()
     {
         isWhiteTurn = true;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public static bool OutOfBounds(int x, int y)
@@ -48,13 +41,13 @@ public class Plateau : MonoBehaviour
 
     }
 
-    public static bool TryMove(Deplacement d)
+    public bool TryMove(Deplacement d)
     {
         int status = ValidMoveMethods.ValidMove(pieces, d);
         // Didn't move
         if (status == 0)
         {
-            Graphiques.Reset();
+            return false;
         }
         // Invalid move
         if (status == -1)
@@ -72,24 +65,24 @@ public class Plateau : MonoBehaviour
             }
             else
             {
-                tourDeJeu.AddDeplacement(d);
+                currentTourDeJeu.AddDeplacement(d);
                 Graphiques.Reset();
             }
         }
         // Normal move 
         if (status == 2)
         {
-            tourDeJeu.AddDeplacement(d);
-            EndTurn(tourDeJeu);
+            currentTourDeJeu.AddDeplacement(d);
+            EndTurn(currentTourDeJeu);
         }
         return false;
     }
 
-    private static void EndTurn(TourDeJeu t)
+    private void EndTurn(TourDeJeu t)
     {
         isWhiteTurn = !isWhiteTurn;
         historique.Push(t);
-        tourDeJeu = null;
+        currentTourDeJeu = null;
         Graphiques.EndTurn();
     }
 }
