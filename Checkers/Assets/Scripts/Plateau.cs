@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Plateau : MonoBehaviour
+public class Plateau
 {
     public static readonly int taillePlateau = 8;
-    public static Piece[,] pieces = new Piece[taillePlateau, taillePlateau];
+    public Piece[,] pieces = new Piece[taillePlateau, taillePlateau];
 
-    public static Stack<TourDeJeu> historique = new Stack<TourDeJeu>();
+    public Stack<TourDeJeu> historique = new Stack<TourDeJeu>();
 
-    // TODO: voir quend est ce que tour de jeu peut servir (pour rejouer par example) et du coup quand est ce que il va reelement etre instancie
-    public static TourDeJeu currentTourDeJeu;
+    // TODO: voir quand est ce que tour de jeu peut servir (pour rejouer par example) et du coup quand est ce que il va reelement etre instancie
+    public TourDeJeu currentTourDeJeu;
 
-    public static bool isWhiteTurn;
+    public bool isWhiteTurn;
 
     // Keeps track of the number of pieces on-board
-    private static int numWhite;
-    private static int numBlack;
+    private int numWhite;
+    private int numBlack;
 
-    public Plateau ()
+    public Plateau()
     {
         isWhiteTurn = true;
     }
@@ -41,48 +41,50 @@ public class Plateau : MonoBehaviour
 
     }
 
-    public bool TryMove(Deplacement d)
+    public InformationsCoup TryMove(Deplacement d)
     {
-        int status = ValidMoveMethods.ValidMove(pieces, d);
+        InformationsValidation status = ValidMoveMethods.ValidMove(pieces, d);
         // Didn't move
-        if (status == 0)
+        if (status.DidntMoved)
         {
-            return false;
+            return InformationsCoup.CreateDidntMove();
         }
         // Invalid move
-        if (status == -1)
+        if (!status.ValidMove)
         {
-            Graphiques.AfficherError("This move is invalid!");
+            return InformationsCoup.CreateInvalidMove(status.ErrorMessage);
         }
         // Killed
-        if (status == 1)
+        if (status.Killed)
         {
             numWhite -= isWhiteTurn ? 0 : 1;
             numBlack -= isWhiteTurn ? 1 : 0;
+            // If the player does not have to eat again
             if (ValidMoveMethods.KillerPlayAgain(pieces, d.Destination.x, d.Destination.y) == null)
             {
-                status = 2;
+                EndTurn(currentTourDeJeu, d);
+                return InformationsCoup.CreateKillMove(status.KillPosition, false);
             }
             else
             {
                 currentTourDeJeu.AddDeplacement(d);
-                Graphiques.Reset();
+                return InformationsCoup.CreateKillMove(status.KillPosition, true);
             }
         }
         // Normal move 
-        if (status == 2)
+        if (status.NormalMove)
         {
-            currentTourDeJeu.AddDeplacement(d);
-            EndTurn(currentTourDeJeu);
+            EndTurn(currentTourDeJeu, d);
+            return InformationsCoup.CreateNormalMove();
         }
-        return false;
+        return InformationsCoup.CreateInvalidMove("something went wrong...");
     }
 
-    private void EndTurn(TourDeJeu t)
+    private void EndTurn(TourDeJeu t, Deplacement lastDeplacement)
     {
+        t.AddDeplacement(lastDeplacement);
         isWhiteTurn = !isWhiteTurn;
         historique.Push(t);
         currentTourDeJeu = null;
-        Graphiques.EndTurn();
     }
 }

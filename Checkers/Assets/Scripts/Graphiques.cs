@@ -97,7 +97,8 @@ public class Graphiques : MonoBehaviour
         GameObject go = Instantiate(isWhite ? whitePiecePrefab : blackPiecePrefab) as GameObject;
         go.transform.SetParent(transform);
         Piece p = go.GetComponent<Piece>();
-        Plateau.pieces[x, y] = p;
+        p.IsWhite = isWhite;
+        plateau.pieces[x, y] = p;
         MovePieceVisual(p, x, y);
     }
 
@@ -113,13 +114,13 @@ public class Graphiques : MonoBehaviour
         {
             return;
         }
-        Piece p = Plateau.pieces[x, y];
+        Piece p = plateau.pieces[x, y];
         // Can't move the piece if this is not one of the selectable
-        if (ValidMoveMethods.HasSomethingToEat(Plateau.pieces, Plateau.isWhiteTurn) && ValidMoveMethods.KillerPlayAgain(Plateau.pieces, x, y) == null)
+        if (ValidMoveMethods.HasSomethingToEat(plateau.pieces, plateau.isWhiteTurn) && ValidMoveMethods.KillerPlayAgain(plateau.pieces, x, y) == null)
         {
             return;
         }
-        if (p != null && p.isWhite == Plateau.isWhiteTurn)
+        if (p != null && p.IsWhite == plateau.isWhiteTurn)
         {
             selectedPiece = p;
             clicked = true;
@@ -166,7 +167,7 @@ public class Graphiques : MonoBehaviour
         // TODO: a implementer
     }
 
-    public void Reset()
+    public void ResetPositions()
     {
         // TODO: a implementer
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TourDeJeu : MonoBehaviour
+public class TourDeJeu
 {
     private List<Deplacement> deplacements = new List<Deplacement>();
     private int CodeError { get; set; }

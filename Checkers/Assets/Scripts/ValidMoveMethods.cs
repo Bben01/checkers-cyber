@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ValidMoveMethods : MonoBehaviour
+public class ValidMoveMethods
 {
     // Validate the move
     public static InformationsValidation ValidMove(Piece[,] board, Deplacement d)
@@ -10,20 +10,27 @@ public class ValidMoveMethods : MonoBehaviour
         // Pas dans le plateau | probleme - destination occupee
         if (Plateau.OutOfBounds(d.Destination.x, d.Destination.y))
         {
-            return InformationsValidation.CreateWrongMove("The target zone is outside the board!");
+            return InformationsValidation.CreateWrongMove("the target zone is outside the board.");
         }
         if (Plateau.Occupied(board, d.Destination.x, d.Destination.y))
         {
-            return InformationsValidation.CreateWrongMove("The target zone is occupied!");
+            return InformationsValidation.CreateWrongMove("the target zone is occupied.");
         }
         Piece selected = board[d.Destination.x, d.Destination.y];
         Dictionary<int, Tuple<int, int>> hasToKill = KillerPlayAgain(board, d.Origin.x, d.Origin.y);
 
+        bool hasSomethingToEat = HasSomethingToEat(board, selected.IsWhite);
+        bool isKillingAgain = IsKillingAgain(hasToKill, d.Destination.x, d.Destination.y);
+
         // The player has to kill and is actually killing a piece
-        if (HasSomethingToEat(board, selected.isWhite) && IsKillingAgain(hasToKill, d.Destination.x, d.Destination.y))
+        if (hasSomethingToEat && isKillingAgain)
         {
             Vector2Int v = d.EatenPiece();
             return InformationsValidation.CreateKillMove(new Tuple<int, int>(v.x, v.y));
+        }
+        else if (hasSomethingToEat && !isKillingAgain)
+        {
+            return InformationsValidation.CreateWrongMove("you are forced to eat another piece.");
         }
 
         if (selected != null)
@@ -36,17 +43,12 @@ public class ValidMoveMethods : MonoBehaviour
             // Invalid move
             if (!ValidRules(board, d))
             {
-                return InformationsValidation.CreateWrongMove("");
+                return InformationsValidation.CreateWrongMove("the rules are not respected.");
             }
-            // Killed a piece
-            //if (killed)
-            //{
-            //    return 1;
-            //}
             // Normal move
             return InformationsValidation.CreateNormalMove();
         }
-        return InformationsValidation.CreateWrongMove("Something went wrong...");
+        return InformationsValidation.CreateWrongMove("something went wrong...");
     }
 
     // Validate the rules of the game.
@@ -64,26 +66,17 @@ public class ValidMoveMethods : MonoBehaviour
     {
         int deltaMoveX = Mathf.Abs(x1 - x2);
         int deltaMoveY = y2 - y1;
-        bool isWhite = board[x1, y1].isWhite;
-        bool isKing = board[x1, y1].isKing;
+        bool IsWhite = board[x1, y1].IsWhite;
+        bool isKing = board[x1, y1].IsKing;
 
         int multiplier = checkWhite ? 1 : -1;
 
-        if (isWhite && checkWhite || !isWhite && !checkWhite || isKing)
+        if (IsWhite && checkWhite || !IsWhite && !checkWhite || isKing)
         {
             if (deltaMoveX == 1 && deltaMoveY == multiplier)
             {
                 return true;
             }
-            //else if (deltaMoveX == 2 && deltaMoveY == 2 * multiplier)
-            //{
-            //    Piece p = board[(x1 + x2) / 2, (y1 + y2) / 2];
-            //    if (p != null && p.isWhite != isWhite)
-            //    {
-            //        killed = true;
-            //        return true;
-            //    }
-            //}
         }
         return false;
     }
@@ -103,12 +96,12 @@ public class ValidMoveMethods : MonoBehaviour
 
     public static bool HasSomethingToEat(Piece[,] board, bool isWhite)
     {
-        for (int i = 0; i < board.Length; i++)
+        for (int i = 0; i < board.GetLength(0); i++)
         {
-            for (int j = 0; j < board.Length; j++)
+            for (int j = 0; j < board.GetLength(1); j++)
             {
                 Piece p = board[i, j];
-                if (p != null && p.isWhite == isWhite && KillerPlayAgain(board, i, j) != null)
+                if (p != null && p.IsWhite == isWhite && KillerPlayAgain(board, i, j) != null)
                 {
                     return true;
                 }
@@ -152,7 +145,7 @@ public class ValidMoveMethods : MonoBehaviour
             return false;
         }
 
-        bool differentColor = board[v.x + direction.x, v.y + direction.y].isWhite != board[v.x, v.y].isWhite;
+        bool differentColor = board[v.x + direction.x, v.y + direction.y].IsWhite != board[v.x, v.y].IsWhite;
         bool unnocupiedTarget = board[rangeX, rangeY] == null;
 
         return differentColor && unnocupiedTarget;

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InformationsValidation : MonoBehaviour
+public class InformationsValidation
 {
     public bool ValidMove { get; }
     public bool Killed { get; }

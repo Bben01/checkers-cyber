@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Deplacement : MonoBehaviour
+public class Deplacement
 {
     public Vector2Int Origin { get; }
     public Vector2Int Destination { get; }
