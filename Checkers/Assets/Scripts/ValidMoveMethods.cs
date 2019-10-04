@@ -16,11 +16,11 @@ public class ValidMoveMethods
         {
             return InformationsValidation.CreateWrongMove("the target zone is occupied.");
         }
-        Piece selected = board[d.Destination.x, d.Destination.y];
+        Piece selected = board[d.Origin.x, d.Origin.y];
         Dictionary<int, Tuple<int, int>> hasToKill = KillerPlayAgain(board, d.Origin.x, d.Origin.y);
 
         bool hasSomethingToEat = HasSomethingToEat(board, selected.IsWhite);
-        bool isKillingAgain = IsKillingAgain(hasToKill, d.Destination.x, d.Destination.y);
+        bool isKillingAgain = hasSomethingToEat ? IsKillingAgain(hasToKill, d.Origin.x, d.Origin.y) : false;
 
         // The player has to kill and is actually killing a piece
         if (hasSomethingToEat && isKillingAgain)
@@ -30,7 +30,7 @@ public class ValidMoveMethods
         }
         else if (hasSomethingToEat && !isKillingAgain)
         {
-            return InformationsValidation.CreateWrongMove("you are forced to eat another piece.");
+            return InformationsValidation.CreateWrongMove("you are forced to eat a piece.");
         }
 
         if (selected != null)
@@ -153,11 +153,16 @@ public class ValidMoveMethods
 
     public static bool CheckNewQueen(Deplacement d, bool checkWhite)
     {
-        int zoneDames = checkWhite ? 0 : Plateau.taillePlateau - 1;
+        int zoneDames = checkWhite ? Plateau.taillePlateau - 1 : 0;
         if (d.Destination.x == zoneDames)
         {
             return true;
         }
         return false;
+    }
+
+    public static Tuple<int, int> PosNewQueen(bool isNewQueen, Deplacement d)
+    {
+        return isNewQueen ? new Tuple<int, int>(d.Destination.x, d.Destination.y) : null;
     }
 }

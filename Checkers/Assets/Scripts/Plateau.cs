@@ -44,6 +44,10 @@ public class Plateau
     public InformationsCoup TryMove(Deplacement d)
     {
         InformationsValidation status = ValidMoveMethods.ValidMove(pieces, d);
+        if (currentTourDeJeu == null)
+        {
+            currentTourDeJeu = new TourDeJeu();
+        }
         // Didn't move
         if (status.DidntMoved)
         {
@@ -54,28 +58,32 @@ public class Plateau
         {
             return InformationsCoup.CreateInvalidMove(status.ErrorMessage);
         }
-        // Killed
-        if (status.Killed)
+        else
         {
-            numWhite -= isWhiteTurn ? 0 : 1;
-            numBlack -= isWhiteTurn ? 1 : 0;
-            // If the player does not have to eat again
-            if (ValidMoveMethods.KillerPlayAgain(pieces, d.Destination.x, d.Destination.y) == null)
+            bool isNewQueen = ValidMoveMethods.CheckNewQueen(d, isWhiteTurn);
+            // Killed
+            if (status.Killed)
+            {
+                numWhite -= isWhiteTurn ? 0 : 1;
+                numBlack -= isWhiteTurn ? 1 : 0;
+                // If the player does not have to eat again
+                if (ValidMoveMethods.KillerPlayAgain(pieces, d.Destination.x, d.Destination.y) == null)
+                {
+                    EndTurn(currentTourDeJeu, d);
+                    return InformationsCoup.CreateKillMove(status.KillPosition, false, d).AddNewQueen(isNewQueen, ValidMoveMethods.PosNewQueen(isNewQueen, d));
+                }
+                else
+                {
+                    currentTourDeJeu.AddDeplacement(d);
+                    return InformationsCoup.CreateKillMove(status.KillPosition, true, d).AddNewQueen(isNewQueen, ValidMoveMethods.PosNewQueen(isNewQueen, d));
+                }
+            }
+            // Normal move 
+            if (status.NormalMove)
             {
                 EndTurn(currentTourDeJeu, d);
-                return InformationsCoup.CreateKillMove(status.KillPosition, false);
+                return InformationsCoup.CreateNormalMove(d).AddNewQueen(isNewQueen, ValidMoveMethods.PosNewQueen(isNewQueen, d));
             }
-            else
-            {
-                currentTourDeJeu.AddDeplacement(d);
-                return InformationsCoup.CreateKillMove(status.KillPosition, true);
-            }
-        }
-        // Normal move 
-        if (status.NormalMove)
-        {
-            EndTurn(currentTourDeJeu, d);
-            return InformationsCoup.CreateNormalMove();
         }
         return InformationsCoup.CreateInvalidMove("something went wrong...");
     }

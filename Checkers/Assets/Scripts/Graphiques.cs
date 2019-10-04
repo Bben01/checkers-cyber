@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,10 +17,12 @@ public class Graphiques : MonoBehaviour
     private Piece selectedPiece;
 
     private Vector2 mouseOver;
-    private Vector2 startClick;
+    private Vector2Int startClick;
 
     private bool clicked;
 
+    private bool hasToPlayAgain;
+    private Vector2Int posPieceToPlay;
 
     // Start is called before the first frame update
     void Start()
@@ -43,11 +46,12 @@ public class Graphiques : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !clicked)
         {
             SelectPiece(x, y);
+            return;
         }
         if (Input.GetMouseButtonDown(0) && clicked)
         {
-            plateau.TryMove(new Deplacement((int)startClick.x, (int)startClick.y, x, y));
-            clicked = false;
+            InformationsCoup infos =  plateau.TryMove(new Deplacement(startClick.x, startClick.y, x, y));
+            AnalizeInfo(infos);
         }
     }
 
@@ -115,17 +119,37 @@ public class Graphiques : MonoBehaviour
             return;
         }
         Piece p = plateau.pieces[x, y];
+        if (hasToPlayAgain)
+        {
+            if (posPieceToPlay.x == x && posPieceToPlay.y == y)
+            {
+                SelectCorrectPiece(p, x, y);
+                hasToPlayAgain = false;
+            }
+            else
+            {
+                return;
+            }
+        }
         // Can't move the piece if this is not one of the selectable
         if (ValidMoveMethods.HasSomethingToEat(plateau.pieces, plateau.isWhiteTurn) && ValidMoveMethods.KillerPlayAgain(plateau.pieces, x, y) == null)
         {
             return;
         }
+        // Good selection
         if (p != null && p.IsWhite == plateau.isWhiteTurn)
         {
-            selectedPiece = p;
-            clicked = true;
+            SelectCorrectPiece(p, x, y);
         }
 
+    }
+
+    // Called to select a piece that has been verified
+    private void SelectCorrectPiece(Piece p, int x, int y)
+    {
+        selectedPiece = p;
+        startClick = new Vector2Int(x, y);
+        clicked = true;
     }
 
     private void UpdateMouseOver()
@@ -162,23 +186,57 @@ public class Graphiques : MonoBehaviour
         }
     }
 
-    public void EndTurn()
+    private void AnalizeInfo(InformationsCoup infos)
     {
-        // TODO: a implementer
+        // There was an error
+        if (infos.ErrorMsg != "")
+        {
+            AfficherError(infos.ErrorMsg);
+            ResetPositions();
+        }
+        // TODO: Debug this
+        MovePieceVisual(selectedPiece, infos.LastDeplacement.Destination.x, infos.LastDeplacement.Destination.y);
+        // There is a new Queen
+        if (infos.IsNewQueen)
+        {
+            AnimateQueen(infos.PosNewQueen);
+            plateau.pieces[infos.PosNewQueen.Item1, infos.PosNewQueen.Item2].IsKing = true;
+        }
+        // Turn is ok, just ended
+        if (infos.EndedTurn)
+        {
+            ResetPositions();
+        }
+        // Killed
+        if (infos.HasToEatAgain)
+        {
+            hasToPlayAgain = true;
+            posPieceToPlay = new Vector2Int(infos.PosKilled.Item1, infos.PosKilled.Item2);
+        }
     }
 
     public void ResetPositions()
     {
-        // TODO: a implementer
+        clicked = false;
+        if (selectedPiece != null)
+        {
+            MovePieceVisual(selectedPiece, startClick.x, startClick.y);
+            selectedPiece = null;
+        }
+        startClick = Vector2Int.zero;
     }
 
-    public void AnimateQueen()
+    public void AnimateQueen(Tuple<int, int> pos)
     {
         // TODO: a implementer
+        // Just for now: 
+        Debug.Log("New Queen!");
     }
 
     public void AfficherError(string errorMessage)
     {
         // TODO: a implementer
+        // Just some hand-on to wait for the graphics
+        Debug.Log(errorMessage);
     }
 }
