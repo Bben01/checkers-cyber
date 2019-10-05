@@ -66,6 +66,7 @@ public class Plateau
             {
                 numWhite -= isWhiteTurn ? 0 : 1;
                 numBlack -= isWhiteTurn ? 1 : 0;
+                MovePieceBoard(d);
                 // If the player does not have to eat again
                 if (ValidMoveMethods.KillerPlayAgain(pieces, d.Destination.x, d.Destination.y) == null)
                 {
@@ -81,6 +82,7 @@ public class Plateau
             // Normal move 
             if (status.NormalMove)
             {
+                MovePieceBoard(d);
                 EndTurn(currentTourDeJeu, d);
                 return InformationsCoup.CreateNormalMove(d).AddNewQueen(isNewQueen, ValidMoveMethods.PosNewQueen(isNewQueen, d));
             }
@@ -94,5 +96,12 @@ public class Plateau
         isWhiteTurn = !isWhiteTurn;
         historique.Push(t);
         currentTourDeJeu = null;
+    }
+
+    private void MovePieceBoard(Deplacement d)
+    {
+        pieces[d.Destination.x, d.Destination.y] = pieces[d.Origin.x, d.Origin.y];
+        pieces[d.Origin.x, d.Origin.y] = null;
+        Debug.Log("Piece moved!");
     }
 }

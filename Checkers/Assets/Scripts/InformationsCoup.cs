@@ -18,7 +18,7 @@ public class InformationsCoup
         ErrorMsg = errorMsg;
         HasToEatAgain = hasToEatAgain;
         EndedTurn = endedTurn;
-        posKilled = PosKilled;
+        PosKilled = posKilled;
         IsNewQueen = false;
         PosNewQueen = null;
         LastDeplacement = lastDeplacement;

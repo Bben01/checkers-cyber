@@ -7,6 +7,10 @@ public class ValidMoveMethods
     // Validate the move
     public static InformationsValidation ValidMove(Piece[,] board, Deplacement d)
     {
+        if (d.NullMove())
+        {
+            return InformationsValidation.CreateNotMove();
+        }
         // Pas dans le plateau | probleme - destination occupee
         if (Plateau.OutOfBounds(d.Destination.x, d.Destination.y))
         {
@@ -20,7 +24,7 @@ public class ValidMoveMethods
         Dictionary<int, Tuple<int, int>> hasToKill = KillerPlayAgain(board, d.Origin.x, d.Origin.y);
 
         bool hasSomethingToEat = HasSomethingToEat(board, selected.IsWhite);
-        bool isKillingAgain = hasSomethingToEat ? IsKillingAgain(hasToKill, d.Origin.x, d.Origin.y) : false;
+        bool isKillingAgain = hasSomethingToEat ? IsKillingAgain(hasToKill, d.Destination.x, d.Destination.y) : false;
 
         // The player has to kill and is actually killing a piece
         if (hasSomethingToEat && isKillingAgain)
@@ -154,7 +158,7 @@ public class ValidMoveMethods
     public static bool CheckNewQueen(Deplacement d, bool checkWhite)
     {
         int zoneDames = checkWhite ? Plateau.taillePlateau - 1 : 0;
-        if (d.Destination.x == zoneDames)
+        if (d.Destination.y == zoneDames)
         {
             return true;
         }

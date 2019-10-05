@@ -34,7 +34,7 @@ public class InformationsValidation
 
     public static InformationsValidation CreateNotMove()
     {
-        return new InformationsValidation(false, false, true, false, null, "The piece didn't move");
+        return new InformationsValidation(false, false, true, false, null, "the piece didn't move.");
     }
 
     public static InformationsValidation CreateWrongMove(string errorMessage)

@@ -128,6 +128,7 @@ public class Graphiques : MonoBehaviour
             }
             else
             {
+                Debug.Log("Salut");
                 return;
             }
         }
@@ -193,8 +194,8 @@ public class Graphiques : MonoBehaviour
         {
             AfficherError(infos.ErrorMsg);
             ResetPositions();
+            return;
         }
-        // TODO: Debug this
         MovePieceVisual(selectedPiece, infos.LastDeplacement.Destination.x, infos.LastDeplacement.Destination.y);
         // There is a new Queen
         if (infos.IsNewQueen)
@@ -205,14 +206,28 @@ public class Graphiques : MonoBehaviour
         // Turn is ok, just ended
         if (infos.EndedTurn)
         {
-            ResetPositions();
+            EndTurn();
         }
         // Killed
         if (infos.HasToEatAgain)
         {
+            Debug.Log($"Piece Killed: { infos.PosKilled }");
             hasToPlayAgain = true;
             posPieceToPlay = new Vector2Int(infos.PosKilled.Item1, infos.PosKilled.Item2);
         }
+    }
+
+    private void EndTurn()
+    {
+        clicked = false;
+        selectedPiece = null;
+        startClick = Vector2Int.zero;
+        CheckVictory();
+    }
+
+    private void CheckVictory()
+    {
+        // TODO: a implementer
     }
 
     public void ResetPositions()
