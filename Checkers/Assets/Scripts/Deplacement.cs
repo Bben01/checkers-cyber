@@ -19,9 +19,13 @@ public class Deplacement
         return Origin == Destination;
     }
 
-    // Returns the position of the eaten piece, if there is no, the return is very bad
+    // Returns the position of the eaten piece, if there is no, the return is a Vector2Int.zero => (0, 0)
     public Vector2Int EatenPiece()
     {
-        return Vector2Int.Max(Origin, Destination) - Vector2Int.one;
+        int sumX = Origin.x + Destination.x;
+        int sumY = Origin.y + Destination.y;
+        bool okX = (sumX) % 2 == 0;
+        bool okY = (sumY) % 2 == 0;
+        return okX && okY ? new Vector2Int(sumX / 2, sumY / 2) : Vector2Int.zero;
     }
 }

@@ -13,4 +13,10 @@ public class Piece : MonoBehaviour
         IsKing = false;
     }
 
+    public Piece(Piece p)
+    {
+        IsWhite = p.IsWhite;
+        IsKing = p.IsKing;
+    }
+
 }

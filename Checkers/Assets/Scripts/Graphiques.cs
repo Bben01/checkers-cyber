@@ -71,6 +71,8 @@ public class Graphiques : MonoBehaviour
 
     private void GenerateBoard()
     {
+        int numWhite = 0;
+        int numBlack = 0;
         // Generate white team
         for (int y = 0; y < (taillePlateau - 1) / 2; y++)
         {
@@ -79,6 +81,7 @@ public class Graphiques : MonoBehaviour
             {
                 // Generate the piece
                 GeneratePiece(oddRow ? x : x + 1, y, true);
+                numWhite++;
             }
         }
 
@@ -90,9 +93,12 @@ public class Graphiques : MonoBehaviour
             {
                 // Generate the piece
                 GeneratePiece(oddRow ? x : x + 1, y, false);
+                numBlack++;
             }
         }
 
+        plateau.NumWhite = numWhite;
+        plateau.NumBlack = numBlack;
     }
 
     private void GeneratePiece(int x, int y, bool isWhite)
@@ -128,7 +134,7 @@ public class Graphiques : MonoBehaviour
             }
             else
             {
-                Debug.Log("Salut");
+                Debug.Log("Non, c'est pas celle la...");
                 return;
             }
         }
@@ -203,10 +209,14 @@ public class Graphiques : MonoBehaviour
             AnimateQueen(infos.PosNewQueen);
             plateau.pieces[infos.PosNewQueen.Item1, infos.PosNewQueen.Item2].IsKing = true;
         }
+        if (infos.PosKilled != null)
+        {
+            Destroy(infos.PieceKilled.gameObject);
+        }
         // Turn is ok, just ended
         if (infos.EndedTurn)
         {
-            EndTurn();
+            EndTurn(infos.LastDeplacement);
         }
         // Killed
         if (infos.HasToEatAgain)
@@ -214,20 +224,30 @@ public class Graphiques : MonoBehaviour
             Debug.Log($"Piece Killed: { infos.PosKilled }");
             hasToPlayAgain = true;
             posPieceToPlay = new Vector2Int(infos.PosKilled.Item1, infos.PosKilled.Item2);
+            startClick = new Vector2Int(infos.LastDeplacement.Destination.x, infos.LastDeplacement.Destination.y);
         }
     }
 
-    private void EndTurn()
+    private void EndTurn(Deplacement lastDeplacement)
     {
+        bool victory = CheckVictory(plateau.isWhiteTurn);
+        plateau.EndTurn(lastDeplacement);
         clicked = false;
         selectedPiece = null;
+        hasToPlayAgain = false;
         startClick = Vector2Int.zero;
-        CheckVictory();
     }
 
-    private void CheckVictory()
+    private bool CheckVictory(bool checkWhite)
     {
         // TODO: a implementer
+        // Just for now:
+        if (!plateau.HasPiecesLeft(!checkWhite))
+        {
+            Debug.Log(checkWhite ? "White won!" : "Black won!");
+            return true;
+        }
+        return false;
     }
 
     public void ResetPositions()
@@ -246,12 +266,13 @@ public class Graphiques : MonoBehaviour
         // TODO: a implementer
         // Just for now: 
         Debug.Log("New Queen!");
+        plateau.pieces[pos.Item1, pos.Item2].IsKing = true;
     }
 
     public void AfficherError(string errorMessage)
     {
         // TODO: a implementer
-        // Just some hand-on to wait for the graphics
+        // Just for now:
         Debug.Log(errorMessage);
     }
 }

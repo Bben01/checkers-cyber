@@ -9,14 +9,13 @@ public class Plateau
 
     public Stack<TourDeJeu> historique = new Stack<TourDeJeu>();
 
-    // TODO: voir quand est ce que tour de jeu peut servir (pour rejouer par example) et du coup quand est ce que il va reelement etre instancie
     public TourDeJeu currentTourDeJeu;
 
     public bool isWhiteTurn;
 
     // Keeps track of the number of pieces on-board
-    private int numWhite;
-    private int numBlack;
+    public int NumWhite { get; set; }
+    public int NumBlack { get; set; }
 
     public Plateau()
     {
@@ -64,44 +63,69 @@ public class Plateau
             // Killed
             if (status.Killed)
             {
-                numWhite -= isWhiteTurn ? 0 : 1;
-                numBlack -= isWhiteTurn ? 1 : 0;
+                Piece pKilled = GetKilledPiece(d);
+                NumWhite -= isWhiteTurn ? 0 : 1;
+                NumBlack -= isWhiteTurn ? 1 : 0;
                 MovePieceBoard(d);
                 // If the player does not have to eat again
                 if (ValidMoveMethods.KillerPlayAgain(pieces, d.Destination.x, d.Destination.y) == null)
                 {
-                    EndTurn(currentTourDeJeu, d);
-                    return InformationsCoup.CreateKillMove(status.KillPosition, false, d).AddNewQueen(isNewQueen, ValidMoveMethods.PosNewQueen(isNewQueen, d));
+                    return InformationsCoup.CreateKillMove(status.KillPosition, false, d, pKilled).AddNewQueen(isNewQueen, ValidMoveMethods.PosNewQueen(isNewQueen, d));
                 }
                 else
                 {
                     currentTourDeJeu.AddDeplacement(d);
-                    return InformationsCoup.CreateKillMove(status.KillPosition, true, d).AddNewQueen(isNewQueen, ValidMoveMethods.PosNewQueen(isNewQueen, d));
+                    return InformationsCoup.CreateKillMove(status.KillPosition, true, d, pKilled).AddNewQueen(isNewQueen, ValidMoveMethods.PosNewQueen(isNewQueen, d));
                 }
             }
             // Normal move 
             if (status.NormalMove)
             {
                 MovePieceBoard(d);
-                EndTurn(currentTourDeJeu, d);
                 return InformationsCoup.CreateNormalMove(d).AddNewQueen(isNewQueen, ValidMoveMethods.PosNewQueen(isNewQueen, d));
             }
         }
         return InformationsCoup.CreateInvalidMove("something went wrong...");
     }
 
-    private void EndTurn(TourDeJeu t, Deplacement lastDeplacement)
+    public void EndTurn(Deplacement lastDeplacement)
     {
-        t.AddDeplacement(lastDeplacement);
+        if (currentTourDeJeu == null)
+        {
+            return;
+        }
+        currentTourDeJeu.AddDeplacement(lastDeplacement);
         isWhiteTurn = !isWhiteTurn;
-        historique.Push(t);
+        historique.Push(currentTourDeJeu);
         currentTourDeJeu = null;
     }
 
     private void MovePieceBoard(Deplacement d)
     {
-        pieces[d.Destination.x, d.Destination.y] = pieces[d.Origin.x, d.Origin.y];
-        pieces[d.Origin.x, d.Origin.y] = null;
+        pieces = UpdatePieceBoard(pieces, d);
         Debug.Log("Piece moved!");
+    }
+
+    public Piece[,] UpdatePieceBoard(Piece[,] board, Deplacement d)
+    {
+        board[d.Destination.x, d.Destination.y] = board[d.Origin.x, d.Origin.y];
+        board[d.Origin.x, d.Origin.y] = null;
+        Vector2Int eaten = d.EatenPiece();
+        if (eaten != Vector2Int.zero)
+        {
+            board[eaten.x, eaten.y] = null;
+        }
+        return board;
+    }
+
+    private Piece GetKilledPiece(Deplacement d)
+    {
+        Vector2Int eaten = d.EatenPiece();
+        return eaten != Vector2Int.zero ? pieces[eaten.x, eaten.y] : null;
+    }
+
+    public bool HasPiecesLeft(bool checkWhite)
+    {
+        return checkWhite ? NumWhite != 0 : NumBlack != 0;
     }
 }
