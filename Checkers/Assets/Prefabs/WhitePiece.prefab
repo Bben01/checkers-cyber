@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3827408318080199584}
   - component: {fileID: 5208036013452333462}
   - component: {fileID: 1979930455693028719}
-  - component: {fileID: -7468428267885142876}
+  - component: {fileID: 4400623749623816853}
   m_Layer: 0
   m_Name: WhitePiece
   m_TagString: Untagged
@@ -79,7 +79,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &-7468428267885142876
+--- !u!114 &4400623749623816853
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,8 +88,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 236146848943659443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3b5e6aad070cee48b23707437bf0325, type: 3}
+  m_Script: {fileID: 11500000, guid: c3842049a2bfd1447aa14ff7c6ff74d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isWhite: 1
-  isKing: 0
