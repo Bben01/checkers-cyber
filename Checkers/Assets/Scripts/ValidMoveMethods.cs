@@ -5,7 +5,7 @@ using UnityEngine;
 public class ValidMoveMethods
 {
     // Validate the move
-    public static InformationsValidation ValidMove(Piece[,] board, Deplacement d)
+    public static InformationsValidation ValidMove(Piece[,] board, Deplacement d, bool hasToEatAgain)
     {
         if (d.NullMove())
         {
@@ -21,9 +21,9 @@ public class ValidMoveMethods
             return InformationsValidation.CreateWrongMove("the target zone is occupied.");
         }
         Piece selected = board[d.Origin.x, d.Origin.y];
-        Dictionary<int, Tuple<int, int>> hasToKill = KillerPlayAgain(board, d.Origin.x, d.Origin.y);
+        Dictionary<int, Tuple<int, int>> hasToKill = CalculateEatPositions(board, d.Origin.x, d.Origin.y, false, true, hasToEatAgain);
 
-        bool hasSomethingToEat = HasSomethingToEat(board, selected.IsWhite);
+        bool hasSomethingToEat = HasSomethingToEat(board, selected.IsWhite, hasToEatAgain);
         bool isKillingAgain = hasSomethingToEat ? IsKillingAgain(hasToKill, d.Destination.x, d.Destination.y) : false;
 
         // The player has to kill and is actually killing a piece
@@ -98,14 +98,14 @@ public class ValidMoveMethods
         return false;
     }
 
-    public static bool HasSomethingToEat(Piece[,] board, bool isWhite)
+    public static bool HasSomethingToEat(Piece[,] board, bool isWhite, bool hasToEatAgain)
     {
         for (int i = 0; i < board.GetLength(0); i++)
         {
             for (int j = 0; j < board.GetLength(1); j++)
             {
                 Piece p = board[i, j];
-                if (p != null && p.IsWhite == isWhite && KillerPlayAgain(board, i, j) != null)
+                if (p != null && p.IsWhite == isWhite && CalculateEatPositions(board, i, j, false, true, hasToEatAgain) != null)
                 {
                     return true;
                 }
@@ -114,29 +114,51 @@ public class ValidMoveMethods
         return false;
     }
 
-    public static Dictionary<int, Tuple<int, int>> KillerPlayAgain(Piece[,] board, int x, int y)
+    public static Dictionary<int, Tuple<int, int>> CalculateEatPositions(Piece[,] board, int x, int y, bool checkNormal, bool checkKillPositions, bool hasToEatAgain)
     {
-        Dictionary<int, Tuple<int, int>> hasToKill = new Dictionary<int, Tuple<int, int>>();
+        Dictionary<int, Tuple<int, int>> positions = new Dictionary<int, Tuple<int, int>>();
 
         Vector2Int vPiece = new Vector2Int(x, y);
         Vector2Int[] vectors = {
             Vector2Int.down + Vector2Int.left, Vector2Int.down + Vector2Int.right, Vector2Int.up + Vector2Int.left, Vector2Int.up + Vector2Int.right
         };
 
-        bool hasKilled = false;
-        int count = 0;
+        bool emptyDict = true;
+        int countPositive = 1;
+        int countNegative = -1;
 
         foreach (Vector2Int vector in vectors)
         {
-            if (Check(board, vPiece, vector))
+            if (checkKillPositions && Check(board, vPiece, vector) && (hasToEatAgain || CanMoveDirection(board, x, y, vector)))
             {
-                hasToKill.Add(count, new Tuple<int, int>(vPiece.x + vector.x * 2, vPiece.y + vector.y * 2));
-                hasKilled = true;
-                count++;
+                positions.Add(countPositive, new Tuple<int, int>(vPiece.x + vector.x * 2, vPiece.y + vector.y * 2));
+                emptyDict = false;
+                countPositive++;
                 Debug.Log("Le pion peut manger: " + (vector + vPiece));
             }
+
+            bool ok = checkNormal && !Plateau.OutOfBounds(vPiece.x + vector.x, vPiece.y + vector.y) && board[vPiece.x + vector.x, vPiece.y + vector.y] == null;
+            if (ok && CanMoveDirection(board, x, y, vector))
+            {
+                positions.Add(countNegative, new Tuple<int, int>(vPiece.x + vector.x, vPiece.y + vector.y));
+                emptyDict = false;
+                countNegative--;
+                Debug.Log("Le pion peut se deplacer sur la case: " + (vector + vPiece));
+            }
         }
-        return hasKilled ? hasToKill : null;
+
+        return !emptyDict ? positions : null;
+    }
+
+    public static bool CanMoveDirection(Piece[,] board, int x, int y, Vector2Int direction)
+    {
+        Piece p = board[x, y];
+        if (p.IsKing)
+            return true;
+        if (p.IsWhite)
+            return direction == Vector2Int.up + Vector2Int.left || direction == Vector2Int.up + Vector2Int.right;
+
+        return direction == Vector2Int.down + Vector2Int.left || direction == Vector2Int.down + Vector2Int.right;
     }
 
     private static bool Check(Piece[,] board, Vector2Int v, Vector2Int direction)

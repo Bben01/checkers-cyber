@@ -50,24 +50,11 @@ public class Graphiques : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0) && clicked)
         {
-            InformationsCoup infos =  plateau.TryMove(new Deplacement(startClick.x, startClick.y, x, y));
+            InformationsCoup infos =  plateau.TryMove(new Deplacement(startClick.x, startClick.y, x, y), hasToPlayAgain);
             AnalizeInfo(infos);
         }
     }
-
-    private void UpdatePieceOver(Piece p)
-    {
-        if (!Camera.main)
-        {
-            Debug.Log("Unable to find main Camera");
-            return;
-        }
-
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 25.0f, LayerMask.GetMask("Board")))
-        {
-            p.transform.position = hit.point + (Vector3.up / 2);
-        }
-    }
+    
 
     private void GenerateBoard()
     {
@@ -138,15 +125,26 @@ public class Graphiques : MonoBehaviour
                 return;
             }
         }
-        // Can't move the piece if this is not one of the selectable
-        if (ValidMoveMethods.HasSomethingToEat(plateau.pieces, plateau.isWhiteTurn) && ValidMoveMethods.KillerPlayAgain(plateau.pieces, x, y) == null)
+        bool hasSomethingToEat = false;
+        if (ValidMoveMethods.HasSomethingToEat(plateau.pieces, plateau.isWhiteTurn, false))
         {
-            return;
+            hasSomethingToEat = true;
+
+            // Can't move the piece if this is not one of the selectable
+            if (ValidMoveMethods.CalculateEatPositions(plateau.pieces, x, y, false, true, false) == null)
+            {
+                AfficherError("Another piece is forced to be played!");
+                return;
+            }
         }
         // Good selection
-        if (p != null && p.IsWhite == plateau.isWhiteTurn)
+        if (p != null && p.IsWhite == plateau.isWhiteTurn && ValidMoveMethods.CalculateEatPositions(plateau.pieces, x, y, !hasSomethingToEat, true, false) != null)
         {
             SelectCorrectPiece(p, x, y);
+        }
+        else
+        {
+            AfficherError("This piece cannot be selected!");
         }
 
     }
@@ -199,7 +197,10 @@ public class Graphiques : MonoBehaviour
         if (infos.ErrorMsg != "")
         {
             AfficherError(infos.ErrorMsg);
-            ResetPositions();
+            if (!hasToPlayAgain)
+            {
+                ResetPositions();
+            }
             return;
         }
         MovePieceVisual(selectedPiece, infos.LastDeplacement.Destination.x, infos.LastDeplacement.Destination.y);
