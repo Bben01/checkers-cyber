@@ -40,9 +40,9 @@ public class Plateau
 
     }
 
-    public InformationsCoup TryMove(Deplacement d)
+    public InformationsCoup TryMove(Deplacement d, bool hasToEatAgain)
     {
-        InformationsValidation status = ValidMoveMethods.ValidMove(pieces, d);
+        InformationsValidation status = ValidMoveMethods.ValidMove(pieces, d, hasToEatAgain);
         if (currentTourDeJeu == null)
         {
             currentTourDeJeu = new TourDeJeu();
@@ -59,7 +59,7 @@ public class Plateau
         }
         else
         {
-            bool isNewQueen = ValidMoveMethods.CheckNewQueen(d, isWhiteTurn);
+            bool isNewQueen = !pieces[d.Origin.x, d.Origin.y].IsKing && ValidMoveMethods.CheckNewQueen(d, isWhiteTurn);
             // Killed
             if (status.Killed)
             {
@@ -68,7 +68,7 @@ public class Plateau
                 NumBlack -= isWhiteTurn ? 1 : 0;
                 MovePieceBoard(d);
                 // If the player does not have to eat again
-                if (ValidMoveMethods.KillerPlayAgain(pieces, d.Destination.x, d.Destination.y) == null)
+                if (ValidMoveMethods.CalculateEatPositions(pieces, d.Destination.x, d.Destination.y, false, true, true) == null)
                 {
                     return InformationsCoup.CreateKillMove(status.KillPosition, false, d, pKilled).AddNewQueen(isNewQueen, ValidMoveMethods.PosNewQueen(isNewQueen, d));
                 }

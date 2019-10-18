@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Piece : MonoBehaviour
 {
@@ -18,5 +16,4 @@ public class Piece : MonoBehaviour
         IsWhite = p.IsWhite;
         IsKing = p.IsKing;
     }
-
 }
