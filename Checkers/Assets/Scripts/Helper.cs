@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Helper
@@ -53,13 +51,13 @@ public class Helper
         return code == 1;
     }
 
-    public static bool IsTrue(string[] msg, int index)
+    public static bool IsTrue(string msg)
     {
         try
         {
-            return msg[index].ToLower().Equals("true");
+            return msg.ToLower().Equals("true");
         }
-        catch (System.Exception)
+        catch (Exception)
         {
             return false;
         }

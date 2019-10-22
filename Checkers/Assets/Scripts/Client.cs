@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Text;
+using UnityEngine;
 
 public class Client
 {
@@ -54,7 +55,13 @@ public class Client
     public static string[] FormatSendAndResponse(string methodName, string[] args = null)
     {
         string format = args != null ? FormatMessageArgs(methodName, args) : FormatMessageNoArgs(methodName);
-        return Send(format);
+        return Send(format, true);
+    }
+
+    public static string SendAndResponseWithoutFormat(string methodName, string[] args = null)
+    {
+        string format = args != null ? FormatMessageArgs(methodName, args) : FormatMessageNoArgs(methodName);
+        return Send(format, false)[0];
     }
 
     private static void End()
@@ -65,7 +72,7 @@ public class Client
         openClient = false;
     }
 
-    public static string[] Send(string message)
+    public static string[] Send(string message, bool getArgs)
     {
         try
         {
@@ -85,14 +92,14 @@ public class Client
             // Receive the TcpServer.response.
             byte[] len = new byte[4];
             stream.Read(len, 0, 4);
-            int trueLen = BitConverter.ToInt32(len, 0);
+            int.TryParse(Encoding.ASCII.GetString(len), out int trueLen);
 
             // Buffer to store the response bytes.
             data = new byte[trueLen];
 
             // Read the first batch of the TcpServer response bytes.
             stream.Read(data, 0, trueLen);
-            return GetArgsFromByteArray(data);
+            return getArgs ? GetArgsFromByteArray(data) : GetFromByteArray(data);
         }
         catch (ArgumentNullException e)
         {
@@ -109,8 +116,13 @@ public class Client
     // Returns null if the message does not match the pattern -> <nbOfArgs>arg1-arg2-...
     private static string[] GetArgsFromByteArray(byte[] encodedMessage)
     {
-        int numberOfArgs = encodedMessage[0];
+        int.TryParse(Encoding.ASCII.GetString(new byte[] { encodedMessage[0] }), out int numberOfArgs);
         string[] args = Encoding.ASCII.GetString(encodedMessage).Substring(1).Split('-');
         return args.Length == numberOfArgs ? args : null;
+    }
+
+    private static string[] GetFromByteArray(byte[] encodedMessage)
+    {
+        return new string[] { Encoding.ASCII.GetString(encodedMessage) };
     }
 }
