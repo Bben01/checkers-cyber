@@ -266,8 +266,15 @@ public class Graphiques : MonoBehaviour
     {
         // TODO: a implementer
         // Just for now: 
+        if (pos == null)
+        {
+            Debug.Log("Error with new Queen.");
+            return;
+        }
         Debug.Log("New Queen!");
-        plateau.pieces[pos.Item1, pos.Item2].IsKing = true;
+        Piece p = plateau.pieces[pos.Item1, pos.Item2];
+        p.transform.Rotate(180, 0, 0, Space.Self);
+        p.IsKing = true;
     }
 
     public void AfficherError(string errorMessage)
