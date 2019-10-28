@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Graphiques : MonoBehaviour
 {
     public static readonly int taillePlateau = 8;
-    public Plateau plateau;
+    public Piece[,] board = new Piece[taillePlateau, taillePlateau]; // TODO: faire quelque chose
 
     public GameObject whitePiecePrefab;
     public GameObject blackPiecePrefab;
@@ -24,12 +22,14 @@ public class Graphiques : MonoBehaviour
     private bool hasToPlayAgain;
     private Vector2Int posPieceToPlay;
 
+    private bool isWhiteTurn;
+
     // Start is called before the first frame update
     void Start()
     {
-        plateau = new Plateau();
         GenerateBoard();
         clicked = false;
+        isWhiteTurn = true;
     }
 
     // Update is called once per frame
@@ -50,16 +50,102 @@ public class Graphiques : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0) && clicked)
         {
-            InformationsCoup infos =  plateau.TryMove(new Deplacement(startClick.x, startClick.y, x, y), hasToPlayAgain);
-            AnalizeInfo(infos);
+            string[] returnInfos = Client.FormatSendAndResponse("try_move_piece", new string[5] { $"{startClick.x}", $"{startClick.y}", $"{x}", $"{y}", $"{hasToPlayAgain}" });
+            AnalizeInfo(returnInfos);
         }
     }
-    
+
+    private void AnalizeInfo(string[] returnInfos)
+    {
+        // Error
+        if (Helper.Activate(returnInfos[0], 0))
+        {
+            AfficherError(returnInfos[1].Substring(2));
+            if (Helper.Activate(returnInfos[1], 0))
+            {
+                Reset();
+            }
+            return;
+        }
+        // Just move visually the piece
+        Vector2Int lastDeplacement = Helper.GetLastDeplacementDest(returnInfos[4]);
+        MovePieceVisual(selectedPiece, lastDeplacement.x, lastDeplacement.y);
+        // Killed
+        if (Helper.Activate(returnInfos[2], 0))
+        {
+            Vector2Int posKilled = Helper.GetPosKilled(returnInfos[2]);
+            Debug.Log($"Piece Killed: { posKilled }");
+            Piece p = board[posKilled.x, posKilled.y];
+            board[posKilled.x, posKilled.y] = null;
+            Destroy(p.gameObject);
+            // Has to play again
+            if (Helper.Activate(returnInfos[2], 3))
+            {
+                hasToPlayAgain = true;
+                posPieceToPlay = posKilled;
+                MovePieceBoard(new Deplacement(startClick.x, startClick.y, lastDeplacement.x, lastDeplacement.y));
+                startClick = lastDeplacement;
+            }
+            else
+            {
+                MovePieceBoard(new Deplacement(startClick.x, startClick.y, lastDeplacement.x, lastDeplacement.y));
+            }
+        }
+        else
+        {
+            MovePieceBoard(new Deplacement(startClick.x, startClick.y, lastDeplacement.x, lastDeplacement.y));
+        }
+        
+        // New Queen
+        if (Helper.Activate(returnInfos[1], 0))
+        {
+            AnimateQueen(Helper.GetPosNewQueen(returnInfos[1]));
+        }
+        // Ended turn
+        if (Helper.Activate(returnInfos[3], 0))
+        {
+            EndTurn();
+        }
+        // Victory
+        if (Helper.Activate(returnInfos[5], 0))
+        {
+            Debug.Log(returnInfos[5].Substring(1));
+        }
+    }
+
+    private void MovePieceBoard(Deplacement lastDeplacement)
+    {
+        board[lastDeplacement.Destination.x, lastDeplacement.Destination.y] = board[lastDeplacement.Origin.x, lastDeplacement.Origin.y];
+        board[lastDeplacement.Origin.x, lastDeplacement.Origin.y] = null;
+        Vector2Int eaten = lastDeplacement.EatenPiece();
+        if (eaten != Vector2Int.zero)
+        {
+            board[eaten.x, eaten.y] = null;
+        }
+    }
+
+    private void Reset()
+    {
+        clicked = false;
+        if (selectedPiece != null)
+        {
+            MovePieceVisual(selectedPiece, startClick.x, startClick.y);
+            selectedPiece = null;
+        }
+        startClick = Vector2Int.zero;
+    }
+
+    private void EndTurn()
+    {
+        clicked = false;
+        selectedPiece = null;
+        hasToPlayAgain = false;
+        isWhiteTurn = !isWhiteTurn;
+        startClick = Vector2Int.zero;
+    }
 
     private void GenerateBoard()
     {
-        int numWhite = 0;
-        int numBlack = 0;
         // Generate white team
         for (int y = 0; y < (taillePlateau - 1) / 2; y++)
         {
@@ -68,7 +154,6 @@ public class Graphiques : MonoBehaviour
             {
                 // Generate the piece
                 GeneratePiece(oddRow ? x : x + 1, y, true);
-                numWhite++;
             }
         }
 
@@ -80,81 +165,24 @@ public class Graphiques : MonoBehaviour
             {
                 // Generate the piece
                 GeneratePiece(oddRow ? x : x + 1, y, false);
-                numBlack++;
             }
         }
-
-        plateau.NumWhite = numWhite;
-        plateau.NumBlack = numBlack;
     }
 
     private void GeneratePiece(int x, int y, bool isWhite)
     {
-        // TODO: a adapter pour la nouvelle version
         GameObject go = Instantiate(isWhite ? whitePiecePrefab : blackPiecePrefab) as GameObject;
         go.transform.SetParent(transform);
         Piece p = go.GetComponent<Piece>();
         p.IsWhite = isWhite;
-        plateau.pieces[x, y] = p;
+        board[x, y] = p;
         MovePieceVisual(p, x, y);
+        Client.SendAndResponseWithoutFormat("generate_board_submethod", new string[3] { $"{x}", $"{y}", $"{isWhite}" });
     }
 
     private void MovePieceVisual(Piece p, int x, int y)
     {
         p.transform.position = (Vector3.right * x) + (Vector3.forward * y) + boardOffset + pieceOffset;
-    }
-
-    private void SelectPiece(int x, int y)
-    {
-        // Out of bounds
-        if (x < 0 || x >= taillePlateau || y < 0 || y >= taillePlateau || clicked)
-        {
-            return;
-        }
-        Piece p = plateau.pieces[x, y];
-        if (hasToPlayAgain)
-        {
-            if (posPieceToPlay.x == x && posPieceToPlay.y == y)
-            {
-                SelectCorrectPiece(p, x, y);
-                hasToPlayAgain = false;
-            }
-            else
-            {
-                Debug.Log("Non, c'est pas celle la...");
-                return;
-            }
-        }
-        bool hasSomethingToEat = false;
-        if (ValidMoveMethods.HasSomethingToEat(plateau.pieces, plateau.isWhiteTurn, false))
-        {
-            hasSomethingToEat = true;
-
-            // Can't move the piece if this is not one of the selectable
-            if (ValidMoveMethods.CalculateEatPositions(plateau.pieces, x, y, false, true, false) == null)
-            {
-                AfficherError("Another piece is forced to be played!");
-                return;
-            }
-        }
-        // Good selection
-        if (p != null && p.IsWhite == plateau.isWhiteTurn && ValidMoveMethods.CalculateEatPositions(plateau.pieces, x, y, !hasSomethingToEat, true, false) != null)
-        {
-            SelectCorrectPiece(p, x, y);
-        }
-        else
-        {
-            AfficherError("This piece cannot be selected!");
-        }
-
-    }
-
-    // Called to select a piece that has been verified
-    private void SelectCorrectPiece(Piece p, int x, int y)
-    {
-        selectedPiece = p;
-        startClick = new Vector2Int(x, y);
-        clicked = true;
     }
 
     private void UpdateMouseOver()
@@ -191,75 +219,57 @@ public class Graphiques : MonoBehaviour
         }
     }
 
-    private void AnalizeInfo(InformationsCoup infos)
+    private void SelectPiece(int x, int y)
     {
-        // There was an error
-        if (infos.ErrorMsg != "")
+        // Out of bounds
+        if (x < 0 || x >= taillePlateau || y < 0 || y >= taillePlateau || clicked)
         {
-            AfficherError(infos.ErrorMsg);
-            if (!hasToPlayAgain)
-            {
-                ResetPositions();
-            }
             return;
         }
-        MovePieceVisual(selectedPiece, infos.LastDeplacement.Destination.x, infos.LastDeplacement.Destination.y);
-        // There is a new Queen
-        if (infos.IsNewQueen)
+        Piece p = board[x, y];
+        if (hasToPlayAgain)
         {
-            AnimateQueen(infos.PosNewQueen);
-            plateau.pieces[infos.PosNewQueen.Item1, infos.PosNewQueen.Item2].IsKing = true;
+            if (posPieceToPlay.x == x && posPieceToPlay.y == y)
+            {
+                SelectCorrectPiece(p, x, y);
+                hasToPlayAgain = false;
+            }
+            else
+            {
+                Debug.Log("Non, c'est pas celle la...");
+                return;
+            }
         }
-        if (infos.PosKilled != null)
+        bool hasSomethingToEat = false;
+        if (Helper.IsTrue(Client.SendAndResponseWithoutFormat("can_eat")))
         {
-            Destroy(infos.PieceKilled.gameObject);
+            hasSomethingToEat = true;
+
+            // Can't move the piece if this is not one of the selectable
+            if (!Helper.IsTrue(Client.SendAndResponseWithoutFormat("selectable", new string[2] { $"{x}", $"{y}" })))
+            {
+                AfficherError("Another piece is forced to be played!");
+                return;
+            }
         }
-        // Turn is ok, just ended
-        if (infos.EndedTurn)
+        // Good selection
+        if (p != null && p.IsWhite == Helper.IsTrue(Client.SendAndResponseWithoutFormat("is_white_turn")) && Helper.IsTrue(Client.SendAndResponseWithoutFormat("selectable", new string[3] { $"{x}", $"{y}", $"{Helper.GetBools(!hasSomethingToEat)}" })))
         {
-            EndTurn(infos.LastDeplacement);
+            SelectCorrectPiece(p, x, y);
         }
-        // Killed
-        if (infos.HasToEatAgain)
+        else
         {
-            Debug.Log($"Piece Killed: { infos.PosKilled }");
-            hasToPlayAgain = true;
-            posPieceToPlay = new Vector2Int(infos.PosKilled.Item1, infos.PosKilled.Item2);
-            startClick = new Vector2Int(infos.LastDeplacement.Destination.x, infos.LastDeplacement.Destination.y);
+            AfficherError("This piece cannot be selected!");
         }
+
     }
 
-    private void EndTurn(Deplacement lastDeplacement)
+    // Called to select a piece that has been verified
+    private void SelectCorrectPiece(Piece p, int x, int y)
     {
-        bool victory = CheckVictory(plateau.isWhiteTurn);
-        plateau.EndTurn(lastDeplacement);
-        clicked = false;
-        selectedPiece = null;
-        hasToPlayAgain = false;
-        startClick = Vector2Int.zero;
-    }
-
-    private bool CheckVictory(bool checkWhite)
-    {
-        // TODO: a implementer
-        // Just for now:
-        if (!plateau.HasPiecesLeft(!checkWhite))
-        {
-            Debug.Log(checkWhite ? "White won!" : "Black won!");
-            return true;
-        }
-        return false;
-    }
-
-    public void ResetPositions()
-    {
-        clicked = false;
-        if (selectedPiece != null)
-        {
-            MovePieceVisual(selectedPiece, startClick.x, startClick.y);
-            selectedPiece = null;
-        }
-        startClick = Vector2Int.zero;
+        selectedPiece = p;
+        startClick = new Vector2Int(x, y);
+        clicked = true;
     }
 
     public void AnimateQueen(Tuple<int, int> pos)
@@ -272,12 +282,12 @@ public class Graphiques : MonoBehaviour
             return;
         }
         Debug.Log("New Queen!");
-        Piece p = plateau.pieces[pos.Item1, pos.Item2];
-        p.transform.Rotate(180, 0, 0, Space.Self);
+        Piece p = board[pos.Item1, pos.Item2];
         p.IsKing = true;
+        p.transform.Rotate(180, 0, 0, Space.Self);
     }
 
-    public void AfficherError(string errorMessage)
+    public static void AfficherError(string errorMessage)
     {
         // TODO: a implementer
         // Just for now:
