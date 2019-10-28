@@ -15,7 +15,7 @@ class Deplacement:
         sum_y = self.origin[1] + self.destination[1]
         ok_x = sum_x % 2 == 0
         ok_y = sum_y % 2 == 0
-        return (sum_x / 2, sum_y / 2) if ok_x and ok_y else None
+        return (int(sum_x / 2), int(sum_y / 2)) if ok_x and ok_y else None
 
     def null_move(self):
         return self.origin == self.destination

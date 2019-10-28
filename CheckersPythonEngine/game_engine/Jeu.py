@@ -53,6 +53,8 @@ class Jeu:
                 return_message += "1"
                 self.hasToPlayAgain = True
                 self.posPieceToPlay = (infos.posKilled[0], infos.posKilled[1])
+            else:
+                return_message += "0"
             return_message += separator
         else:
             return_message += is_false

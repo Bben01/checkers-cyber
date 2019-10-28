@@ -80,6 +80,7 @@ public class Graphiques : MonoBehaviour
         {
             Vector2Int posKilled = Helper.GetPosKilled(returnInfos[2]);
             Debug.Log($"Piece Killed: { posKilled }");
+            Destroy(board[posKilled.x, posKilled.y].gameObject);
             // Has to play again
             if (Helper.Activate(returnInfos[2], 3))
             {
@@ -88,10 +89,22 @@ public class Graphiques : MonoBehaviour
                 startClick = lastDeplacement;
             }
         }
+        MovePieceBoard(new Deplacement(startClick.x, startClick.y, lastDeplacement.x, lastDeplacement.y));
         // Ended turn
         if (Helper.Activate(returnInfos[3], 0))
         {
             EndTurn();
+        }
+    }
+
+    private void MovePieceBoard(Deplacement lastDeplacement)
+    {
+        board[lastDeplacement.Destination.x, lastDeplacement.Destination.y] = board[lastDeplacement.Origin.x, lastDeplacement.Origin.y];
+        board[lastDeplacement.Origin.x, lastDeplacement.Origin.y] = null;
+        Vector2Int eaten = lastDeplacement.EatenPiece();
+        if (eaten != Vector2Int.zero)
+        {
+            board[eaten.x, eaten.y] = null;
         }
     }
 
@@ -217,7 +230,7 @@ public class Graphiques : MonoBehaviour
             hasSomethingToEat = true;
 
             // Can't move the piece if this is not one of the selectable
-            if (Helper.IsTrue(Client.SendAndResponseWithoutFormat("selectable", new string[2] { $"{x}", $"{y}" })))
+            if (!Helper.IsTrue(Client.SendAndResponseWithoutFormat("selectable", new string[2] { $"{x}", $"{y}" })))
             {
                 AfficherError("Another piece is forced to be played!");
                 return;

@@ -7,7 +7,7 @@ from game_engine.Jeu import Jeu
 
 IP = "127.0.0.1"
 PORT = 10000
-DEBUG = False
+DEBUG = True
 
 SEPARATOR = "##-+-##"
 
@@ -81,7 +81,7 @@ def main():
             if current_socket is server_socket:
                 (new_socket, address) = server_socket.accept()
                 open_client_sockets.append(new_socket)
-                print("New Client!")
+                print(f"New Client! {current_socket}")
             else:
                 try:
                     length = current_socket.recv(4).decode()
