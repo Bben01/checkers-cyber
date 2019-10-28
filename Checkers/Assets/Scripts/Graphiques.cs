@@ -61,7 +61,7 @@ public class Graphiques : MonoBehaviour
         if (Helper.Activate(returnInfos[0], 0))
         {
             AfficherError(returnInfos[1].Substring(2));
-            if (Helper.Activate(returnInfos[1], 1))
+            if (Helper.Activate(returnInfos[1], 0))
             {
                 Reset();
             }
@@ -70,30 +70,46 @@ public class Graphiques : MonoBehaviour
         // Just move visually the piece
         Vector2Int lastDeplacement = Helper.GetLastDeplacementDest(returnInfos[4]);
         MovePieceVisual(selectedPiece, lastDeplacement.x, lastDeplacement.y);
-        // New Queen
-        if (Helper.Activate(returnInfos[1], 0))
-        {
-            AnimateQueen(Helper.GetPosNewQueen(returnInfos[1]));
-        }
         // Killed
         if (Helper.Activate(returnInfos[2], 0))
         {
             Vector2Int posKilled = Helper.GetPosKilled(returnInfos[2]);
             Debug.Log($"Piece Killed: { posKilled }");
-            Destroy(board[posKilled.x, posKilled.y].gameObject);
+            Piece p = board[posKilled.x, posKilled.y];
+            board[posKilled.x, posKilled.y] = null;
+            Destroy(p.gameObject);
             // Has to play again
             if (Helper.Activate(returnInfos[2], 3))
             {
                 hasToPlayAgain = true;
                 posPieceToPlay = posKilled;
+                MovePieceBoard(new Deplacement(startClick.x, startClick.y, lastDeplacement.x, lastDeplacement.y));
                 startClick = lastDeplacement;
             }
+            else
+            {
+                MovePieceBoard(new Deplacement(startClick.x, startClick.y, lastDeplacement.x, lastDeplacement.y));
+            }
         }
-        MovePieceBoard(new Deplacement(startClick.x, startClick.y, lastDeplacement.x, lastDeplacement.y));
+        else
+        {
+            MovePieceBoard(new Deplacement(startClick.x, startClick.y, lastDeplacement.x, lastDeplacement.y));
+        }
+        
+        // New Queen
+        if (Helper.Activate(returnInfos[1], 0))
+        {
+            AnimateQueen(Helper.GetPosNewQueen(returnInfos[1]));
+        }
         // Ended turn
         if (Helper.Activate(returnInfos[3], 0))
         {
             EndTurn();
+        }
+        // Victory
+        if (Helper.Activate(returnInfos[5], 0))
+        {
+            Debug.Log(returnInfos[5].Substring(1));
         }
     }
 
@@ -267,6 +283,7 @@ public class Graphiques : MonoBehaviour
         }
         Debug.Log("New Queen!");
         Piece p = board[pos.Item1, pos.Item2];
+        p.IsKing = true;
         p.transform.Rotate(180, 0, 0, Space.Self);
     }
 

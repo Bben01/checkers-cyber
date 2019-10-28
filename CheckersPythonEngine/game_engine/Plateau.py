@@ -87,7 +87,6 @@ class Plateau:
 
     def get_killed_piece(self, d: Deplacement):
         eaten = d.eaten_piece()
-        print(f'eaten0={eaten[0]}, eaten1={eaten[1]}')
         return self.pieces[eaten[0]][eaten[1]] if eaten is not None else None
 
     def end_turn(self, last_deplacement: Deplacement):

@@ -105,15 +105,14 @@ def calculate_eat_positions(board: [[]], x, y, check_normal: bool, check_kill_po
     count_negative = -1
 
     for vector in vectors:
-        if check_kill_positions and check(board, v_piece, vector) and (has_to_eat_again or can_move_direction(board, x,
-                                                                                                            y, vector)):
+        if check_kill_positions and check(board, v_piece, vector) and (has_to_eat_again or can_move_direction(board, x, y, vector)):
             positions[count_positive] = (v_piece[0] + vector[0] * 2, v_piece[1] + vector[1] * 2)
             empty_dict = False
             count_positive += 1
             print(f"Le pion peut manger: {concat_int_int_tuples(vector, v_piece)}")
 
-        ok = check_normal and not Plateau.out_of_bounds(v_piece[0] + vector[0], v_piece[1] + vector[1]) and \
-             board[v_piece[0] + vector[0]][v_piece[1] + vector[1]] is not None
+        ok = check_normal and (not Plateau.out_of_bounds(v_piece[0] + vector[0], v_piece[1] + vector[1])) and \
+             board[v_piece[0] + vector[0]][v_piece[1] + vector[1]] is None
         if ok and can_move_direction(board, x, y, vector):
             positions[count_negative] = concat_int_int_tuples(v_piece, vector)
             empty_dict = False
@@ -128,9 +127,9 @@ def can_move_direction(board: [[]], x, y, direction: ()):
     if p.isKing:
         return True
     if p.isWhite:
-        return direction == (1, -1) or direction == (1, 1)
+        return direction == (-1, 1) or direction == (1, 1)
 
-    return direction == (-1, -1) or direction == (-1, 1)
+    return direction == (-1, -1) or direction == (1, -1)
 
 
 def check(board: [[]], v: (), direction: ()):

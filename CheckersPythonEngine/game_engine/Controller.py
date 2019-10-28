@@ -50,7 +50,7 @@ def try_move_piece(game_instance: Jeu, x1, y1, x2, y2, has_to_play_again):
 
     infos = game_instance.plateau.try_move(Deplacement(x1, y1, x2, y2), has_to_play_again)
     commands = game_instance.analize_info(infos)
-    return "5" + commands
+    return "6" + commands
 
 
 def generate_board_submethod(game_instance: Jeu, x, y, is_white):
