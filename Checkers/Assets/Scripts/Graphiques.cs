@@ -60,7 +60,7 @@ public class Graphiques : MonoBehaviour
         // Error
         if (Helper.Activate(returnInfos[0], 0))
         {
-            AfficherError(returnInfos[1].Substring(2));
+            AfficherError(returnInfos[1].Substring(1));
             if (Helper.Activate(returnInfos[1], 0))
             {
                 Reset();
