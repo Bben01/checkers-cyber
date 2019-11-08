@@ -19,7 +19,7 @@ class Plateau:
     numBlack: int
 
     def __init__(self):
-        self.pieces = [[None for i in range(self.taillePlateau)] for j in range(self.taillePlateau)]
+        self.pieces = [[None for _ in range(self.taillePlateau)] for _ in range(self.taillePlateau)]
         self.isWhiteTurn = True
         self.numBlack = 0
         self.numWhite = 0
@@ -49,8 +49,8 @@ class Plateau:
         if not status.validMove:
             return InformationCoup.create_invalid_move(status.errorMessage)
         else:
-            is_new_queen = not self.pieces[d.origin[0]][d.origin[1]].isKing\
-                           and ValidMoveMethods.check_new_queen(d, self.isWhiteTurn)
+            is_new_queen = not self.pieces[d.origin[0]][d.origin[1]].isKing and \
+                           ValidMoveMethods.check_new_queen(d, self.isWhiteTurn)
             # Killed
             if status.killed:
                 p_killed = self.get_killed_piece(d)
@@ -59,16 +59,21 @@ class Plateau:
                 self.move_piece_board(d)
 
                 # If the player does not have to eat again
-                if ValidMoveMethods.calculate_eat_positions(self.pieces, d.destination[0], d.destination[1], False, True, True) is None:  # NOQA
-                    return InformationCoup.create_kill_move(status.killPosition, False, d, p_killed).add_new_queen(is_new_queen, ValidMoveMethods.pos_new_queen(is_new_queen, d))  # NOQA
+                if ValidMoveMethods.calculate_eat_positions(self.pieces, d.destination[0], d.destination[1], False,
+                                                            True, True) is None:
+                    return InformationCoup.create_kill_move(status.killPosition, False, d, p_killed).add_new_queen(
+                        is_new_queen, ValidMoveMethods.pos_new_queen(is_new_queen, d))
                 else:
                     self.currentTourDeJeu.add_deplacement(d)
-                    return InformationCoup.create_kill_move(status.killPosition, True, d, p_killed).add_new_queen(is_new_queen, ValidMoveMethods.pos_new_queen(is_new_queen, d))  # NOQA
+                    return InformationCoup.create_kill_move(status.killPosition, True, d, p_killed).add_new_queen(
+                        is_new_queen, ValidMoveMethods.pos_new_queen(is_new_queen, d))
 
             # Normal move
             if status.normalMove:
                 self.move_piece_board(d)
-                return InformationCoup.create_normal_move(d).add_new_queen(is_new_queen, ValidMoveMethods.pos_new_queen(is_new_queen, d))  # NOQA
+                return InformationCoup.create_normal_move(d).add_new_queen(is_new_queen,
+                                                                           ValidMoveMethods.pos_new_queen(is_new_queen,
+                                                                                                          d))
 
         return InformationCoup.create_invalid_move("something went wrong...")
 

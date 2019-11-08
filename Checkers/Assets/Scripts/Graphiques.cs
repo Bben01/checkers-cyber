@@ -140,8 +140,19 @@ public class Graphiques : MonoBehaviour
         clicked = false;
         selectedPiece = null;
         hasToPlayAgain = false;
-        isWhiteTurn = !isWhiteTurn;
+        isWhiteTurn = PlayAgain();
         startClick = Vector2Int.zero;
+    }
+
+    private bool PlayAgain()
+    {
+        bool hasSomthingToPlay = Client.SendAndResponseWithoutFormat("has_something_to_play", new string[2] { $"{!isWhiteTurn}", "false" }).ToLower().Equals("true");
+        if (!hasSomthingToPlay)
+        {
+            string color = isWhiteTurn ? "White" : "Black";
+            AfficherError($"{color} plays again!");
+        }
+        return hasSomthingToPlay ? true : false;
     }
 
     private void GenerateBoard()

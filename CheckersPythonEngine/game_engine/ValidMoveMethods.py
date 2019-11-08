@@ -158,3 +158,12 @@ def pos_new_queen(is_new_queen: bool, d: Deplacement):
 
 def concat_int_int_tuples(first_tuple: (int, int), secont_tuple: (int, int)):
     return first_tuple[0] + secont_tuple[0], first_tuple[1] + secont_tuple[1]
+
+
+def add_to_dict(dict_original, dict_to_add, count):
+    if dict_to_add is None:
+        return dict_original, count
+    for _, position in dict_to_add.items():
+        dict_original[count] = position
+        count += 1
+    return dict_original, count

@@ -2,8 +2,6 @@ from game_engine.Deplacement import Deplacement
 from game_engine.InformationCoup import InformationCoup
 from game_engine.Plateau import Plateau
 
-dictionnaire = {"false": False, "true": True}
-
 
 class Jeu:
     plateau: Plateau
