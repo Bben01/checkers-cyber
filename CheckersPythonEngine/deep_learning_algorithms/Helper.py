@@ -1,3 +1,4 @@
+from deep_learning_algorithms.Move import Move
 from game_engine import ValidMoveMethods
 from game_engine.Deplacement import Deplacement
 
@@ -20,6 +21,13 @@ def calculate_recursive_eat_positions(board, x, y, has_to_eat=False):
     return moves
 
 
+def convert_to_list(dico):
+    moves_list = []
+    for id_move, moves in dico.items():
+        moves_list.append(tuple(moves))
+    return moves_list
+
+
 def update_board(board, x, y, move):
     board[move[0]][move[1]] = board[x][y]
     board[x][y] = None
@@ -30,9 +38,10 @@ def update_board(board, x, y, move):
 
 
 def normalize_moves(moves):
-    for i, move in moves.items():
-        moves[i] = [move]
-    return moves
+    possible_moves = []
+    for _, move in moves.items():
+        possible_moves.append(move)
+    return possible_moves
 
 
 def append_moves(original, to_append):
@@ -41,3 +50,10 @@ def append_moves(original, to_append):
     for _, move in to_append.items():
         original[original["count"]] = move
         original["count"] += 1
+
+
+def create_moves(list_of_moves, player_color):
+    move_list = []
+    for move in list_of_moves:
+        move_list.append(Move(player_color, move))
+    return move_list

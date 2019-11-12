@@ -1,7 +1,7 @@
 import copy
 
 from deep_learning_algorithms import Helper
-from deep_learning_algorithms.InfosOnMoves import KillMoves
+from deep_learning_algorithms.Move import Move
 from deep_learning_algorithms.Plateau import Plateau
 from game_engine import ValidMoveMethods
 from game_engine.Deplacement import Deplacement
@@ -10,14 +10,12 @@ from game_engine.Piece import Piece
 
 class State:
     plateau: Plateau
-    killMoves: KillMoves
 
     isWhiteTurn: bool
 
-    def __init__(self, is_white_turn=True, plateau=Plateau(), kill_moves=KillMoves()):
+    def __init__(self, is_white_turn=True, plateau=Plateau()):
         self.isWhiteTurn = is_white_turn
         self.plateau = plateau
-        self.killMoves = kill_moves
 
     @staticmethod
     def initial_state():
@@ -36,8 +34,8 @@ class State:
 
         return State(is_white_turn=True, plateau=plateau)
 
-    def make_new_game_state(self, move_id, new_queen):
-        moves = self.killMoves.get_move(move_id)
+    def make_new_game_state(self, move: Move, new_queen):
+        moves = move.get_moves()
         previous = None
         new_state = copy.deepcopy(self.plateau.board)
         for tup in moves:
@@ -48,7 +46,7 @@ class State:
         if new_queen:
             new_state.plateau.board[moves[-1][0]][moves[-1][1]].isKing = True
         new_state.isWhiteTurn = not self.isWhiteTurn
-        for _ in self.killMoves.get_killed_pieces(move_id):
+        for _ in move.get_killed_pieces():
             new_state.plateau.numWhite -= 0 if self.isWhiteTurn else 1
             new_state.plateau.numBlack -= 1 if self.isWhiteTurn else 0
         if not new_state.has_something_to_play():
@@ -75,41 +73,36 @@ class State:
             return self.plateau.numWhite == 0
 
     def getPossibleActions(self):
+        """
+        Return all possible actions (legal ones) from the current state
+        :return: a list of Move
+        """
         has_to_eat_something = self.has_to_eat()
-        plays = {}
+        plays = []
         for x in range(self.plateau.taillePlateau):
             for y in range(self.plateau.taillePlateau):
                 current_piece = self.plateau.board[x][y]
                 if current_piece is not None and current_piece.isWhite == self.isWhiteTurn:
                     if has_to_eat_something:
-                        tmp = Helper.calculate_recursive_eat_positions(self.plateau.board, x, y)
+                        tmp = Helper.convert_to_list(Helper.calculate_recursive_eat_positions(self.plateau.board, x, y))
                     else:
                         tmp = Helper.normalize_moves(
                             ValidMoveMethods.calculate_eat_positions(self.plateau.board, x, y, True, False, False))
-                    Helper.append_moves(plays, tmp)
-        del plays["count"]
-        if has_to_eat_something:
-            self.killMoves.add_moves(plays)
+                    plays.append(Helper.create_moves(tmp, self.isWhiteTurn))
         return plays
 
-    def takeAction(self, action):
-        # Only one time
-        move_id = 0
-        for id_number, first_action in action.items():
-            move_id = id_number
-            action = first_action
-            break
-        origin = action[0]
-        destination = action[1]
+    def takeAction(self, move):
+        origin = move.get_origin()
+        destination = move.get_dest()
         is_new_queen = not self.plateau.board[origin[0]][origin[1]].isKing and \
                        ValidMoveMethods.check_new_queen(
                            Deplacement(origin[0], origin[1], destination[0], destination[1]), self.isWhiteTurn)
         # Killed
-        if self.killMoves.get_killed_pieces(move_id) is not None:
-            return self.make_new_game_state(move_id, is_new_queen)
+        if move.get_killed_pieces() is not None:
+            return self.make_new_game_state(move, is_new_queen)
         # Normal move
         else:
-            return self.make_new_game_state(move_id, is_new_queen)
+            return self.make_new_game_state(move, is_new_queen)
 
     def isTerminal(self):
         return not self.has_something_to_play(check_other=True) or self.has_won(True) or self.has_won(False)
