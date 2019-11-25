@@ -1,56 +1,19 @@
-def mirror_coordinates(x, y, y_axis_coor=4):
-    """
-    Add reflective or mirror coordinate for the input coordinate based on the y-axis.
-    :param x: the x-axis of the coordinate
-    :param y: the y-axis of the coordinate
-    :param y_axis_coor: The center of the y-axis
-    :return: the tuple of x,y mirrored coordinate
-    """
-    y -= y_axis_coor
-    y *= -1
-    y += y_axis_coor
-    return x, y
-
-
-def object_change_coordinates(pawn):
-    """
-    Change the pawn x and y coordinates into the mirrored one
-    :param pawn: the object that want to be mirrored
-    :return:
-    """
-    (x_new, y_new) = mirror_coordinates(pawn.x, pawn.y)
-    pawn.x = x_new
-    pawn.y = y_new
-
-
 def mirror_state(input_state):
     """
-    Mirror the state. It will mirror the coordinates of all the pawns and kings.
-    After that, it will change the color to the opposite of the pawn's color.
+    Mirror the state by changing the colors of the current state
     :param input_state: State
     :return: mirrored state
     """
     from copy import deepcopy
     # iterate through pawn
     state = deepcopy(input_state)
-    state.turn += 5
+    for x, row in enumerate(input_state.plateau.board):
+        for y, piece in enumerate(row):
+            if piece is not None:
+                state.plateau.board[x][y].isWhite = not piece.isWhite
 
-    black_list_pawn = state.black_pawn_list
-    white_list_pawn = state.white_pawn_list
-    white_king = state.white_king
-    black_king = state.black_king
-    state.black_pawn_list = state.white_pawn_list
-    state.white_pawn_list = black_list_pawn
-    state.black_king = state.white_king
-    state.white_king = black_king
-    list_total_pawn = black_list_pawn + white_list_pawn + [white_king] + [black_king]
-
-    for pawn in list_total_pawn:
-        assert isinstance(pawn, Pawn)
-        pawn.player = state.player_list[(pawn.player.color + 1) % 2]
-        object_change_coordinates(pawn)
-    state.refresh_board()
-    return state
+    state.isWhiteTurn = not state.isWhiteTurn
+    state.plateau.numWhite, state.plateau.numBlack = state.plateau.numBlack, state.plateau.numWhite
 
 
 def get_key_mirror_action(input_key_action: str):

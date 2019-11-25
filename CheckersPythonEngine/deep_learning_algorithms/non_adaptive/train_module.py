@@ -5,9 +5,10 @@ from deep_learning_algorithms.non_adaptive.util.action_encoder import ActionEnco
 from deep_learning_algorithms.non_adaptive.util.stacked_state import StackedState
 from deep_learning_algorithms.MctsMethods import State
 from deep_learning_algorithms.non_adaptive.util import AIElements
+from deep_learning_algorithms.mcts import Mcts
 from copy import deepcopy
 import numpy as np
-from deep_learning_algorithms.non_adaptive.alpha_zero.mcts import MCTreeSearch
+from deep_learning_algorithms.non_adaptive.mcts import MCTreeSearch
 from deep_learning_algorithms.non_adaptive.util.alphazero_util import parse_global_list_training, HelperTrainingExample, \
     mirror_stacked_state
 from keras.models import clone_model
@@ -40,11 +41,11 @@ def fit_train(global_list_training, ae, model_deep_net,
         print("==============")
 
         # If episode is below of 1/8 of episode, force attack or promote if possible.
-        greed_is_good = True if eps < greedy_episode else False
+        greed_is_good = False  # True if eps < greedy_episode else False
         state = State()
         state.initial_state()
         stacked_state = StackedState(state)
-        mcts = MCTreeSearch(model_deep_net.model, 1, mtcs_sims, ae, stacked_state)
+        mcts = Mcts(timeLimit=1000)  # MCTreeSearch(model_deep_net.model, 1, mtcs_sims, ae, stacked_state)
 
         new_list_training = do_self_play_episode(stacked_state, mcts, ae, greed_is_good)
         global_list_training.extend(new_list_training)
@@ -150,7 +151,7 @@ def do_self_play_episode(
         greedy_turn=AlphaZeroConfig.GREEDY_TURN_MIN,
         max_turn_episode=AlphaZeroConfig.MAX_TURN_SIMULATION):
     """
-    Self play an episode. This function will simulate MCTS every turns.
+    Self play an episode. This function will simulate MCTS every turn.
     :param max_turn_episode:
     :param greedy_turn:
     :param stacked_state: The state that is stacked.

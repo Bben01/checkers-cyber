@@ -1,9 +1,8 @@
-from numpy.core.multiarray import ndarray
-
-from ai_modules.ai_elements import AIElements
-from copy import deepcopy
 import random
+from copy import deepcopy
+
 import numpy as np
+from ai_modules.ai_elements import AIElements
 
 from deep_learning_algorithms.non_adaptive.config import AlphaZeroConfig
 from deep_learning_algorithms.non_adaptive.util.alphazero_util import mirror_stacked_state
@@ -14,7 +13,9 @@ class NodeMCTS:
     """
         Node in the tree
     """
+
     def __init__(self, stacked_state, parent=None, root=False, maximizer=0):
+        self.v_ = self.v[0][0]
         self.stacked_state: StackedState = stacked_state
         self.num_state = 0
         self.parent = parent
@@ -33,7 +34,7 @@ class NodeMCTS:
                     epsilon=AlphaZeroConfig.MCTS_EPSILON,
                     alpha_diri=AlphaZeroConfig.MCTS_ALPHA_DIRICHLET,
                     cpuct=AlphaZeroConfig.MCTS_PUCT,
-                    greed_attack = False):
+                    greed_attack=False):
         """
         This function contains 2 steps on the MCTS.
         Select and Expand & Evaluate
@@ -63,7 +64,6 @@ class NodeMCTS:
                     state_stack_representation = np.array([state_stack_representation.get_deep_representation_stack()])
 
                 self.p_state, self.v = model_deep_net.predict(state_stack_representation)
-                self.v_ = self.v[0][0]
                 self.v = self.v[0][0]
                 self.p_state = self.p_state[0]
 
@@ -73,7 +73,7 @@ class NodeMCTS:
                 self.p_state *= possible_action_ohe
                 sum_policy_state = np.sum(self.p_state)
                 if sum_policy_state > 0:
-                    ## normalize to sum 1
+                    # normalize to sum 1
                     self.p_state /= sum_policy_state
                 else:
                     print("All valid moves were masked, do workaround.")
@@ -112,19 +112,19 @@ class NodeMCTS:
                         num_state_action_val = self.num_state_action[action]
                     if self.root:
                         upper_confidence = q_state_action_val + \
-                                           cpuct * ((1 - epsilon) * self.p_state[index_action] + epsilon * dirchlet_prob[
-                            counter_loop]) * \
+                                           cpuct * ((1 - epsilon) * self.p_state[index_action] + epsilon *
+                                                    dirchlet_prob[
+                                                        counter_loop]) * \
                                            np.sqrt(self.num_state) / (1 + num_state_action_val)
-
 
                     else:
                         upper_confidence = q_state_action_val + \
                                            cpuct * self.p_state[index_action] * \
                                            np.sqrt(self.num_state) / (1 + num_state_action_val)
                     if greed_attack and possible_action[action]['action'] == 'attack':
-                        upper_confidence += AlphaZeroConfig.Q_ATTACK_GREEDY # Higher Chance to Attack
+                        upper_confidence += AlphaZeroConfig.Q_ATTACK_GREEDY  # Higher Chance to Attack
                     if greed_attack and possible_action[action]['action'] == 'promote':
-                        upper_confidence += AlphaZeroConfig.Q_PROMOTE_GREEDY # Higher Chance to promote
+                        upper_confidence += AlphaZeroConfig.Q_PROMOTE_GREEDY  # Higher Chance to promote
                     counter_loop += 1
                     if best_upper_confidence < upper_confidence:
                         best_upper_confidence = upper_confidence
@@ -173,6 +173,7 @@ class MCTreeSearch:
     """
         Class for simulating the MCTS
     """
+
     def __init__(self, model_deep_net, cpuct, number_of_simulation, label_encoder, init_state_stack):
         self.model_deep_net = model_deep_net
         self.root = NodeMCTS(init_state_stack, root=True)
@@ -180,7 +181,7 @@ class MCTreeSearch:
         self.cpuct = cpuct
         self.label_encoder = label_encoder
 
-    def self_play(self, greed_attack = False):
+    def self_play(self, greed_attack=False):
         """
         Simulate the MCTS until the defined number of simulation
         :param greed_attack:
@@ -193,12 +194,14 @@ class MCTreeSearch:
             while not end_loop:
                 if node_check.p_state is None:
                     # Select and backup
-                    node_check.expand_node(self.model_deep_net, current_player, self.label_encoder, cpuct=self.cpuct, greed_attack=greed_attack)
+                    node_check.expand_node(self.model_deep_net, current_player, self.label_encoder, cpuct=self.cpuct,
+                                           greed_attack=greed_attack)
                     node_check.backfill()
                     end_loop = True
                 else:
                     # Expand and Evaluate
-                    node_check.expand_node(self.model_deep_net, current_player, self.label_encoder, cpuct=self.cpuct, greed_attack=greed_attack)
+                    node_check.expand_node(self.model_deep_net, current_player, self.label_encoder, cpuct=self.cpuct,
+                                           greed_attack=greed_attack)
                     node_check = node_check.edge_action[node_check.selected_action]
         print("Simulation End, num of simulation = %d" % (self.number_of_simulation))
 
@@ -210,7 +213,7 @@ class MCTreeSearch:
         :return:
         """
         counts = [self.root.num_state_action[action] if action
-                in self.root.num_state_action else 0 for action in
+                                                        in self.root.num_state_action else 0 for action in
                   self.label_encoder.le.classes_]
         if temperature == 0:
             best_action = np.argmax(counts)
@@ -232,7 +235,7 @@ class MCTreeSearch:
         :param action_key:
         :return:
         """
-        self.root:NodeMCTS = self.root.edge_action[action_key]
+        self.root: NodeMCTS = self.root.edge_action[action_key]
         self.root.root = True
         self.root.parent = None  # omitted
 
