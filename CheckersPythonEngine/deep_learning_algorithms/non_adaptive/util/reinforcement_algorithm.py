@@ -1,5 +1,5 @@
 from deep_learning_algorithms.non_adaptive.deep_net_architecture import PawnNetZero
-from deep_learning_algorithms.non_adaptive.alpha_zero.mcts import MCTreeSearch
+from deep_learning_algorithms.mcts import Mcts
 from deep_learning_algorithms.non_adaptive.util.action_encoder import ActionEncoder
 from deep_learning_algorithms.non_adaptive.util.stacked_state import StackedState
 from keras.models import load_model

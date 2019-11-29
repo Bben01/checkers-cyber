@@ -88,7 +88,7 @@ def possible_plays(game_instance: Jeu, check_white, has_to_eat_again):
     return plays
 
 
-def ia_play(game_instance: Jeu, has_to_play_again):
+def ia_play(game_instance: Jeu):
     # This is where the ia is called to play
     # Just for now:
     x1 = int(input("x1: "))

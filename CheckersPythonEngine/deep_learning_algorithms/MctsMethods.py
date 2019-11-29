@@ -97,12 +97,8 @@ class State:
         is_new_queen = not self.plateau.board[origin[0]][origin[1]].isKing and \
                        ValidMoveMethods.check_new_queen(
                            Deplacement(origin[0], origin[1], destination[0], destination[1]), self.isWhiteTurn)
-        # Killed
-        if move.get_killed_pieces() is not None:
-            return self.make_new_game_state(move, is_new_queen)
-        # Normal move
-        else:
-            return self.make_new_game_state(move, is_new_queen)
+
+        return self.make_new_game_state(move, is_new_queen)
 
     def isTerminal(self):
         return not self.has_something_to_play(check_other=True) or self.has_won(True) or self.has_won(False)

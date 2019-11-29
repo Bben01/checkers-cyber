@@ -5,7 +5,6 @@ def mirror_state(input_state):
     :return: mirrored state
     """
     from copy import deepcopy
-    # iterate through pawn
     state = deepcopy(input_state)
     for x, row in enumerate(input_state.plateau.board):
         for y, piece in enumerate(row):
@@ -14,6 +13,7 @@ def mirror_state(input_state):
 
     state.isWhiteTurn = not state.isWhiteTurn
     state.plateau.numWhite, state.plateau.numBlack = state.plateau.numBlack, state.plateau.numWhite
+    return state
 
 
 def get_key_mirror_action(input_key_action: str):
