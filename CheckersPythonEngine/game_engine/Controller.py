@@ -90,10 +90,16 @@ def possible_plays(game_instance: Jeu, check_white, has_to_eat_again):
 
 def ia_play(game_instance: Jeu):
     # This is where the ia is called to play
-    # Just for now:
-    x1 = int(input("x1: "))
-    y1 = int(input("y1: "))
-    x2 = int(input("x2: "))
-    y2 = int(input("y2: "))
-    infos = game_instance.plateau.try_move(Deplacement(x1, y1, x2, y2), has_to_play_again)
-    return game_instance.analize_info(infos)
+    from alpha_beta_pruning import IAController
+    return_string = []
+    has_to_play_again = False
+    for move in IAController.list_actions(IAController.controller(game_instance)):
+        x1 = move[0][0]
+        y1 = move[0][1]
+        x2 = move[1][0]
+        y2 = move[1][1]
+        infos = game_instance.plateau.try_move(Deplacement(x1, y1, x2, y2), has_to_play_again)
+        return_string.append(game_instance.analize_info(infos))
+        has_to_play_again = True
+
+    return len(return_string) + "//-//".join(return_string)

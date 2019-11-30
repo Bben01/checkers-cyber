@@ -24,6 +24,8 @@ public class Graphiques : MonoBehaviour
 
     private bool isWhiteTurn;
 
+    private bool iaIsPlaying = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,21 +39,42 @@ public class Graphiques : MonoBehaviour
     {
         UpdateMouseOver();
 
-        int x = (int)mouseOver.x;
-        int y = (int)mouseOver.y;
-        if (selectedPiece != null)
+        if (iaIsPlaying)
         {
-            UpdatePieceDrag(selectedPiece);
-        }
-        if (Input.GetMouseButtonDown(0) && !clicked)
-        {
-            SelectPiece(x, y);
             return;
         }
-        if (Input.GetMouseButtonDown(0) && clicked)
+
+        if (isWhiteTurn)
         {
-            string[] returnInfos = Client.FormatSendAndResponse("try_move_piece", new string[5] { $"{startClick.x}", $"{startClick.y}", $"{x}", $"{y}", $"{hasToPlayAgain}" });
-            AnalizeInfo(returnInfos);
+            int x = (int)mouseOver.x;
+            int y = (int)mouseOver.y;
+            if (selectedPiece != null)
+            {
+                UpdatePieceDrag(selectedPiece);
+            }
+            if (Input.GetMouseButtonDown(0) && !clicked)
+            {
+                SelectPiece(x, y);
+                return;
+            }
+            if (Input.GetMouseButtonDown(0) && clicked)
+            {
+                string[] returnInfos = Client.FormatSendAndResponse("try_move_piece", new string[5] { $"{startClick.x}", $"{startClick.y}", $"{x}", $"{y}", $"{hasToPlayAgain}" });
+                AnalizeInfo(returnInfos);
+            }
+        }
+        else
+        {
+            string[][] infos = Client.IAPlay();
+            IAPlay(infos);
+        }
+    }
+
+    private void IAPlay(string[][] infos)
+    {
+        foreach (string[] info in infos)
+        {
+            AnalizeInfo(info);
         }
     }
 

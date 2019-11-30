@@ -48,13 +48,12 @@ def alphabeta(state, depth, a, b, maximizingPlayer):
         return value
 
 
-def get_best_state(state):
-    best_state = None
+def get_best_action(state):
+    best_action = None
     best_value = float("-inf")
     for state_action in state.getPossibleActions():
-        current_state = state.takeAction(state_action)
-        value = alphabeta(current_state, 3, float("-inf"), float("inf"), True)
+        value = alphabeta(state.takeAction(state_action), 3, float("-inf"), float("inf"), True)
         if value > best_value:
-            best_state = current_state
+            best_action = state_action
             best_value = value
-    return best_state
+    return best_action

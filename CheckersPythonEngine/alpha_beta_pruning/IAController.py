@@ -9,8 +9,18 @@ def controller(game_state):
     :return: the action to take
     """
     state = ChargeState.create_state(game_state)
-    best_state = Alphabeta.get_best_state(state)
+    best_state = Alphabeta.get_best_action(state)
     return best_state
 
-def list_actions(best_state_action):
 
+def list_actions(best_move):
+    list_moves = []
+    previous_move = None
+    for current_move in best_move.get_moves():
+        if previous_move is None:
+            previous_move = current_move
+            continue
+        list_moves.append((previous_move, current_move))
+        previous_move = current_move
+
+    return list_moves
