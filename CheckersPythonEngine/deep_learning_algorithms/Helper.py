@@ -39,6 +39,8 @@ def update_board(board, x, y, move):
 
 def normalize_moves(moves):
     possible_moves = []
+    if moves is None:
+        return
     for _, move in moves.items():
         possible_moves.append(move)
     return possible_moves
@@ -54,6 +56,8 @@ def append_moves(original, to_append):
 
 def create_moves(list_of_moves, player_color):
     move_list = []
+    if not list_of_moves:
+        return
     for move in list_of_moves:
         move_list.append(Move(player_color, move))
     return move_list

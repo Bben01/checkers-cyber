@@ -88,7 +88,10 @@ class State:
                     else:
                         tmp = Helper.normalize_moves(
                             ValidMoveMethods.calculate_eat_positions(self.plateau.board, x, y, True, False, False))
-                    plays.append(Helper.create_moves(tmp, self.isWhiteTurn))
+                    if tmp is not None:
+                        print(f'Not None! {tmp}')
+                        plays.append(Helper.create_moves(tmp, self.isWhiteTurn))
+        print("Something?")
         return plays
 
     def takeAction(self, move):
