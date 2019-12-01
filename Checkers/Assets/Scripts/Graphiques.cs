@@ -163,7 +163,7 @@ public class Graphiques : MonoBehaviour
         clicked = false;
         selectedPiece = null;
         hasToPlayAgain = false;
-        isWhiteTurn = PlayAgain();
+        isWhiteTurn = PlayAgain() ? !isWhiteTurn : isWhiteTurn;
         startClick = Vector2Int.zero;
     }
 

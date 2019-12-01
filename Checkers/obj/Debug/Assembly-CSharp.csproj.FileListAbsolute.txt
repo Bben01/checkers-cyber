@@ -781,3 +781,12 @@ F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\obj\Debug\Assembly-CSharp
 F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\obj\Debug\Assembly-CSharp.dll
 F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\obj\Debug\Assembly-CSharp.pdb
+F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\Temp\bin\Debug\Unity.Timeline.Editor.pdb
+F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\Temp\bin\Debug\Unity.VSCode.Editor.pdb
+F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\Temp\bin\Debug\Unity.TextMeshPro.Editor.pdb
+F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\Temp\bin\Debug\UnityEngine.UI.pdb
+F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\Temp\bin\Debug\Unity.Timeline.pdb
+F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\Temp\bin\Debug\Unity.CollabProxy.Editor.pdb
+F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\Temp\bin\Debug\Unity.Rider.Editor.pdb
+F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\Temp\bin\Debug\Unity.TextMeshPro.pdb
+F:\UnityProjects\ProjectGitHub\checkers-cyber\Checkers\Temp\bin\Debug\UnityEditor.UI.pdb

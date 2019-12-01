@@ -4,6 +4,14 @@ from game_engine.Deplacement import Deplacement
 
 
 def calculate_recursive_eat_positions(board, x, y, has_to_eat=False):
+    """
+    Calculates all eat positions of a given piece on the board
+    :param board: the board
+    :param x: the x coordinate of the piece
+    :param y: the y coordinate of the piece
+    :param has_to_eat: whether the piece has to eat again or not
+    :return: A dict of possible moves
+    """
     count = 0
     moves = {}
     tmp = ValidMoveMethods.calculate_eat_positions(board, x, y, False, True, has_to_eat)
@@ -21,11 +29,32 @@ def calculate_recursive_eat_positions(board, x, y, has_to_eat=False):
     return moves
 
 
-def convert_to_list(dico):
+def convert_to_list(dico, origin):
+    """
+    Convert {1: [( , ), ( , )], 2: ...} to [[( , ), ( , )], [...]]
+    :param dico: the dict of moves {1: [( , ), ( , )], 2: ...}
+    :param origin: a tuple that represents the origin (x, y)
+    :return: [[( , ), ( , )], [...]]
+    """
     moves_list = []
     for id_move, moves in dico.items():
-        moves_list.append(tuple(moves))
+        moves_list.append([origin].append(moves))
     return moves_list
+
+
+def normalize_moves(moves, origin):
+    """
+    Convert {1: ( , ), 2: ...} to [[origin, ( , )], [...]]
+    :param moves: dict of moves
+    :param origin: a tuple that represents the origin (x, y)
+    :return: [[origin, ( , )], [...]]
+    """
+    possible_moves = []
+    if moves is None:
+        return
+    for _, move in moves.items():
+        possible_moves.append([origin].append(move))
+    return possible_moves
 
 
 def update_board(board, x, y, move):
@@ -37,15 +66,6 @@ def update_board(board, x, y, move):
     return board
 
 
-def normalize_moves(moves):
-    possible_moves = []
-    if moves is None:
-        return
-    for _, move in moves.items():
-        possible_moves.append(move)
-    return possible_moves
-
-
 def append_moves(original, to_append):
     if to_append is None:
         return
@@ -55,6 +75,12 @@ def append_moves(original, to_append):
 
 
 def create_moves(list_of_moves, player_color):
+    """
+    Create [Move1([]), Move2([]), ...] from [[origin, ( , )], [...]]
+    :param list_of_moves: the list of moves
+    :param player_color: the color of the player
+    :return: the created list
+    """
     move_list = []
     if not list_of_moves:
         return

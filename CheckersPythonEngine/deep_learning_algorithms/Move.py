@@ -9,7 +9,7 @@ class Move:
     def add_move(self, moved_on):
         """
         This method adds a move to the dict moves.
-        :param moved_on: list of tuple that represent the positions that the piece went in
+        :param moved_on: list of tuple that represents the positions that the piece went in
         :return: wether the list has been correctly added to the move
         """
         if self.moved_on is None:

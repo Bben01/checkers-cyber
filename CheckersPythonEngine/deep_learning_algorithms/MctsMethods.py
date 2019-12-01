@@ -84,10 +84,10 @@ class State:
                 current_piece = self.plateau.board[x][y]
                 if current_piece is not None and current_piece.isWhite == self.isWhiteTurn:
                     if has_to_eat_something:
-                        tmp = Helper.convert_to_list(Helper.calculate_recursive_eat_positions(self.plateau.board, x, y))
+                        tmp = Helper.convert_to_list(Helper.calculate_recursive_eat_positions(self.plateau.board, x, y), (x, y))
                     else:
                         tmp = Helper.normalize_moves(
-                            ValidMoveMethods.calculate_eat_positions(self.plateau.board, x, y, True, False, False))
+                            ValidMoveMethods.calculate_eat_positions(self.plateau.board, x, y, True, False, False), (x, y))
                     if tmp is not None:
                         print(f'Not None! {tmp}')
                         plays.append(Helper.create_moves(tmp, self.isWhiteTurn))
