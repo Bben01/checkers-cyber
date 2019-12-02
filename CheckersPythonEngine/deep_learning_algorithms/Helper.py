@@ -53,7 +53,7 @@ def normalize_moves(moves, origin):
     if moves is None:
         return
     for _, move in moves.items():
-        possible_moves.append([origin].append(move))
+        possible_moves.append([origin, move])
     return possible_moves
 
 
@@ -86,4 +86,5 @@ def create_moves(list_of_moves, player_color):
         return
     for move in list_of_moves:
         move_list.append(Move(player_color, move))
+        print(move)
     return move_list

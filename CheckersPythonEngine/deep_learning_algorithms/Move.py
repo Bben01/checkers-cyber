@@ -43,3 +43,6 @@ class Move:
 
     def __hash__(self):
         return hash((self.player_white, self.moved_on))
+
+    def __str__(self):
+        return f"Move({self.moved_on}, {self.player_white})"

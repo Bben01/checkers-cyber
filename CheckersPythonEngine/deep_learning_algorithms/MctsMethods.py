@@ -37,12 +37,13 @@ class State:
     def make_new_game_state(self, move: Move, new_queen):
         moves = move.get_moves()
         previous = None
-        new_state = copy.deepcopy(self.plateau.board)
+        new_state = State(not self.isWhiteTurn, copy.deepcopy(self.plateau.board))
+        print(f"moves={moves}")
         for tup in moves:
             if previous is None:
                 previous = tup
             else:
-                new_state = Helper.update_board(new_state, previous[0], previous[1], tup)
+                new_state.plateau.board = Helper.update_board(new_state.plateau, previous[0], previous[1], tup)
         if new_queen:
             new_state.plateau.board[moves[-1][0]][moves[-1][1]].isKing = True
         new_state.isWhiteTurn = not self.isWhiteTurn
@@ -90,11 +91,12 @@ class State:
                             ValidMoveMethods.calculate_eat_positions(self.plateau.board, x, y, True, False, False), (x, y))
                     if tmp is not None:
                         print(f'Not None! {tmp}')
-                        plays.append(Helper.create_moves(tmp, self.isWhiteTurn))
-        print("Something?")
+                        plays.extend(Helper.create_moves(tmp, self.isWhiteTurn))
+        print(f'play: {plays}')
         return plays
 
     def takeAction(self, move):
+        print(f"{move}")
         origin = move.get_origin()
         destination = move.get_dest()
         is_new_queen = not self.plateau.board[origin[0]][origin[1]].isKing and \
