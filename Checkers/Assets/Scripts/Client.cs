@@ -5,7 +5,7 @@ using System.Text;
 public class Client
 {
     private static readonly string ip = "127.0.0.1";
-    private static readonly int port = 10000;
+    private static readonly int port = 10001;
     private static bool openClient = false;
     private static TcpClient client;
     private static NetworkStream stream;

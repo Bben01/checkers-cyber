@@ -1,4 +1,5 @@
 import copy
+import pprint
 
 from deep_learning_algorithms import Helper
 from deep_learning_algorithms.Move import Move
@@ -37,13 +38,12 @@ class State:
     def make_new_game_state(self, move: Move, new_queen):
         moves = move.get_moves()
         previous = None
-        new_state = State(not self.isWhiteTurn, copy.deepcopy(self.plateau.board))
-        print(f"moves={moves}")
+        new_state = State(not self.isWhiteTurn, copy.deepcopy(self.plateau))
         for tup in moves:
             if previous is None:
                 previous = tup
             else:
-                new_state.plateau.board = Helper.update_board(new_state.plateau, previous[0], previous[1], tup)
+                new_state.plateau.board = Helper.update_board(new_state.plateau.board, previous[0], previous[1], tup)
         if new_queen:
             new_state.plateau.board[moves[-1][0]][moves[-1][1]].isKing = True
         new_state.isWhiteTurn = not self.isWhiteTurn
@@ -52,6 +52,7 @@ class State:
             new_state.plateau.numBlack -= 1 if self.isWhiteTurn else 0
         if not new_state.has_something_to_play():
             new_state.isWhiteTurn = not new_state.isWhiteTurn
+        print(self.print_board(new_state.plateau.board))
         return new_state
 
     def has_to_eat(self):
@@ -79,6 +80,7 @@ class State:
         :return: a list of Move
         """
         has_to_eat_something = self.has_to_eat()
+        print(f'hastoeat={has_to_eat_something}, white={self.isWhiteTurn}')
         plays = []
         for x in range(self.plateau.taillePlateau):
             for y in range(self.plateau.taillePlateau):
@@ -90,13 +92,12 @@ class State:
                         tmp = Helper.normalize_moves(
                             ValidMoveMethods.calculate_eat_positions(self.plateau.board, x, y, True, False, False), (x, y))
                     if tmp is not None:
-                        print(f'Not None! {tmp}')
                         plays.extend(Helper.create_moves(tmp, self.isWhiteTurn))
-        print(f'play: {plays}')
         return plays
 
     def takeAction(self, move):
         print(f"{move}")
+
         origin = move.get_origin()
         destination = move.get_dest()
         is_new_queen = not self.plateau.board[origin[0]][origin[1]].isKing and \
@@ -114,3 +115,12 @@ class State:
         if not self.isWhiteTurn and self.has_won(False):
             return 1
         return 0
+
+    @staticmethod
+    def print_board(board):
+        string = ""
+        for k, i in enumerate(board):
+            for j in board[k]:
+                string += '{:^30}'.format(str(j))
+            string += "\n"
+        return string

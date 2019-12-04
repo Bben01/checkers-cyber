@@ -18,7 +18,10 @@ def calculate_recursive_eat_positions(board, x, y, has_to_eat=False):
     if tmp is None:
         return None
     for _, move in tmp.items():
-        other_paths = calculate_recursive_eat_positions(update_board(board, x, y, move), move[0], move[1], True)
+        from deep_learning_algorithms.MctsMethods import State
+        updated = update_board(board, x, y, move)
+        print(f"updated=\n{State.print_board(updated)}")
+        other_paths = calculate_recursive_eat_positions(updated, move[0], move[1], True)
         if other_paths is not None:
             for _, other in other_paths.items():
                 moves[count] = [move].append(other)
@@ -26,6 +29,7 @@ def calculate_recursive_eat_positions(board, x, y, has_to_eat=False):
         else:
             moves[count] = [move]
             count += 1
+    print(f"calculate_moves={x, y}, {moves}")
     return moves
 
 
@@ -36,6 +40,7 @@ def convert_to_list(dico, origin):
     :param origin: a tuple that represents the origin (x, y)
     :return: [[( , ), ( , )], [...]]
     """
+    print(f'dico={dico}')
     moves_list = []
     for id_move, moves in dico.items():
         moves_list.append([origin].append(moves))

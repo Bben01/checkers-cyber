@@ -109,7 +109,7 @@ def calculate_eat_positions(board: [[]], x, y, check_normal: bool, check_kill_po
             positions[count_positive] = (v_piece[0] + vector[0] * 2, v_piece[1] + vector[1] * 2)
             empty_dict = False
             count_positive += 1
-            print(f"Le pion peut manger: {concat_int_int_tuples(vector, v_piece)}")
+            print(f"Le pion peut manger: {concat_int_int_tuples(vector, v_piece)} from {(x, y)}")
 
         ok = check_normal and (not Plateau.out_of_bounds(v_piece[0] + vector[0], v_piece[1] + vector[1])) and \
              board[v_piece[0] + vector[0]][v_piece[1] + vector[1]] is None
