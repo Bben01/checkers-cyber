@@ -10,40 +10,37 @@ def calculate_recursive_eat_positions(board, x, y, has_to_eat=False):
     :param x: the x coordinate of the piece
     :param y: the y coordinate of the piece
     :param has_to_eat: whether the piece has to eat again or not
-    :return: A dict of possible moves
+    :return: A list of possible moves
     """
-    count = 0
-    moves = {}
+    moves = []
     tmp = ValidMoveMethods.calculate_eat_positions(board, x, y, False, True, has_to_eat)
     if tmp is None:
         return None
     for _, move in tmp.items():
+        # move is a tuple
         from deep_learning_algorithms.MctsMethods import State
         updated = update_board(board, x, y, move)
-        print(f"updated=\n{State.print_board(updated)}")
         other_paths = calculate_recursive_eat_positions(updated, move[0], move[1], True)
         if other_paths is not None:
-            for _, other in other_paths.items():
-                moves[count] = [move].append(other)
-                count += 1
+            for other in other_paths:
+                moves.append([move] + other)
         else:
-            moves[count] = [move]
-            count += 1
-    print(f"calculate_moves={x, y}, {moves}")
+            moves.append([move])
     return moves
 
 
-def convert_to_list(dico, origin):
+def add_origin(liste, origin):
     """
-    Convert {1: [( , ), ( , )], 2: ...} to [[( , ), ( , )], [...]]
-    :param dico: the dict of moves {1: [( , ), ( , )], 2: ...}
+    Add origin to the list moves
+    :param liste: the list of moves [[( , ), ( , )], [...]]
     :param origin: a tuple that represents the origin (x, y)
     :return: [[( , ), ( , )], [...]]
     """
-    print(f'dico={dico}')
+    if liste is None:
+        return
     moves_list = []
-    for id_move, moves in dico.items():
-        moves_list.append([origin].append(moves))
+    for moves in liste:
+        moves_list.append([origin] + moves)
     return moves_list
 
 
@@ -63,6 +60,8 @@ def normalize_moves(moves, origin):
 
 
 def update_board(board, x, y, move):
+    from copy import deepcopy
+    board = deepcopy(board)  # Make the new board (avoid conflict)
     board[move[0]][move[1]] = board[x][y]
     board[x][y] = None
     eaten = Deplacement(x, y, move[0], move[1]).eaten_piece()
@@ -91,5 +90,4 @@ def create_moves(list_of_moves, player_color):
         return
     for move in list_of_moves:
         move_list.append(Move(player_color, move))
-        print(move)
     return move_list

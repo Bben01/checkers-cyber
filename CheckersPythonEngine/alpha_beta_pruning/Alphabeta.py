@@ -4,17 +4,18 @@ PIECE_VALUE = 2
 
 
 def evaluate(state):
-    if state.hasWon(False):
+    if state.has_won(False):
         return -120
-    if state.hasWon(True):
+    if state.has_won(True):
         return 120
     util_value = 0
-    for piece in state.plateau.board:
-        if piece is not None:
-            if piece.isKing:
-                util_value += KING_VALUE if piece.isWhite == ENNEMY_IS_WHITE else -KING_VALUE
-            else:
-                util_value += PIECE_VALUE if piece.isWhite == ENNEMY_IS_WHITE else -PIECE_VALUE
+    for row in state.plateau.board:
+        for piece in row:
+            if piece is not None:
+                if piece.isKing:
+                    util_value += KING_VALUE if piece.isWhite == ENNEMY_IS_WHITE else -KING_VALUE
+                else:
+                    util_value += PIECE_VALUE if piece.isWhite == ENNEMY_IS_WHITE else -PIECE_VALUE
 
     return util_value
 

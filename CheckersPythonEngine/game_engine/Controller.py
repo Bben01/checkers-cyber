@@ -102,4 +102,4 @@ def ia_play(game_instance: Jeu):
         return_string.append(game_instance.analize_info(infos))
         has_to_play_again = True
 
-    return len(return_string) + "//-//".join(return_string)
+    return str(len(return_string)) + "//-//".join(return_string)

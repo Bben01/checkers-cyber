@@ -44,6 +44,7 @@ class State:
                 previous = tup
             else:
                 new_state.plateau.board = Helper.update_board(new_state.plateau.board, previous[0], previous[1], tup)
+                previous = tup
         if new_queen:
             new_state.plateau.board[moves[-1][0]][moves[-1][1]].isKing = True
         new_state.isWhiteTurn = not self.isWhiteTurn
@@ -52,7 +53,6 @@ class State:
             new_state.plateau.numBlack -= 1 if self.isWhiteTurn else 0
         if not new_state.has_something_to_play():
             new_state.isWhiteTurn = not new_state.isWhiteTurn
-        print(self.print_board(new_state.plateau.board))
         return new_state
 
     def has_to_eat(self):
@@ -80,14 +80,13 @@ class State:
         :return: a list of Move
         """
         has_to_eat_something = self.has_to_eat()
-        print(f'hastoeat={has_to_eat_something}, white={self.isWhiteTurn}')
         plays = []
         for x in range(self.plateau.taillePlateau):
             for y in range(self.plateau.taillePlateau):
                 current_piece = self.plateau.board[x][y]
                 if current_piece is not None and current_piece.isWhite == self.isWhiteTurn:
                     if has_to_eat_something:
-                        tmp = Helper.convert_to_list(Helper.calculate_recursive_eat_positions(self.plateau.board, x, y), (x, y))
+                        tmp = Helper.add_origin(Helper.calculate_recursive_eat_positions(self.plateau.board, x, y), (x, y))
                     else:
                         tmp = Helper.normalize_moves(
                             ValidMoveMethods.calculate_eat_positions(self.plateau.board, x, y, True, False, False), (x, y))
@@ -96,8 +95,6 @@ class State:
         return plays
 
     def takeAction(self, move):
-        print(f"{move}")
-
         origin = move.get_origin()
         destination = move.get_dest()
         is_new_queen = not self.plateau.board[origin[0]][origin[1]].isKing and \
