@@ -64,4 +64,5 @@ class Jeu:
             return_message += separator + "1" + "Black won!" if self.plateau.isWhiteTurn else "White won!"
         else:
             return_message += separator + "0"
+        return_message += separator + f"1{infos.lastDeplacement.origin[0]}{infos.lastDeplacement.origin[1]}"
         return return_message

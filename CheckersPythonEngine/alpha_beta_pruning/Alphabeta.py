@@ -1,6 +1,6 @@
 ENNEMY_IS_WHITE = True
-KING_VALUE = 10
-PIECE_VALUE = 2
+KING_VALUE = 15
+PIECE_VALUE = 7
 
 
 def evaluate(state):
@@ -53,7 +53,7 @@ def get_best_action(state):
     best_action = None
     best_value = float("-inf")
     for state_action in state.getPossibleActions():
-        value = alphabeta(state.takeAction(state_action), 3, float("-inf"), float("inf"), True)
+        value = alphabeta(state.takeAction(state_action), 5, float("-inf"), float("inf"), True)
         if value > best_value:
             best_action = state_action
             best_value = value

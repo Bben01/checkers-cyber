@@ -16,7 +16,10 @@ def controller(game_state):
 def list_actions(best_move):
     list_moves = []
     previous_move = None
-    for current_move in best_move.get_moves():
+    disponible_moves = best_move.get_moves()
+    if disponible_moves is None:
+        return
+    for current_move in disponible_moves:
         if previous_move is None:
             previous_move = current_move
             continue

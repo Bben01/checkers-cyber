@@ -4,7 +4,7 @@ using UnityEngine;
 public class Graphiques : MonoBehaviour
 {
     public static readonly int taillePlateau = 8;
-    public Piece[,] board = new Piece[taillePlateau, taillePlateau]; // TODO: faire quelque chose
+    public Piece[,] board = new Piece[taillePlateau, taillePlateau];
 
     public GameObject whitePiecePrefab;
     public GameObject blackPiecePrefab;
@@ -24,7 +24,6 @@ public class Graphiques : MonoBehaviour
 
     private bool isWhiteTurn;
 
-    private bool iaIsPlaying = false;
 
     // Start is called before the first frame update
     void Start()
@@ -38,11 +37,6 @@ public class Graphiques : MonoBehaviour
     void Update()
     {
         UpdateMouseOver();
-
-        if (iaIsPlaying)
-        {
-            return;
-        }
 
         if (isWhiteTurn)
         {
@@ -65,20 +59,24 @@ public class Graphiques : MonoBehaviour
         }
         else
         {
+            enabled = false;
             string[][] infos = Client.IAPlay();
             IAPlay(infos);
+            enabled = true;
         }
     }
 
     private void IAPlay(string[][] infos)
     {
+        bool firstTime = true;
         foreach (string[] info in infos)
         {
-            AnalizeInfo(info);
+            AnalizeInfo(info, true, firstTime);
+            firstTime = false;
         }
     }
 
-    private void AnalizeInfo(string[] returnInfos)
+    private void AnalizeInfo(string[] returnInfos, bool iaPlay=false, bool firstTime=false)
     {
         // Error
         if (Helper.Activate(returnInfos[0], 0))
@@ -92,6 +90,17 @@ public class Graphiques : MonoBehaviour
         }
         // Just move visually the piece
         Vector2Int lastDeplacement = Helper.GetLastDeplacementDest(returnInfos[4]);
+        if(iaPlay)
+        {
+            int x = (int) char.GetNumericValue(returnInfos[6], 1);
+            int y = (int)char.GetNumericValue(returnInfos[6], 2);
+            if (firstTime)
+            {
+                startClick = new Vector2Int(x, y);
+            }
+            selectedPiece = board[x, y];
+        }
+        
         MovePieceVisual(selectedPiece, lastDeplacement.x, lastDeplacement.y);
         // Killed
         if (Helper.Activate(returnInfos[2], 0))
