@@ -32,7 +32,7 @@ class Jeu:
         # There was an error
         if infos.errorMsg != "":
             return "1" + separator + (
-                "1" if not self.hasToPlayAgain else "0") + infos.errorMsg + separator + "0" + separator + "0" + separator + "0" + separator + "0"
+                "1" if not self.hasToPlayAgain else "0") + infos.errorMsg + separator + "0" + separator + "0" + separator + "0" + separator + "0" + separator + "0"
         else:
             return_message += is_false
         # There is a new Queen
