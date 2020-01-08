@@ -34,7 +34,7 @@ class Board:
         for row in self.pieces:
             for piece in row:
                 if piece is not None:
-                    if piece.lower() == "b" and not color or piece.lower() == "w" and color:
+                    if piece.isWhite() == color:
                         count += 1
 
         return count
@@ -86,3 +86,4 @@ class Board:
                 previous = tup
         if is_new_queen:
             self.pieces[moves[-1][0]][moves[-1][1]].isKing = True
+

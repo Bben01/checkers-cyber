@@ -13,6 +13,7 @@ import numpy as np
 
 class CheckersGame(Game):
     def __init__(self, taillePlateau):
+        super().__init__()
         self.taillePlateau = taillePlateau
 
     def getInitBoard(self):
@@ -51,8 +52,7 @@ class CheckersGame(Game):
         """
         b = Board(self.taillePlateau)
         b.pieces = copy.deepcopy(board)
-        move = (int(action / self.n), action % self.n)
-        b.execute_move(move, player)
+        b.execute_move(action, self._playerToBool(player))
         return b.pieces, -player
 
     def getValidMoves(self, board, player):
@@ -66,7 +66,10 @@ class CheckersGame(Game):
                         moves that are valid from the current board and player,
                         0 for invalid moves
         """
-        pass
+        b = Board(self.taillePlateau)
+        b.pieces = copy.deepcopy(board)
+        legal_moves = b.get_legal_moves(self._playerToBool(player))
+        return legal_moves
 
     def getGameEnded(self, board, player):
         """
@@ -79,7 +82,11 @@ class CheckersGame(Game):
                small non-zero value for draw.
 
         """
-        pass
+        # TODO: voir comment faire puisqu'eux le font avec des 1 au niveau des cases possibles a jouer
+        b = Board(self.taillePlateau)
+        b.pieces = copy.deepcopy(board)
+        num = player if b.countPieces(self._playerToBool(player)) == 0 else 0 if b.countPieces(self._playerToBool(-player)) else -player
+        return num
 
     def getCanonicalForm(self, board, player):
         """
@@ -95,7 +102,14 @@ class CheckersGame(Game):
                             board as is. When the player is black, we can invert
                             the colors and return the board.
         """
-        pass
+        # If white
+        if self._playerToBool(player):
+            return board
+        # If black
+        for row in board:
+            for piece in row:
+                if piece is not None:
+                    piece.reverse_color()
 
     def getSymmetries(self, board, pi):
         """
@@ -120,3 +134,7 @@ class CheckersGame(Game):
                          Required by MCTS for hashing.
         """
         pass
+
+    @staticmethod
+    def _playerToBool(player):
+        return True if player == 1 else False
