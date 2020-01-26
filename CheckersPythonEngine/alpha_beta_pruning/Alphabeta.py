@@ -1,3 +1,5 @@
+from alpha_beta_pruning import Evaluate
+
 ENNEMY_COLOR = True
 KING_VALUE = 10
 PIECE_VALUE = 7
@@ -35,7 +37,7 @@ def next_states(state):
 
 def alphabeta(state, depth, a, b, maximizingPlayer):
     if depth == 0 or state.isTerminal():
-        return evaluate(state)
+        return Evaluate.evaluate_position(state)
     if maximizingPlayer:
         value = float("-inf")
         for state_children in next_states(state):

@@ -5,8 +5,8 @@ from game_engine.Piece import Piece
 
 
 class Board:
-    def __init__(self, taillePlateau=8):
-        self.taillePlateau = taillePlateau
+    def __init__(self, taille_plateau=8):
+        self.taillePlateau = taille_plateau
         self.pieces = [[None for _ in range(self.taillePlateau)] for _ in range(self.taillePlateau)]
 
         for y in range(int(self.taillePlateau - 1 / 2)):
@@ -20,6 +20,8 @@ class Board:
             for x in range(self.taillePlateau, step=2):
                 if odd_row:
                     self.pieces[x][y] = Piece(False)
+
+        # TODO: faire quelque chose pour cloner le plateau?
 
     # add [][] indexer syntax to the Board
     def __getitem__(self, index):
@@ -69,12 +71,22 @@ class Board:
                     return True
         return False
 
+    @staticmethod
+    def get_action_size():
+        # the method supports n=8 only
+        # assert self.n == 8
+        # action space
+        # square_from = self.n*self.n/2 = 8x8/2 = 32 (for n=8, 5 bits)
+        # move vector, max of 7 squares in 4 directions = (self.n-1)*4 = 7*4 = 28 (for n=8)
+        # maxNumberOfMoves = 32*28 = 896
+        # to simplify action encoding/decoding take max as bin(28)_bin(32) = 11100_11111 = 927
+        return 927
+
     def execute_move(self, move, color):
         origin = move.get_origin()
         destination = move.get_dest()
-        is_new_queen = not self.pieces[origin[0]][origin[1]].isKing and \
-                       ValidMoveMethods.check_new_queen(
-                           Deplacement(origin[0], origin[1], destination[0], destination[1]), color)
+        is_new_queen = not self.pieces[origin[0]][origin[1]].isKing and ValidMoveMethods.check_new_queen(Deplacement(
+            origin[0], origin[1], destination[0], destination[1]), color)
 
         moves = move.get_moves()
         previous = None
@@ -87,3 +99,14 @@ class Board:
         if is_new_queen:
             self.pieces[moves[-1][0]][moves[-1][1]].isKing = True
 
+    def get_game_result(self, color):
+        """ Check whether the game is over (previous method name was is_win() ).
+            Check whether the given player has captured all opponent's pieces
+            or given player's pieces have valid moves
+        @param color (1=white,-1=black) - player to move
+        @return: 1: if the given player won, -1: if the given player lost, 0: if game continues
+        """
+        pass
+
+    def display(self):
+        pass

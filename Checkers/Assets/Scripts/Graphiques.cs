@@ -79,6 +79,7 @@ public class Graphiques : MonoBehaviour
     private void AnalizeInfo(string[] returnInfos, bool iaPlay=false, bool firstTime=false)
     {
         // Error
+        // TODO: There is an error here when the last piece is eaten
         if (Helper.Activate(returnInfos[0], 0))
         {
             AfficherError(returnInfos[1].Substring(1));

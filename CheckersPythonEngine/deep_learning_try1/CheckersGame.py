@@ -12,9 +12,9 @@ import numpy as np
 
 
 class CheckersGame(Game):
-    def __init__(self, taillePlateau):
+    def __init__(self, taille_plateau):
         super().__init__()
-        self.taillePlateau = taillePlateau
+        self.taille_plateau = taille_plateau
 
     def getInitBoard(self):
         """
@@ -23,7 +23,7 @@ class CheckersGame(Game):
                         that will be the input to your neural network)
         """
         b = Board(self.taillePlateau)
-        return np.array(b.pieces)
+        return b
 
     def getBoardSize(self):
         """
@@ -37,7 +37,7 @@ class CheckersGame(Game):
         Returns:
             actionSize: number of all possible actions
         """
-        return self.taillePlateau * self.taillePlateau + 1
+        return Board.get_action_size()
 
     def getNextState(self, board, player, action):
         """
@@ -83,9 +83,11 @@ class CheckersGame(Game):
 
         """
         # TODO: voir comment faire puisqu'eux le font avec des 1 au niveau des cases possibles a jouer
+        # TODO: draw?
         b = Board(self.taillePlateau)
         b.pieces = copy.deepcopy(board)
-        num = player if b.countPieces(self._playerToBool(player)) == 0 else 0 if b.countPieces(self._playerToBool(-player)) else -player
+        num = player if b.countPieces(self._playerToBool(player)) == 0 else -player if b.countPieces(
+            self._playerToBool(-player)) == 0 else 0
         return num
 
     def getCanonicalForm(self, board, player):
@@ -122,9 +124,47 @@ class CheckersGame(Game):
                        form of the board and the corresponding pi vector. This
                        is used when training the neural network from examples.
         """
+        # TOKNOW: not by me
+        # mirror, rotational
+        assert (len(pi) == self.getActionSize())
+        # pi_board = np.reshape(pi[:-1], (self.n, self.n))
+        # l = []
+
+        # for i in range(1, 5):
+        #    for j in [True, False]:
+        #        newB = np.rot90(board, i)
+        #        newPi = np.rot90(pi_board, i)
+        #        if j:
+        #            newB = np.fliplr(newB)
+        #            newPi = np.fliplr(newPi)
+        #        l += [(newB, list(newPi.ravel()) + [pi[-1]])]
+
+        # we apply no sym transformation
+        image_stack = self.getImageStack(board)
+
+        pi = np.copy(pi)
+        l = [(image_stack, pi)]
+        return l
+
+    # def getImageStack -> a quoi ca sert? Que faire? L'implementer est pour plus tard
+    def getImageStack(self, board):
+        """ Returns input stack for the given board
+            [index of image] [description]
+            [0] white men        bit map
+            [1] white kings      bit map
+            [2] black men        bit map
+            [3] black kings      bit map
+            [4] long_capture     bit map (one pixel on the given square)
+
+            [5] no-progress              count
+            [6] king's move count        count
+            [7] repetition count         count
+            [not used] [x] half moves    count
+        """
         pass
 
-    def stringRepresentation(self, board):
+    @staticmethod
+    def stringRepresentation(board):
         """
         Input:
             board: current board
@@ -133,8 +173,12 @@ class CheckersGame(Game):
             boardString: a quick conversion of board to a string format.
                          Required by MCTS for hashing.
         """
-        pass
+        return board.stringRepr
 
     @staticmethod
     def _playerToBool(player):
         return True if player == 1 else False
+
+
+def display(board):
+    board.display()
