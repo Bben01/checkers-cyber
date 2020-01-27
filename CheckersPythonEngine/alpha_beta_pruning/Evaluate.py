@@ -49,9 +49,9 @@ def evaluate_position(state):
     his_king_number = 0
 
     PAWN_VAL = 4 * size ** 3
-    KING_VAL = 2 * PAWN_VAL
+    KING_VAL = 4 * PAWN_VAL
     CRITICAL_PIECE_NUMBER = size / 2
-    POSITION_VS_PIECE_VAL = 8
+    POSITION_VS_PIECE_VAL = 10
 
     for i in range(size):
         for j in range(i % 2, size, 2):
