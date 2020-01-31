@@ -5,12 +5,14 @@ import random
 args = {
     "mutation": 0.1,
     "mutation_rate": 0.5,
+    "mutation_deviation": 0.1,
     "weight_min": 0,
     "weight_max": 10,
     "bias_min": -10,
     "bias_max": 10,
     "depth": 2,
     "reproduce_winner": 3,
+    "nb_games": 5
 }
 
 population = Population()
@@ -37,7 +39,10 @@ def crossover():
 
 
 def mutation():
-    pass
+    for individual in selected:
+        if random.randint(1, 101) <= 100 * args["mutation_rate"]:  # 1/rate chance de muter
+            for i in range(len(individual.genes)):
+                individual.genes[i] = Helper.mutate_list(individual.genes[i])
 
 
 def main():
@@ -49,8 +54,7 @@ def main():
 
         crossover()
 
-        if random.randint(1, 11) <= 10 * args["mutation_rate"]:
-            mutation()
+        mutation()
 
         print(f"Generation {generation_count}")  # TODO: afficher fittest
 

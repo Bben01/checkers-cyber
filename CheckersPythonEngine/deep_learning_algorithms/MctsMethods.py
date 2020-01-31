@@ -1,5 +1,4 @@
 import copy
-import pprint
 
 from deep_learning_algorithms import Helper
 from deep_learning_algorithms.Move import Move
@@ -110,7 +109,7 @@ class State:
         if self.isWhiteTurn and self.has_won(True):
             return 1
         if not self.isWhiteTurn and self.has_won(False):
-            return 1
+            return -1
         return 0
 
     @staticmethod
