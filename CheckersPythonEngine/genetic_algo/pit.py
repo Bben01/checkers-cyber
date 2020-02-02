@@ -10,18 +10,33 @@ def tournament_round(warriors, games):
     :param games: the number of games to play
     :return: individual, winner of each round
     """
+    wins_required = games // 2
     win1 = 0  # number of wins of the first  warrior
     win2 = 0  # number of wins of the second warrior
     color = True  # the color of warrior1
     current_color = True  # the current color
-    for i in range(games):
+    while True:
         state = State.initial_state()
-        while not state.isTerminal():
+        # plays one game
+        while "non terminal":
             state = state.takeAction(Alphabeta.get_best_action(state, warriors[0] if current_color else warriors[1]))
+            if state.isTerminal():
+                break
             Alphabeta.change_player()
             current_color = not current_color
-        if state.has_won(current_color):
-
+        # if the match ends, the other lost
+        if current_color == color:
+            win1 += 1
+        else:
+            win2 += 1
+        # change the color
+        color = not color
+        Alphabeta.change_player(False)
+        # returns the winner if there is
+        if win1 > wins_required:
+            return warriors[0]
+        if win2 > wins_required:
+            return warriors[1]
 
 
 def generate_tournament(participants):

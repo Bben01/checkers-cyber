@@ -1,31 +1,12 @@
-from alpha_beta_pruning import Evaluate
+from genetic_algo import EvaluateGenetics
 
-ENNEMY_COLOR = True
-KING_VALUE = 10
-PIECE_VALUE = 7
+ENNEMY_COLOR = False
 One = True
 
 
-def change_player():
+def change_player(color=not ENNEMY_COLOR):
     global ENNEMY_COLOR
-    ENNEMY_COLOR = not ENNEMY_COLOR
-
-
-def evaluate(state):
-    if state.has_won(False):
-        return 120
-    if state.has_won(True):
-        return -120
-    util_value = 0
-    for row in state.plateau.board:
-        for piece in row:
-            if piece is not None:
-                if piece.isKing:
-                    util_value += KING_VALUE if piece.isWhite != ENNEMY_COLOR else -KING_VALUE
-                else:
-                    util_value += PIECE_VALUE if piece.isWhite != ENNEMY_COLOR else -PIECE_VALUE
-
-    return util_value
+    ENNEMY_COLOR = color
 
 
 def next_states(state):
@@ -42,7 +23,7 @@ def next_states(state):
 
 def alphabeta(state, depth, a, b, maximizingPlayer, individual):
     if depth == 0 or state.isTerminal():
-        return Evaluate.evaluate_position(state)
+        return EvaluateGenetics.evaluate(state, individual, not ENNEMY_COLOR)
     if maximizingPlayer:
         value = float("-inf")
         for state_children in next_states(state):
