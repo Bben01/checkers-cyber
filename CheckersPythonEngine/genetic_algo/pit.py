@@ -32,10 +32,12 @@ def tournament_round(warriors, games):
         # change the color
         color = not color
         Alphabeta.change_player(False)
-        # returns the winner if there is
+        # returns the winner if there is one
         if win1 > wins_required:
+            warriors[0].won()
             return warriors[0]
         if win2 > wins_required:
+            warriors[1].won()
             return warriors[1]
 
 

@@ -16,7 +16,7 @@ def swap(alist1, alist2, limit):
     :param limit: the limit ( < len(alist1))
     :return:
     """
-    for i in len(limit):
+    for i in range(limit):
         alist1[i] = alist2[i], alist2[i] = alist1[i]
 
 
@@ -45,3 +45,11 @@ def mutate_list(liste):
                             mutate(gene[1], args["bias_min"], args["bias_max"], args["mutation_deviation"])))
 
     return return_list
+
+
+def print_population(population):
+    return_str = ""
+    for individual in population:
+        return_str += individual.__str__() + " "
+
+    return return_str

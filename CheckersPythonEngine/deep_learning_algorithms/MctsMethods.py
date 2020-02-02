@@ -22,11 +22,11 @@ class State:
         plateau = Plateau()
         for y in range(int(Plateau.taillePlateau - 1 / 2)):
             odd_row = y % 2 == 0
-            for x in range(Plateau.taillePlateau, step=2):
+            for x in range(0, Plateau.taillePlateau, 2):
                 if odd_row:
                     plateau.board[x][y] = Piece(True)
 
-        for y in range(start=Plateau.taillePlateau - 1, stop=int(Plateau.taillePlateau - 1 / 2) + 1, step=-1):
+        for y in range(Plateau.taillePlateau - 1, int(Plateau.taillePlateau - 1 / 2) + 1, -1):
             odd_row = y % 2 == 0
             for x in range(Plateau.taillePlateau, step=2):
                 if odd_row:

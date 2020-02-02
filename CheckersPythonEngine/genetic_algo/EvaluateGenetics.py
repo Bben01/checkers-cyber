@@ -28,7 +28,7 @@ def number_moveable(state, color):
             if piece is not None:
                 if piece.isWhite == color:
                     positions_dict = Helper.calculate_eat_positions(state.plateau.board, i, j, True, True, False)
-                    if len(positions_dict) != 0:
+                    if positions_dict is not None:
                         if piece.isKing:
                             king += 1
                         else:

@@ -47,8 +47,8 @@ def get_best_action(state, individual):
     best_value = float("-inf")
     for state_action in state.getPossibleActions():
         value = alphabeta(state.takeAction(state_action), 2, float("-inf"), float("inf"), True, individual)
-        print(f'value={value}, best_value={best_value}')
         if value > best_value:
             best_action = state_action
             best_value = value
+    print(f'best_value={best_value}')
     return best_action

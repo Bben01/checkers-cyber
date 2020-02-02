@@ -1,7 +1,3 @@
-from genetic_algo import Helper, pit
-from genetic_algo.Population import Population
-import random
-
 args = {
     "mutation": 0.1,
     "mutation_rate": 0.5,
@@ -14,6 +10,11 @@ args = {
     "reproduce_winner": 3,
     "nb_games": 5
 }
+
+from genetic_algo import Helper, pit
+from genetic_algo.Population import Population
+import random
+
 
 population = Population()
 selected = []
@@ -31,22 +32,25 @@ def crossover():
     limit_ally = random.randint(0, selected[0].geneLength)
     limit_enemy = random.randint(0, selected[0].geneLength)
 
-    # TODO: faire quelque chose de plus generique, plus DRY
-    Helper.swap(selected[0].genes[0], selected[1].genes[0], limit_ally)
-    Helper.swap(selected[2].genes[0], selected[3].genes[0], limit_ally)
-    Helper.swap(selected[0].genes[1], selected[1].genes[1], limit_enemy)
-    Helper.swap(selected[2].genes[1], selected[3].genes[1], limit_enemy)
+    previous = None
+    for individual in selected:
+        if previous is None:
+            previous = individual
+            continue
+        Helper.swap(previous.genes[0], individual.genes[0], limit_ally)
+        Helper.swap(previous.genes[1], individual.genes[1], limit_enemy)
+        previous = None
 
 
 def mutation():
-    for individual in selected:
+    for individual in population.population:
         if random.randint(1, 101) <= 100 * args["mutation_rate"]:  # 1/rate chance de muter
-            for i in range(len(individual.genes)):
-                individual.genes[i] = Helper.mutate_list(individual.genes[i])
+            individual.genes = Helper.mutate_list(individual.genes[0]), Helper.mutate_list(individual.genes[1])
 
 
 def main():
-    global generation_count
+    global generation_count, population
+    population.create()
     while generation_count < 400:
         generation_count += 1
 
@@ -54,9 +58,11 @@ def main():
 
         crossover()
 
+        population = population.fill_reproduce(selected)
+
         mutation()
 
-        print(f"Generation {generation_count}")  # TODO: afficher fittest
+        print(f"Generation {generation_count}: {Helper.print_population(selected)}")
 
 
 if __name__ == '__main__':
