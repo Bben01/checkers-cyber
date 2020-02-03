@@ -6,7 +6,7 @@ from game_engine import Controller
 from game_engine.Jeu import Jeu
 
 IP = "127.0.0.1"
-PORT = 10000
+PORT = 10001
 DEBUG = True
 
 SEPARATOR = "##-+-##"

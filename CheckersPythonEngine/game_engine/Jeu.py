@@ -2,8 +2,6 @@ from game_engine.Deplacement import Deplacement
 from game_engine.InformationCoup import InformationCoup
 from game_engine.Plateau import Plateau
 
-dictionnaire = {"false": False, "true": True}
-
 
 class Jeu:
     plateau: Plateau
@@ -34,7 +32,7 @@ class Jeu:
         # There was an error
         if infos.errorMsg != "":
             return "1" + separator + (
-                "1" if not self.hasToPlayAgain else "0") + infos.errorMsg + separator + "0" + separator + "0" + separator + "0" + separator + "0"
+                "1" if not self.hasToPlayAgain else "0") + infos.errorMsg + separator + "0" + separator + "0" + separator + "0" + separator + "0" + separator + "0"
         else:
             return_message += is_false
         # There is a new Queen
@@ -66,4 +64,5 @@ class Jeu:
             return_message += separator + "1" + "Black won!" if self.plateau.isWhiteTurn else "White won!"
         else:
             return_message += separator + "0"
+        return_message += separator + f"1{infos.lastDeplacement.origin[0]}{infos.lastDeplacement.origin[1]}"
         return return_message

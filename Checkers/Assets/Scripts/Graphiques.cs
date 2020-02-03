@@ -4,7 +4,7 @@ using UnityEngine;
 public class Graphiques : MonoBehaviour
 {
     public static readonly int taillePlateau = 8;
-    public Piece[,] board = new Piece[taillePlateau, taillePlateau]; // TODO: faire quelque chose
+    public Piece[,] board = new Piece[taillePlateau, taillePlateau];
 
     public GameObject whitePiecePrefab;
     public GameObject blackPiecePrefab;
@@ -24,6 +24,7 @@ public class Graphiques : MonoBehaviour
 
     private bool isWhiteTurn;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,27 +38,48 @@ public class Graphiques : MonoBehaviour
     {
         UpdateMouseOver();
 
-        int x = (int)mouseOver.x;
-        int y = (int)mouseOver.y;
-        if (selectedPiece != null)
+        if (isWhiteTurn)
         {
-            UpdatePieceDrag(selectedPiece);
+            int x = (int)mouseOver.x;
+            int y = (int)mouseOver.y;
+            if (selectedPiece != null)
+            {
+                UpdatePieceDrag(selectedPiece);
+            }
+            if (Input.GetMouseButtonDown(0) && !clicked)
+            {
+                SelectPiece(x, y);
+                return;
+            }
+            if (Input.GetMouseButtonDown(0) && clicked)
+            {
+                string[] returnInfos = Client.FormatSendAndResponse("try_move_piece", new string[5] { $"{startClick.x}", $"{startClick.y}", $"{x}", $"{y}", $"{hasToPlayAgain}" });
+                AnalizeInfo(returnInfos);
+            }
         }
-        if (Input.GetMouseButtonDown(0) && !clicked)
+        else
         {
-            SelectPiece(x, y);
-            return;
-        }
-        if (Input.GetMouseButtonDown(0) && clicked)
-        {
-            string[] returnInfos = Client.FormatSendAndResponse("try_move_piece", new string[5] { $"{startClick.x}", $"{startClick.y}", $"{x}", $"{y}", $"{hasToPlayAgain}" });
-            AnalizeInfo(returnInfos);
+            enabled = false;
+            string[][] infos = Client.IAPlay();
+            IAPlay(infos);
+            enabled = true;
         }
     }
 
-    private void AnalizeInfo(string[] returnInfos)
+    private void IAPlay(string[][] infos)
+    {
+        bool firstTime = true;
+        foreach (string[] info in infos)
+        {
+            AnalizeInfo(info, true, firstTime);
+            firstTime = false;
+        }
+    }
+
+    private void AnalizeInfo(string[] returnInfos, bool iaPlay=false, bool firstTime=false)
     {
         // Error
+        // TODO: There is an error here when the last piece is eaten
         if (Helper.Activate(returnInfos[0], 0))
         {
             AfficherError(returnInfos[1].Substring(1));
@@ -69,6 +91,17 @@ public class Graphiques : MonoBehaviour
         }
         // Just move visually the piece
         Vector2Int lastDeplacement = Helper.GetLastDeplacementDest(returnInfos[4]);
+        if(iaPlay)
+        {
+            int x = (int) char.GetNumericValue(returnInfos[6], 1);
+            int y = (int)char.GetNumericValue(returnInfos[6], 2);
+            if (firstTime)
+            {
+                startClick = new Vector2Int(x, y);
+            }
+            selectedPiece = board[x, y];
+        }
+        
         MovePieceVisual(selectedPiece, lastDeplacement.x, lastDeplacement.y);
         // Killed
         if (Helper.Activate(returnInfos[2], 0))
@@ -140,8 +173,19 @@ public class Graphiques : MonoBehaviour
         clicked = false;
         selectedPiece = null;
         hasToPlayAgain = false;
-        isWhiteTurn = !isWhiteTurn;
+        isWhiteTurn = PlayAgain() ? !isWhiteTurn : isWhiteTurn;
         startClick = Vector2Int.zero;
+    }
+
+    private bool PlayAgain()
+    {
+        bool hasSomthingToPlay = Client.SendAndResponseWithoutFormat("has_something_to_play", new string[2] { $"{!isWhiteTurn}", "false" }).ToLower().Equals("true");
+        if (!hasSomthingToPlay)
+        {
+            string color = isWhiteTurn ? "White" : "Black";
+            AfficherError($"{color} plays again!");
+        }
+        return hasSomthingToPlay ? true : false;
     }
 
     private void GenerateBoard()

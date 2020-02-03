@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Text;
-using UnityEngine;
 
 public class Client
 {
     private static readonly string ip = "127.0.0.1";
-    private static readonly int port = 10000;
+    private static readonly int port = 10001;
     private static bool openClient = false;
     private static TcpClient client;
     private static NetworkStream stream;
@@ -64,6 +63,19 @@ public class Client
         return Send(format, false)[0];
     }
 
+    public static string[][] IAPlay()
+    {
+        string format = FormatMessageNoArgs("ia_play");
+        string[] moves = Send(format, false, true);
+        string[][] tabOfMoves = new string[moves.Length][];
+        for (int i = 0; i < moves.Length; i++)
+        {
+            tabOfMoves[i] = moves[i].Split('-');
+        }
+        return tabOfMoves;
+        
+    }
+
     private static void End()
     {
         // Close everything.
@@ -72,7 +84,7 @@ public class Client
         openClient = false;
     }
 
-    public static string[] Send(string message, bool getArgs)
+    public static string[] Send(string message, bool getArgs, bool iaPlay=false)
     {
         try
         {
@@ -99,6 +111,10 @@ public class Client
 
             // Read the first batch of the TcpServer response bytes.
             stream.Read(data, 0, trueLen);
+            if (iaPlay)
+            {
+                return GetIAPlaysFromByteArray(data);
+            }
             return getArgs ? GetArgsFromByteArray(data) : GetFromByteArray(data);
         }
         catch (ArgumentNullException e)
@@ -124,5 +140,12 @@ public class Client
     private static string[] GetFromByteArray(byte[] encodedMessage)
     {
         return new string[] { Encoding.ASCII.GetString(encodedMessage) };
+    }
+
+    private static string[] GetIAPlaysFromByteArray(byte[] encodedMessage)
+    {
+        int.TryParse(Encoding.ASCII.GetString(new byte[] { encodedMessage[0] }), out int numberOfSupArgs);
+        string[] args = Encoding.ASCII.GetString(encodedMessage).Substring(1).Split(new string[] { "//-//" }, StringSplitOptions.None);
+        return args.Length == numberOfSupArgs ? args : null;
     }
 }

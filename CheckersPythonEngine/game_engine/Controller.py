@@ -50,7 +50,7 @@ def try_move_piece(game_instance: Jeu, x1, y1, x2, y2, has_to_play_again):
 
     infos = game_instance.plateau.try_move(Deplacement(x1, y1, x2, y2), has_to_play_again)
     commands = game_instance.analize_info(infos)
-    return "6" + commands
+    return "7" + commands
 
 
 def generate_board_submethod(game_instance: Jeu, x, y, is_white):
@@ -67,12 +67,39 @@ def generate_board_submethod(game_instance: Jeu, x, y, is_white):
     return "done"
 
 
-def ia_play(game_instance: Jeu, has_to_play_again):
+def has_something_to_play(game_instance: Jeu, check_white, has_to_eat_again):
+    return "true" if possible_plays(game_instance, check_white, has_to_eat_again) is not None else "false"
+
+
+def possible_plays(game_instance: Jeu, check_white, has_to_eat_again):
+    try:
+        check_white = bool(check_white)
+        has_to_eat_again = bool(has_to_eat_again)
+    except ValueError:
+        return "null"
+    plays = {}
+    count = 0
+    for x in range(game_instance.plateau.taillePlateau):
+        for y in range(game_instance.plateau.taillePlateau):
+            current_piece = game_instance.plateau.pieces[x][y]
+            if current_piece is not None and current_piece.isWhite == check_white:
+                tmp = ValidMoveMethods.calculate_eat_positions(game_instance.plateau.pieces, x, y, True, True, has_to_eat_again)
+                plays, count = ValidMoveMethods.add_to_dict(plays, tmp, count)
+    return plays
+
+
+def ia_play(game_instance: Jeu):
     # This is where the ia is called to play
-    # Just for now:
-    x1 = int(input("x1: "))
-    y1 = int(input("y1: "))
-    x2 = int(input("x2: "))
-    y2 = int(input("y2: "))
-    infos = game_instance.plateau.try_move(Deplacement(x1, y1, x2, y2), has_to_play_again)
-    return game_instance.analize_info(infos)
+    from alpha_beta_pruning import IAController
+    return_string = []
+    has_to_play_again = False
+    for move in IAController.list_actions(IAController.controller(game_instance)):
+        x1 = move[0][0]
+        y1 = move[0][1]
+        x2 = move[1][0]
+        y2 = move[1][1]
+        infos = game_instance.plateau.try_move(Deplacement(x1, y1, x2, y2), has_to_play_again)
+        return_string.append(game_instance.analize_info(infos))
+        has_to_play_again = True
+
+    return str(len(return_string)) + "//-//".join(return_string)

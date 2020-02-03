@@ -3,6 +3,9 @@ from game_engine.InformationValidation import InformationValidation
 from game_engine.Plateau import Plateau
 
 
+VERBOSE = False
+
+
 def valid_move(board: [], d: Deplacement, has_to_eat_again: bool):
     if d.null_move():
         return InformationValidation.create_not_move()
@@ -109,7 +112,8 @@ def calculate_eat_positions(board: [[]], x, y, check_normal: bool, check_kill_po
             positions[count_positive] = (v_piece[0] + vector[0] * 2, v_piece[1] + vector[1] * 2)
             empty_dict = False
             count_positive += 1
-            print(f"Le pion peut manger: {concat_int_int_tuples(vector, v_piece)}")
+            if VERBOSE:
+                print(f"Le pion peut manger: {concat_int_int_tuples(vector, v_piece)} from {(x, y)}")
 
         ok = check_normal and (not Plateau.out_of_bounds(v_piece[0] + vector[0], v_piece[1] + vector[1])) and \
              board[v_piece[0] + vector[0]][v_piece[1] + vector[1]] is None
@@ -117,7 +121,8 @@ def calculate_eat_positions(board: [[]], x, y, check_normal: bool, check_kill_po
             positions[count_negative] = concat_int_int_tuples(v_piece, vector)
             empty_dict = False
             count_negative -= 1
-            print(f"Le pion peut se deplacer sur la case: {concat_int_int_tuples(v_piece, vector)}")
+            if VERBOSE:
+                print(f"Le pion peut se deplacer sur la case: {concat_int_int_tuples(v_piece, vector)}")
 
     return positions if not empty_dict else None
 
@@ -158,3 +163,12 @@ def pos_new_queen(is_new_queen: bool, d: Deplacement):
 
 def concat_int_int_tuples(first_tuple: (int, int), secont_tuple: (int, int)):
     return first_tuple[0] + secont_tuple[0], first_tuple[1] + secont_tuple[1]
+
+
+def add_to_dict(dict_original, dict_to_add, count):
+    if dict_to_add is None:
+        return dict_original, count
+    for _, position in dict_to_add.items():
+        dict_original[count] = position
+        count += 1
+    return dict_original, count
