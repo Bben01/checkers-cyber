@@ -1,8 +1,11 @@
+import pickle
+
 import game_engine.ValidMoveMethods as Helper
 
 ENNEMY_COLOR = True
 WIN = float("inf")
 LOSS = float("-inf")
+WEIGHTS = None
 
 
 """
@@ -10,6 +13,12 @@ This will be used to change the weights of every info on the board according to 
 The array of values will be this: [nb_of_pawn, nb_of_king, nb_safe_pawn, nb_safe_king, nb_moveable_pawn, nb_moveable_king, distance_prom_line, nb_unoccupied_prom_line]
 Special patterns could be added after
 """
+
+
+def load_them(filename):
+    global WEIGHTS
+    with open(filename, "rb") as f:
+        WEIGHTS = pickle.load(f)
 
 
 def number_moveable(state, color):
@@ -93,12 +102,12 @@ def prom_line(state, color):
     return distance_sum, size / 2 - occupied
 
 
-def evaluate(state, individual, color):
+def evaluate(state, color):
     ally, enemy = get_weight(state, color)
     computed_sum = 0
     for i in range(len(ally) - 1):
-        computed_sum += individual.genes[0][i][0] * ally[i] + individual.genes[0][i][1]
-        computed_sum += individual.genes[1][i][0] * ally[i] + individual.genes[1][i][1]
+        computed_sum += WEIGHTS[0][i][0] * ally[i] + WEIGHTS[0][i][1]
+        computed_sum += WEIGHTS[1][i][0] * ally[i] + WEIGHTS[1][i][1]
 
     return computed_sum
 

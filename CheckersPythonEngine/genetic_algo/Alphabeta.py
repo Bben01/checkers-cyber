@@ -50,5 +50,4 @@ def get_best_action(state, individual):
         if value > best_value:
             best_action = state_action
             best_value = value
-    print(f'best_value={best_value}')
     return best_action

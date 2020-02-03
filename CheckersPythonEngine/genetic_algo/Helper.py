@@ -17,7 +17,9 @@ def swap(alist1, alist2, limit):
     :return:
     """
     for i in range(limit):
-        alist1[i] = alist2[i], alist2[i] = alist1[i]
+        tuple1 = alist1[i]
+        alist1[i] = alist2[i]
+        alist2[i] = tuple1
 
 
 def mutate(nb, min_range, max_range, deviation):

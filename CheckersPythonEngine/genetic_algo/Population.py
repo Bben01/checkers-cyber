@@ -32,3 +32,11 @@ class Population:
             new_population.append(selected[selected_randoms[0]].reproduce(selected[selected_randoms[1]]))
 
         return Population(new_population)
+
+    def best_score(self):
+        return max(self.population, key=lambda individual: individual.score)
+
+    def save_fit(self):
+        best_individual = self.best_score()
+        with open(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\genetic_algo\fittest", 'w') as f:
+            f.write(str(best_individual.genes))

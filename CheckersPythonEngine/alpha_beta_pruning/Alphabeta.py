@@ -1,26 +1,7 @@
-from alpha_beta_pruning import Evaluate
+from alpha_beta_pruning import EvaluateGenetics
 
 ENNEMY_COLOR = True
-KING_VALUE = 10
-PIECE_VALUE = 7
 One = True
-
-
-def evaluate(state):
-    if state.has_won(False):
-        return 120
-    if state.has_won(True):
-        return -120
-    util_value = 0
-    for row in state.plateau.board:
-        for piece in row:
-            if piece is not None:
-                if piece.isKing:
-                    util_value += KING_VALUE if piece.isWhite != ENNEMY_COLOR else -KING_VALUE
-                else:
-                    util_value += PIECE_VALUE if piece.isWhite != ENNEMY_COLOR else -PIECE_VALUE
-
-    return util_value
 
 
 def next_states(state):
@@ -37,7 +18,7 @@ def next_states(state):
 
 def alphabeta(state, depth, a, b, maximizingPlayer):
     if depth == 0 or state.isTerminal():
-        return Evaluate.evaluate_position(state)
+        return EvaluateGenetics.evaluate(state, not ENNEMY_COLOR)
     if maximizingPlayer:
         value = float("-inf")
         for state_children in next_states(state):
@@ -57,11 +38,12 @@ def alphabeta(state, depth, a, b, maximizingPlayer):
 
 
 def get_best_action(state):
+    if EvaluateGenetics.WEIGHTS is None:
+        EvaluateGenetics.load_them(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\genetic_algo\serialized")
     best_action = None
     best_value = float("-inf")
     for state_action in state.getPossibleActions():
         value = alphabeta(state.takeAction(state_action), 5, float("-inf"), float("inf"), True)
-        print(f'value={value}, best_value={best_value}')
         if value > best_value:
             best_action = state_action
             best_value = value

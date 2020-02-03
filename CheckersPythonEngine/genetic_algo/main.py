@@ -29,8 +29,8 @@ def selection():
 
 
 def crossover():
-    limit_ally = random.randint(0, selected[0].geneLength)
-    limit_enemy = random.randint(0, selected[0].geneLength)
+    limit_ally = random.randint(0, selected[0].geneLength - 1)
+    limit_enemy = random.randint(0, selected[0].geneLength - 1)
 
     previous = None
     for individual in selected:
@@ -62,7 +62,9 @@ def main():
 
         mutation()
 
-        print(f"Generation {generation_count}: {Helper.print_population(selected)}")
+        print(f"Generation {generation_count}: {population.best_score()}")
+
+        population.save_fit()
 
 
 if __name__ == '__main__':
