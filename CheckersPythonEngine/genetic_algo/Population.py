@@ -1,4 +1,5 @@
 import random
+import pickle
 
 from genetic_algo.Individual import Individual
 
@@ -18,7 +19,6 @@ class Population:
         for i in range(self.size):
             individual = Individual()
             self.population.append(individual.fillWeights())
-            del individual
 
     def fill_reproduce(self, selected):
         """
@@ -38,5 +38,5 @@ class Population:
 
     def save_fit(self):
         best_individual = self.best_score()
-        with open(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\genetic_algo\fittest", 'w') as f:
-            f.write(str(best_individual.genes))
+        with open(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\genetic_algo\serialized", 'w') as f:
+            pickle.dump(best_individual.genes, f)
