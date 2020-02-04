@@ -3,7 +3,7 @@ import pickle
 
 import game_engine.ValidMoveMethods as Helper
 
-ENNEMY_COLOR = True
+ENNEMY_COLOR = False
 WIN = float("inf")
 LOSS = float("-inf")
 WEIGHTS = None

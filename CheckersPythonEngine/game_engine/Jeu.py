@@ -1,3 +1,4 @@
+from game_engine import Controller
 from game_engine.Deplacement import Deplacement
 from game_engine.InformationCoup import InformationCoup
 from game_engine.Plateau import Plateau
@@ -14,10 +15,11 @@ class Jeu:
         self.hasToPlayAgain = False
         self.posPieceToPlay = ()
 
-    def check_victory(self, check_white: bool):
-        # TODO: a implementer
+    def check_victory(self, ennemy_color: bool):
         # Just for now
-        if not self.plateau.has_pieces_left(not check_white):
+        if not self.plateau.has_pieces_left(ennemy_color):
+            return True
+        if Controller.possible_plays(self, not ennemy_color, False) is None:
             return True
         return False
 
@@ -60,7 +62,7 @@ class Jeu:
             return_message += is_false
         return_message += "1" + repr(infos.lastDeplacement.destination[0]) + repr(infos.lastDeplacement.destination[1])
         # Victory
-        if self.check_victory(not self.plateau.isWhiteTurn):
+        if self.check_victory(self.plateau.isWhiteTurn):
             return_message += separator + "1" + ("Black won!" if self.plateau.isWhiteTurn else "White won!")
         else:
             return_message += separator + "0"
