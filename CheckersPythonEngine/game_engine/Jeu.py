@@ -31,8 +31,8 @@ class Jeu:
         is_false = "0" + separator
         # There was an error
         if infos.errorMsg != "":
-            return "1" + separator + (
-                "1" if not self.hasToPlayAgain else "0") + infos.errorMsg + separator + "0" + separator + "0" + separator + "0" + separator + "0" + separator + "0"
+            return "1" + separator + ("1" if not self.hasToPlayAgain else "0") + infos.errorMsg + separator + "0"\
+                   + separator + "0" + separator + "0" + separator + "0" + separator + "0"
         else:
             return_message += is_false
         # There is a new Queen
@@ -61,7 +61,7 @@ class Jeu:
         return_message += "1" + repr(infos.lastDeplacement.destination[0]) + repr(infos.lastDeplacement.destination[1])
         # Victory
         if self.check_victory(not self.plateau.isWhiteTurn):
-            return_message += separator + "1" + "Black won!" if self.plateau.isWhiteTurn else "White won!"
+            return_message += separator + "1" + ("Black won!" if self.plateau.isWhiteTurn else "White won!")
         else:
             return_message += separator + "0"
         return_message += separator + f"1{infos.lastDeplacement.origin[0]}{infos.lastDeplacement.origin[1]}"

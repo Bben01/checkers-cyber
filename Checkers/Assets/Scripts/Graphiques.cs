@@ -24,6 +24,8 @@ public class Graphiques : MonoBehaviour
 
     private bool isWhiteTurn;
 
+    private bool isVictory;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,11 +33,18 @@ public class Graphiques : MonoBehaviour
         GenerateBoard();
         clicked = false;
         isWhiteTurn = true;
+        isVictory = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isVictory)
+        {
+            // TODO: Appeler la prochaine scene ici
+            return;
+        }
+
         UpdateMouseOver();
 
         if (isWhiteTurn)
@@ -74,6 +83,7 @@ public class Graphiques : MonoBehaviour
             AnalizeInfo(info, true, firstTime);
             firstTime = false;
         }
+        Reset();
     }
 
     private void AnalizeInfo(string[] returnInfos, bool iaPlay=false, bool firstTime=false)
@@ -143,6 +153,7 @@ public class Graphiques : MonoBehaviour
         if (Helper.Activate(returnInfos[5], 0))
         {
             Debug.Log(returnInfos[5].Substring(1));
+            isVictory = true;
         }
     }
 
