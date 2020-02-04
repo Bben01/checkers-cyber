@@ -50,7 +50,7 @@ class Plateau:
             return InformationCoup.create_invalid_move(status.errorMessage)
         else:
             is_new_queen = not self.pieces[d.origin[0]][d.origin[1]].isKing and \
-                           ValidMoveMethods.check_new_queen(d, self.isWhiteTurn)
+                           ValidMoveMethods.check_new_queen(d, self.isWhiteTurn) and not has_to_eat_again
             # Killed
             if status.killed:
                 p_killed = self.get_killed_piece(d)
