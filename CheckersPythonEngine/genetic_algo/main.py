@@ -18,7 +18,7 @@ import random
 
 population = Population()
 selected = []
-generation_count = 0
+generation_count = -1
 
 
 def selection():
@@ -49,9 +49,12 @@ def mutation():
 
 
 def main():
-    global generation_count, population
-    population.create()
-    while generation_count < 400:
+    global generation_count, population, selected
+    if Population.is_saved():
+        population.load_population()
+    else:
+        population.create()
+    while True:
         generation_count += 1
 
         selection()
@@ -60,11 +63,16 @@ def main():
 
         population = population.fill_reproduce(selected)
 
+        selected = []
+
         mutation()
 
         print(f"Generation {generation_count}: {population.best_score()}")
 
         population.save_fit()
+
+        if generation_count % 100 == 0:
+            population.save_population()
 
 
 if __name__ == '__main__':

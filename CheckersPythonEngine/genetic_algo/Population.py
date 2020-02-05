@@ -1,3 +1,4 @@
+import os
 import random
 import pickle
 
@@ -38,5 +39,31 @@ class Population:
 
     def save_fit(self):
         best_individual = self.best_score()
-        with open(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\genetic_algo\serialized", 'w') as f:
+        with open(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\genetic_algo\serialized", 'wb') as f:
             pickle.dump(best_individual.genes, f)
+
+        with open(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\genetic_algo\fittest", 'w') as f:
+            f.write(str(best_individual.genes))
+
+    def save_population(self):
+        best_sort = sorted(self.population, key=lambda individuals: individuals.score)
+
+        for i, individual in enumerate(best_sort):
+            with open(fr"../Temp/{i}", "wb") as f:
+                pickle.dump(individual, f)
+
+    def __len__(self):
+        return len(self.population)
+
+    def load_population(self):
+        i = 0
+        while True:
+            if os.path.isfile(fr"../Temp/{i}"):
+                with open(fr"../Temp/{i}", "rb") as f:
+                    self.population.append(pickle.load(f))
+            else:
+                return
+
+    @staticmethod
+    def is_saved():
+        return os.path.isfile(r"../Temp/0")
