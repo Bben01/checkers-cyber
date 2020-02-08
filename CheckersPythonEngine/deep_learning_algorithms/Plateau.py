@@ -7,7 +7,7 @@ class Plateau:
     numWhite: int
     numBlack: int
 
-    def __init__(self, board=None, num_black=0, num_white=0):
+    def __init__(self, board=None, num_black=12, num_white=12):
         self.board = [[None for _ in range(self.taillePlateau)] for _ in range(self.taillePlateau)] if board is None else board
         self.numBlack = num_black
         self.numWhite = num_white

@@ -32,7 +32,10 @@ class State:
                 if odd_row:
                     plateau.board[x][y] = Piece(False)
 
-        return State(is_white_turn=True, plateau=plateau)
+        # TODO: remove this when finished
+        State.print_board(plateau.board)
+
+        return State(plateau=plateau)
 
     def make_new_game_state(self, move: Move, new_queen):
         moves = move.get_moves()
@@ -46,7 +49,6 @@ class State:
                 previous = tup
         if new_queen:
             new_state.plateau.board[moves[-1][0]][moves[-1][1]].isKing = True
-        new_state.isWhiteTurn = not self.isWhiteTurn
         for _ in move.get_killed_pieces():
             new_state.plateau.numWhite -= 0 if self.isWhiteTurn else 1
             new_state.plateau.numBlack -= 1 if self.isWhiteTurn else 0

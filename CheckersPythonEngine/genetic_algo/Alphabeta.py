@@ -1,4 +1,5 @@
 from genetic_algo import EvaluateGenetics
+from genetic_algo.main import args
 
 ENNEMY_COLOR = False
 One = True
@@ -15,7 +16,6 @@ def next_states(state):
     for string_state in state.getPossibleActions():
         states.append(state.takeAction(string_state))
         if One:
-            print(states[0].print_board(states[0].plateau.board))
             One = False
 
     return states
@@ -46,7 +46,7 @@ def get_best_action(state, individual):
     best_action = None
     best_value = float("-inf")
     for state_action in state.getPossibleActions():
-        value = alphabeta(state.takeAction(state_action), 2, float("-inf"), float("inf"), True, individual)
+        value = alphabeta(state.takeAction(state_action), args["depth"], float("-inf"), float("inf"), True, individual)
         if value > best_value:
             best_action = state_action
             best_value = value

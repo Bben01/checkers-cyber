@@ -25,7 +25,6 @@ def send_waiting_messages(wlist):
 
 
 def analize_message(msg, game_instance: Jeu):
-    # TODO: try/except the method
     call_method = msg[0] == '1'
     if call_method:
         method_name = msg[1:65].rstrip(' ')

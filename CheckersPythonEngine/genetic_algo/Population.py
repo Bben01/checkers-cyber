@@ -61,6 +61,7 @@ class Population:
             if os.path.isfile(fr"../Temp/{i}"):
                 with open(fr"../Temp/{i}", "rb") as f:
                     self.population.append(pickle.load(f))
+                i += 1
             else:
                 return
 

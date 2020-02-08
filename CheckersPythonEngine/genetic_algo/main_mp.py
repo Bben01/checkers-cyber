@@ -11,7 +11,7 @@ args = {
     "nb_games": 3
 }
 
-from genetic_algo import Helper, pit
+from genetic_algo import Helper, pit_mp
 from genetic_algo.Population import Population
 import random
 
@@ -24,8 +24,7 @@ generation_count = 0
 def selection():
     global selected
     random.shuffle(population.population)
-    for tournament in Helper.split_list(population.population, population.nb_tournaments):
-        selected.append(pit.generate_tournament(tournament))
+    selected.extend(pit_mp.tournament(population.population))
 
 
 def crossover():
