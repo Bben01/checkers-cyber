@@ -301,6 +301,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -332,7 +333,7 @@ Camera:
   m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
+  m_FocalLength: 20.78461
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -341,7 +342,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -373,6 +374,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 65, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd1b778abbdf5e94b9bf0953395c8c73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1183120278}
+  distance: 5
+  xSpeed: 20
+  ySpeed: 30
+  yMinLimit: 10
+  yMaxLimit: 80
+  distanceMin: 0.5
+  distanceMax: 15
+  activator: 32
 --- !u!1 &1183120274 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: aced56e68a84d494ead3992c81fd5e34,
@@ -395,6 +417,12 @@ MonoBehaviour:
     type: 3}
   blackPiecePrefab: {fileID: 8271606189294470371, guid: 3f98fa1c2515e4744b9780b1a448f9bf,
     type: 3}
+--- !u!4 &1183120278 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: aced56e68a84d494ead3992c81fd5e34,
+    type: 3}
+  m_PrefabInstance: {fileID: 622300451}
+  m_PrefabAsset: {fileID: 0}
 --- !u!65 &1183120279
 BoxCollider:
   m_ObjectHideFlags: 0
