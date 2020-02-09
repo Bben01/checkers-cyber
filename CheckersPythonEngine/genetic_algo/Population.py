@@ -63,7 +63,8 @@ class Population:
                     self.population.append(pickle.load(f))
                 i += 1
             else:
-                return
+                break
+        print("Population retreived.")
 
     @staticmethod
     def is_saved():

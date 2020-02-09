@@ -1,4 +1,6 @@
 from game_engine import Deplacement
+import logging
+import timeit as time
 
 
 class TourDeJeu:
@@ -17,3 +19,6 @@ class TourDeJeu:
 
     def set_code_error(self, code: int):
         self.codeError = code
+
+    def log(self, filename):
+        logging.info()
