@@ -85,7 +85,6 @@ def possible_plays(game_instance: Jeu, check_white, has_to_eat_again):
             if current_piece is not None and current_piece.isWhite == check_white:
                 tmp = ValidMoveMethods.calculate_eat_positions(game_instance.plateau.pieces, x, y, True, True, has_to_eat_again)
                 plays, count = ValidMoveMethods.add_to_dict(plays, tmp, count)
-    print(f"Can play on: {plays}")
     return plays
 
 
