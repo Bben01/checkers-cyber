@@ -1,5 +1,5 @@
 from genetic_algo import EvaluateGenetics
-from genetic_algo.main import args
+from genetic_algo.args import args
 
 ENNEMY_COLOR = False
 One = True

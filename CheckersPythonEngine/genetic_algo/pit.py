@@ -1,6 +1,6 @@
 from deep_learning_algorithms.MctsMethods import State
 from genetic_algo import Alphabeta
-from genetic_algo.main import args
+from genetic_algo.args import args
 
 
 def game(warriors):

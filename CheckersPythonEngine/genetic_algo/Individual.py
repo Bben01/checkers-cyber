@@ -1,6 +1,6 @@
 import random
 
-from genetic_algo.main import args
+from genetic_algo.args import args
 
 
 class Individual:

@@ -48,24 +48,21 @@ class Population:
     def save_population(self):
         best_sort = sorted(self.population, key=lambda individuals: individuals.score)
 
-        for i, individual in enumerate(best_sort):
-            with open(fr"../Temp/{i}", "wb") as f:
-                pickle.dump(individual, f)
+        with open(r"../Temp/population", "wb") as f:
+            pickle.dump(best_sort, f)
 
     def __len__(self):
         return len(self.population)
 
     def load_population(self):
-        i = 0
-        while True:
-            if os.path.isfile(fr"../Temp/{i}"):
-                with open(fr"../Temp/{i}", "rb") as f:
-                    self.population.append(pickle.load(f))
-                i += 1
-            else:
-                break
-        print("Population retreived.")
+        filename = r"../Temp/population"
+        if os.path.isfile(filename):
+            with open(filename, "rb") as f:
+                self.population = pickle.load(f)
+            print("Population retreived.")
+        else:
+            print("Could not retreive the population, check if the file population exists in Temp")
 
     @staticmethod
     def is_saved():
-        return os.path.isfile(r"../Temp/0")
+        return os.path.isfile(r"../Temp/ArchiveGenerations/0")

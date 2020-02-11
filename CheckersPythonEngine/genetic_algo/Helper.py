@@ -1,6 +1,6 @@
 import random
 
-from genetic_algo.main import args
+from genetic_algo.args import args
 
 
 def split_list(alist, wanted_parts=1):
