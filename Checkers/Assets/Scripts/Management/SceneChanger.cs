@@ -10,12 +10,16 @@ public class SceneChanger : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             FadeToLevel(1);
-            Debug.Log("OK");
         }
     }
 
     public void FadeToLevel(int levelIndex)
     {
         animator.SetTrigger("NextScene");
+    }
+
+    public void OnFadeComplete()
+    {
+
     }
 }

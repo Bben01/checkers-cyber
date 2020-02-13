@@ -394,7 +394,7 @@ MonoBehaviour:
   yMaxLimit: 80
   distanceMin: 0.5
   distanceMax: 15
-  activator: 32
+  activator: 304
 --- !u!1 &1183120274 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: aced56e68a84d494ead3992c81fd5e34,

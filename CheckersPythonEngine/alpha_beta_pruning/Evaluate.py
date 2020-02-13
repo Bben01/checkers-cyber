@@ -41,10 +41,10 @@ def evaluate_position(state):
     size = state.plateau.taillePlateau
     h_size = size / 2
 
-    my_pieces = [[None for x in range(2)] for y in range(size * size)]
+    my_pieces = [[None for _ in range(2)] for _ in range(size * size)]
     my_piece_number = 0
     my_king_number = 0
-    his_pieces = [[None for x in range(2)] for y in range(size * size)]
+    his_pieces = [[None for _ in range(2)] for _ in range(size * size)]
     his_piece_number = 0
     his_king_number = 0
 

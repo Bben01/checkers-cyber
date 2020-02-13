@@ -1,17 +1,12 @@
 from alpha_beta_pruning import EvaluateGenetics
 
 ENNEMY_COLOR = True
-One = True
 
 
 def next_states(state):
-    global One
     states = []
     for string_state in state.getPossibleActions():
         states.append(state.takeAction(string_state))
-        if One:
-            print(states[0].print_board(states[0].plateau.board))
-            One = False
 
     return states
 

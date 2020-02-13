@@ -18,7 +18,6 @@ def calculate_recursive_eat_positions(board, x, y, has_to_eat=False):
         return None
     for _, move in tmp.items():
         # move is a tuple
-        from deep_learning_algorithms.MctsMethods import State
         updated = update_board(board, x, y, move)
         other_paths = calculate_recursive_eat_positions(updated, move[0], move[1], True)
         if other_paths is not None:

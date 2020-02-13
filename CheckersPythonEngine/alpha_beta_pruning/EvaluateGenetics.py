@@ -1,4 +1,3 @@
-import json
 import pickle
 
 import game_engine.ValidMoveMethods as Helper
@@ -20,7 +19,6 @@ def load_them(filename):
     global WEIGHTS
     with open(filename, "rb") as f:
         WEIGHTS = pickle.load(f)
-    print(json.dumps(WEIGHTS, indent=4))
 
 
 def number_moveable(state, color):

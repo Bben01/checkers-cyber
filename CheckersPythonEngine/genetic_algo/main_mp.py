@@ -1,5 +1,6 @@
 from genetic_algo import Helper, pit_mp
 from genetic_algo.Population import Population
+from genetic_algo.args import args
 import random
 
 
@@ -53,7 +54,7 @@ def main():
 
         mutation()
 
-        print(f"Generation {generation_count}: {population.best_score()}")
+        print(f"Generation {generation_count} - {population.best_score()}")
 
         population.save_fit()
 
@@ -61,8 +62,4 @@ def main():
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        population.save_fit()
-        population.save_population()
+    main()
