@@ -1,6 +1,8 @@
-import select
 import socket
+import sys
 import threading
+
+import select
 
 from game_engine import Controller
 from game_engine.Jeu import Jeu
@@ -50,12 +52,12 @@ def format_message(msg):
 
 
 def incoming_messages():
-    while True:
-        for message in message_recieved:
-            game_instance, data = message
-            to_send = call(game_instance, data)
-            messages_to_send.append((game_instance, to_send))
-            message_recieved.remove(message)
+    for message in message_recieved:
+        game_instance, data = message
+        to_send = call(game_instance, data)
+        messages_to_send.append((game_instance, to_send))
+        message_recieved.remove(message)
+    sys.exit()
 
 
 def call(game_instance, data):
@@ -73,7 +75,6 @@ def main():
     server_socket.listen(5)
     open_client_sockets = []
     process_incoming_messages = threading.Thread(target=incoming_messages, daemon=True)
-    process_incoming_messages.start()
     while True:
         rlist, wlist, xlist = select.select([server_socket] + open_client_sockets, open_client_sockets, [])
         for current_socket in rlist:
@@ -94,6 +95,9 @@ def main():
                     del running_threads[current_socket]
                 else:
                     message_recieved.append((current_socket, data))
+                    if not process_incoming_messages.is_alive():
+                        process_incoming_messages = threading.Thread(target=incoming_messages, daemon=True)
+                        process_incoming_messages.start()
 
         send_waiting_messages(wlist)
 

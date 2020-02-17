@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 5230057530476691287}
+  delay: 300
 --- !u!1 &5230057531613248193
 GameObject:
   m_ObjectHideFlags: 0

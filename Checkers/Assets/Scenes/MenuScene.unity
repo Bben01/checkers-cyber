@@ -278,6 +278,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5230057530476691282, guid: 5133a8bbed58458449551bd456daa83b,
+        type: 3}
+      propertyPath: _delay
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5230057531613248222, guid: 5133a8bbed58458449551bd456daa83b,
         type: 3}
       propertyPath: m_LocalPosition.z
