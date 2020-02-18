@@ -10,6 +10,9 @@ public class Client
     private static TcpClient client;
     private static NetworkStream stream;
 
+    public static string[][] infoAI = null;
+
+
     public static string FormatMessageNoArgs(string methodName)
     {
         string str = $"1{methodName.PadRight(64),'-'}0";
@@ -73,7 +76,6 @@ public class Client
             tabOfMoves[i] = moves[i].Split('-');
         }
         return tabOfMoves;
-        
     }
 
     private static void End()
@@ -98,8 +100,6 @@ public class Client
 
             // Send the message to the connected TcpServer. 
             stream.Write(data, 0, data.Length);
-
-            Console.WriteLine($"Sent: {message}");
 
             // Receive the TcpServer.response.
             byte[] len = new byte[4];

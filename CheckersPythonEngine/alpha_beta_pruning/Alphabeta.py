@@ -1,3 +1,5 @@
+import concurrent.futures
+
 from alpha_beta_pruning import EvaluateGenetics
 
 ENNEMY_COLOR = True
@@ -33,14 +35,28 @@ def alphabeta(state, depth, a, b, maximizingPlayer):
         return value
 
 
+def execute_alphabeta(args):
+    """
+    Execute alphabeta and returns the value.
+    This method is the interface between the actual alphabeta method and the executor pool
+    :param args: the arguments
+    :return: the value returned by the alphabeta method
+    """
+    return alphabeta(args[0], args[1], args[2], args[3], args[4])
+
+
 def get_best_action(state):
-    if EvaluateGenetics.WEIGHTS is None:
-        EvaluateGenetics.load_them(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\genetic_algo\serialized")
     best_action = None
     best_value = float("-inf")
-    for state_action in state.getPossibleActions():
-        value = alphabeta(state.takeAction(state_action), 5, float("-inf"), float("inf"), True)
-        if value > best_value:
-            best_action = state_action
-            best_value = value
+    possible_actions = state.getPossibleActions()
+    state_actions = [(state.takeAction(state_action), 5, float("-inf"), float("inf"), True) for state_action in possible_actions]
+
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        results = list(executor.map(execute_alphabeta, state_actions))
+
+    for i, result in enumerate(results):
+        if result > best_value:
+            best_action = possible_actions[i]
+            best_value = result
+
     return best_action

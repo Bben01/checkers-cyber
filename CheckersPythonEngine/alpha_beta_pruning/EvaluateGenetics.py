@@ -1,24 +1,11 @@
-import pickle
-
 import game_engine.ValidMoveMethods as Helper
-
-ENNEMY_COLOR = False
-WIN = float("inf")
-LOSS = float("-inf")
-WEIGHTS = None
-
+from alpha_beta_pruning import param
 
 """
 This will be used to change the weights of every info on the board according to a genetic algorithm
 The array of values will be this: [nb_of_pawn, nb_of_king, nb_safe_pawn, nb_safe_king, nb_moveable_pawn, nb_moveable_king, distance_prom_line, nb_unoccupied_prom_line]
 Special patterns could be added after
 """
-
-
-def load_them(filename):
-    global WEIGHTS
-    with open(filename, "rb") as f:
-        WEIGHTS = pickle.load(f)
 
 
 def number_moveable(state, color):
@@ -106,8 +93,8 @@ def evaluate(state, color):
     ally, enemy = get_weight(state, color)
     computed_sum = 0
     for i in range(len(ally) - 1):
-        computed_sum += WEIGHTS[0][i][0] * ally[i] + WEIGHTS[0][i][1]
-        computed_sum += WEIGHTS[1][i][0] * ally[i] + WEIGHTS[1][i][1]
+        computed_sum += param.WEIGHTS[0][i][0] * ally[i] + param.WEIGHTS[0][i][1]
+        computed_sum += param.WEIGHTS[1][i][0] * ally[i] + param.WEIGHTS[1][i][1]
 
     return computed_sum
 
