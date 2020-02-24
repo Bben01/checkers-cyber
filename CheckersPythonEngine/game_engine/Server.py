@@ -14,7 +14,7 @@ SEPARATOR = "##-+-##"
 
 message_recieved = []
 messages_to_send = []
-running_threads = {}
+running_games = {}
 
 
 def send_waiting_messages(wlist):
@@ -60,10 +60,10 @@ def incoming_messages():
 
 
 def call(game_instance, data):
-    running = running_threads.get(game_instance)
+    running = running_games.get(game_instance)
     if running is None:
         game = Jeu()
-        running_threads[game_instance] = game
+        running_games[game_instance] = game
         running = game
     return analize_message(data, running)
 
@@ -91,7 +91,7 @@ def main():
                 if data == "":
                     open_client_sockets.remove(current_socket)
                     print("Connection with client closed.")
-                    del running_threads[current_socket]
+                    del running_games[current_socket]
                 else:
                     message_recieved.append((current_socket, data))
                     if not process_incoming_messages.is_alive():

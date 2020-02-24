@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
+using System.Threading;
 
 public class Graphiques : MonoBehaviour
 {
@@ -27,6 +27,9 @@ public class Graphiques : MonoBehaviour
 
     private bool isVictory;
 
+    private string[][] interThread = null;
+
+    private bool isIAing = false;
 
     // Start is called before the first frame update
     void Start()
@@ -69,11 +72,29 @@ public class Graphiques : MonoBehaviour
         }
         else
         {
-            enabled = false;
-            string[][] infos = Client.IAPlay();
-            IAPlay(infos);
-            enabled = true;
+            if (!isIAing)
+            {
+                isIAing = true;
+                ThreadStart childref = new ThreadStart(IACom);
+
+                Thread childThread = new Thread(childref);
+                childThread.Start();
+            }
+            else
+            {
+                if (interThread != null)
+                {
+                    IAPlay(interThread);
+                    interThread = null;
+                    isIAing = false;
+                }
+            }
         }
+    }
+
+    private void IACom()
+    {
+        interThread = Client.IAPlay();
     }
 
     private void IAPlay(string[][] infos)
@@ -87,7 +108,7 @@ public class Graphiques : MonoBehaviour
         Reset();
     }
 
-    private void AnalizeInfo(string[] returnInfos, bool iaPlay=false, bool firstTime=false)
+    private void AnalizeInfo(string[] returnInfos, bool iaPlay = false, bool firstTime = false)
     {
         // Error
         // TODO: There is an error here when the last piece is eaten
@@ -102,9 +123,9 @@ public class Graphiques : MonoBehaviour
         }
         // Just move visually the piece
         Vector2Int lastDeplacement = Helper.GetLastDeplacementDest(returnInfos[4]);
-        if(iaPlay)
+        if (iaPlay)
         {
-            int x = (int) char.GetNumericValue(returnInfos[6], 1);
+            int x = (int)char.GetNumericValue(returnInfos[6], 1);
             int y = (int)char.GetNumericValue(returnInfos[6], 2);
             if (firstTime)
             {
@@ -112,7 +133,7 @@ public class Graphiques : MonoBehaviour
             }
             selectedPiece = board[x, y];
         }
-        
+
         MovePieceVisual(selectedPiece, lastDeplacement.x, lastDeplacement.y);
         // Killed
         if (Helper.Activate(returnInfos[2], 0))
@@ -139,7 +160,7 @@ public class Graphiques : MonoBehaviour
         {
             MovePieceBoard(new Deplacement(startClick.x, startClick.y, lastDeplacement.x, lastDeplacement.y));
         }
-        
+
         // New Queen
         if (Helper.Activate(returnInfos[1], 0))
         {
@@ -191,13 +212,13 @@ public class Graphiques : MonoBehaviour
 
     private bool PlayAgain()
     {
-        bool hasSomthingToPlay = Client.SendAndResponseWithoutFormat("has_something_to_play", new string[2] { $"{!isWhiteTurn}", "false" }).ToLower().Equals("true");
-        if (!hasSomthingToPlay)
+        bool hasSomethingToPlay = Client.SendAndResponseWithoutFormat("has_something_to_play", new string[2] { $"{!isWhiteTurn}", "false" }).ToLower().Equals("true");
+        if (!hasSomethingToPlay)
         {
             string color = isWhiteTurn ? "White" : "Black";
             AfficherError($"{color} plays again!");
         }
-        return hasSomthingToPlay ? true : false;
+        return hasSomethingToPlay;
     }
 
     private void GenerateBoard()
@@ -238,7 +259,7 @@ public class Graphiques : MonoBehaviour
 
     private void MovePieceVisual(Piece p, int x, int y)
     {
-        p.transform.position = (Vector3.right * x) + (Vector3.forward * y) + boardOffset + pieceOffset;
+        p.transform.position = Vector3.Lerp(p.transform.position, (Vector3.right * x) + (Vector3.forward * y) + boardOffset + pieceOffset, 30);
     }
 
     private void UpdateMouseOver()

@@ -30,7 +30,6 @@ def alphabeta(state, depth, a, b, maximizingPlayer):
             value = min(value, alphabeta(state_children, depth - 1, a, b, True))
             b = min(b, value)
             if a >= b:
-
                 break
         return value
 

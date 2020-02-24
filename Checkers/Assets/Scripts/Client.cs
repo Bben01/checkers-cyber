@@ -10,9 +10,6 @@ public class Client
     private static TcpClient client;
     private static NetworkStream stream;
 
-    public static string[][] infoAI = null;
-
-
     public static string FormatMessageNoArgs(string methodName)
     {
         string str = $"1{methodName.PadRight(64),'-'}0";

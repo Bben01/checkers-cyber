@@ -66,7 +66,7 @@ def number_pieces(state, color):
 
 def prom_line(state, color):
     """
-    Compute the aggregated distance to pawn line and the number of occupied spot in prom line
+    Compute the aggregated distance to prom line and the number of occupied spot in prom line
     :param state: current state of the game
     :param color: the player to check
     :return: a tuple (distance, unoccupied_field)
@@ -81,9 +81,11 @@ def prom_line(state, color):
     for i in range(size):
         for j in range(i % 2, size, 2):
             piece = state.plateau.board[i][j]
-            if piece is not None and piece.isWhite == color and not piece.isKing:
+            if piece is None or piece.isKing:
+                continue
+            if piece.isWhite == color:
                 distance_sum += abs(prom_line_number - j)
-            if piece is not None and piece.isWhite != color and j == size - prom_line_number - 1:
+            if piece.isWhite != color and j == size - prom_line_number - 1:
                 occupied += 1
 
     return distance_sum, size / 2 - occupied
