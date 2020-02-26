@@ -259,7 +259,7 @@ public class Graphiques : MonoBehaviour
 
     private void MovePieceVisual(Piece p, int x, int y)
     {
-        p.transform.position = Vector3.Lerp(p.transform.position, (Vector3.right * x) + (Vector3.forward * y) + boardOffset + pieceOffset, 30);
+        p.transform.position = (Vector3.right * x) + (Vector3.forward * y) + boardOffset + pieceOffset;
     }
 
     private void UpdateMouseOver()
@@ -351,8 +351,6 @@ public class Graphiques : MonoBehaviour
 
     public void AnimateQueen(Tuple<int, int> pos)
     {
-        // TODO: a implementer
-        // Just for now: 
         if (pos == null)
         {
             Debug.Log("Error with new Queen.");
@@ -361,7 +359,7 @@ public class Graphiques : MonoBehaviour
         Debug.Log("New Queen!");
         Piece p = board[pos.Item1, pos.Item2];
         p.IsKing = true;
-        p.transform.Rotate(180, 0, 0, Space.Self);
+        p.ActivateAnimation();
     }
 
     public static void AfficherError(string errorMessage)

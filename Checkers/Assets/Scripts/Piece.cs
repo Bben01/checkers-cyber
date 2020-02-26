@@ -2,6 +2,8 @@
 
 public class Piece : MonoBehaviour
 {
+    public Animator animator;
+
     public bool IsKing { get; set; }
     public bool IsWhite { get; set; }
 
@@ -15,5 +17,10 @@ public class Piece : MonoBehaviour
     {
         IsWhite = p.IsWhite;
         IsKing = p.IsKing;
+    }
+
+    public void ActivateAnimation()
+    {
+        animator.SetTrigger("AnimateKing");
     }
 }
