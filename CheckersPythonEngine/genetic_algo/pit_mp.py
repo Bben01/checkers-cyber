@@ -52,7 +52,7 @@ def tournament(participants):
         return participants
     tuple_list = [[participants[i], participants[i + 1]] for i in range(0, len(participants) - 1, 2)]
     survivors = []
-    with concurrent.futures.ProcessPoolExecutor() as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
         results = executor.map(generate_tournament_round, tuple_list)
 
     for result in results:

@@ -6,13 +6,14 @@ public class ChangeSceneOnClickScript : MonoBehaviour
     public Animator animator;
     public int delay = 60 * 5;
     public bool acceptTouch = true;
+    public bool acceptDelay = true;
 
     private int _nextScene;
 
     // Update is called once per frame
     public void Update()
     {
-        if (acceptTouch && (Input.GetMouseButtonDown(0) || (Input.touches != null && Input.touches.Length > 0) || delay == 0))
+        if (acceptTouch && (Input.GetMouseButtonDown(0) || (Input.touches != null && Input.touches.Length > 0) || (delay == 0 && acceptDelay)))
         {
             FadeToNextLevel();
         }

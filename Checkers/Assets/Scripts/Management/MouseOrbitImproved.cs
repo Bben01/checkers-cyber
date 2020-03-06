@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [AddComponentMenu("Camera Control/Mouse Orbit with zoom")]
 public class MouseOrbitImproved : MonoBehaviour
@@ -16,7 +15,7 @@ public class MouseOrbitImproved : MonoBehaviour
     public float distanceMin = .5f;
     public float distanceMax = 15f;
 
-    public KeyCode activator = KeyCode.Space;
+    public int activator = 2;
     private bool keyDown = false;
     private bool shortKeyActivation = false;
     private int timerCount = 60;
@@ -46,7 +45,7 @@ public class MouseOrbitImproved : MonoBehaviour
     {
         // Update only when activator is pressed, supports short presses and long ones too
         timerCount--;
-        if (Input.GetKeyUp(activator))
+        if (Input.GetMouseButtonUp(activator))
         {
             keyDown = false;
             if (!shortKeyActivation && timerCount > 0)
@@ -58,7 +57,7 @@ public class MouseOrbitImproved : MonoBehaviour
                 shortKeyActivation = false;
             }
         }
-        if (Input.GetKeyDown(activator))
+        if (Input.GetMouseButtonDown(activator))
         {
             keyDown = true;
             timerCount = 60;
