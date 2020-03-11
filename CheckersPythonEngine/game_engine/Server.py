@@ -92,6 +92,10 @@ def main():
                     open_client_sockets.remove(current_socket)
                     print("Connection with client closed.")
                     del running_games[current_socket]
+                    # There is no instance of game running, restarting the server to better performances
+                    if len(open_client_sockets) == 0:
+                        server_socket.close()
+                        main()
                 else:
                     message_recieved.append((current_socket, data))
                     if not process_incoming_messages.is_alive():
