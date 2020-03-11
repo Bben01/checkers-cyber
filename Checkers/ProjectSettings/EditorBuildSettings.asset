@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuScene.unity
     guid: 42cf716dc4874104e9ebb6a798fa4e62
   - enabled: 1
+    path: Assets/Scenes/RemodelCheckersScene.unity
+    guid: 3a599f6fe0bd69b49bc86f3919a6b10c
+  - enabled: 0
     path: Assets/Scenes/CheckersScene.unity
     guid: c99442349f76ab94fb4a80a252926f99
   - enabled: 1
