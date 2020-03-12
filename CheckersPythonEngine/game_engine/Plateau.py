@@ -36,7 +36,7 @@ class Plateau:
         except IndexError:
             return True
 
-    def try_move(self, d: Deplacement, has_to_eat_again: bool):
+    def try_move(self, d: Deplacement, has_to_eat_again: bool, last_deplacement=True):
         status = ValidMoveMethods.valid_move(self.pieces, d, has_to_eat_again)
         if self.currentTourDeJeu is None:
             self.currentTourDeJeu = TourDeJeu()
@@ -50,7 +50,7 @@ class Plateau:
             return InformationCoup.create_invalid_move(status.errorMessage)
         else:
             is_new_queen = not self.pieces[d.origin[0]][d.origin[1]].isKing and \
-                           ValidMoveMethods.check_new_queen(d, self.isWhiteTurn) and not has_to_eat_again
+                           ValidMoveMethods.check_new_queen(d, self.isWhiteTurn) and last_deplacement
             # Killed
             if status.killed:
                 p_killed = self.get_killed_piece(d)

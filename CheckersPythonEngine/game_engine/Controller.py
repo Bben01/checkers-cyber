@@ -93,12 +93,13 @@ def ia_play(game_instance: Jeu):
     from alpha_beta_pruning import IAController
     return_string = []
     has_to_play_again = False
-    for move in IAController.list_actions(IAController.controller(game_instance)):
+    list_actions = IAController.list_actions(IAController.controller(game_instance))
+    for i, move in enumerate(list_actions):
         x1 = move[0][0]
         y1 = move[0][1]
         x2 = move[1][0]
         y2 = move[1][1]
-        infos = game_instance.plateau.try_move(Deplacement(x1, y1, x2, y2), has_to_play_again)
+        infos = game_instance.plateau.try_move(Deplacement(x1, y1, x2, y2), has_to_play_again, last_deplacement=len(list_actions) - 1 == i)
         return_string.append(game_instance.analize_info(infos))
         has_to_play_again = True
 
