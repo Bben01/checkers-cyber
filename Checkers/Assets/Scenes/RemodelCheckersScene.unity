@@ -314,6 +314,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneChanger
       objectReference: {fileID: 0}
+    - target: {fileID: 5230057530476691287, guid: 5133a8bbed58458449551bd456daa83b,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5230057530476691284, guid: 5133a8bbed58458449551bd456daa83b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -387,11 +392,6 @@ PrefabInstance:
     - target: {fileID: 5230057531613248222, guid: 5133a8bbed58458449551bd456daa83b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5230057530476691287, guid: 5133a8bbed58458449551bd456daa83b,
-        type: 3}
-      propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5230057531613248221, guid: 5133a8bbed58458449551bd456daa83b,
@@ -1787,13 +1787,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1674639860}
-  m_LocalRotation: {x: 0.53729963, y: 0, z: 0, w: 0.8433915}
-  m_LocalPosition: {x: 0.05, y: 6.37, z: -7}
+  m_LocalRotation: {x: 0.58594805, y: 0, z: 0, w: 0.81034863}
+  m_LocalPosition: {x: 0, y: 6.37, z: -3.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 65, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 71.74, y: 0, z: 0}
 --- !u!1 &1747812791
 GameObject:
   m_ObjectHideFlags: 0
@@ -2139,5 +2139,20 @@ PrefabInstance:
       propertyPath: cameras.Array.data[0]._camera
       value: 
       objectReference: {fileID: 1674639862}
+    - target: {fileID: 9101704080372443234, guid: 427cdd143a70afa439d64f8325eca7a8,
+        type: 3}
+      propertyPath: CameraSettings.orbital.speedScrool
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101704080372443234, guid: 427cdd143a70afa439d64f8325eca7a8,
+        type: 3}
+      propertyPath: CameraSettings.orbital.minDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2822969928081406521, guid: 427cdd143a70afa439d64f8325eca7a8,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 427cdd143a70afa439d64f8325eca7a8, type: 3}
