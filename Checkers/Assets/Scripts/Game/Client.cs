@@ -9,6 +9,20 @@ public class Client
     private static bool openClient = false;
     private static TcpClient client;
     private static NetworkStream stream;
+    private static bool HasToClose = false;
+    private static bool IAWork = false;
+
+    public static void CloseClient()
+    {
+        if (IAWork)
+        {
+            HasToClose = true;
+        }
+        else
+        {
+            End();
+        }
+    }
 
     public static string FormatMessageNoArgs(string methodName)
     {
@@ -49,6 +63,7 @@ public class Client
         stream = client.GetStream();
 
         openClient = true;
+        HasToClose = false;
     }
 
     public static string[] FormatSendAndResponse(string methodName, string[] args = null)
@@ -65,6 +80,7 @@ public class Client
 
     public static string[][] IAPlay()
     {
+        IAWork = true;
         string format = FormatMessageNoArgs("ia_play");
         string[] moves = Send(format, false, true);
         string[][] tabOfMoves = new string[moves.Length][];
@@ -72,12 +88,15 @@ public class Client
         {
             tabOfMoves[i] = moves[i].Split('-');
         }
+        if (HasToClose)
+            End();
+        IAWork = false;
         return tabOfMoves;
     }
 
     public static void End()
     {
-        // Close everything.
+        // Closes everything.
         stream.Close();
         client.Close();
         openClient = false;

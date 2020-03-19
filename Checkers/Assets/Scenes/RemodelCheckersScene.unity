@@ -1496,6 +1496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PauseMenuUI: {fileID: 361814192}
+  chess: {fileID: 1508007872}
   pauseKeyCode1: 32
   pauseKeyCode2: 27
 --- !u!1 &1217958853

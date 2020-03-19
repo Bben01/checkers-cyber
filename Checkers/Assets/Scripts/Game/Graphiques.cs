@@ -34,6 +34,7 @@ public class Graphiques : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        enabled = true;
         GenerateBoard();
         clicked = false;
         isWhiteTurn = true;
@@ -97,7 +98,7 @@ public class Graphiques : MonoBehaviour
         }
     }
 
-    void OnApplicationQuit() => Client.End();
+    void OnApplicationQuit() => Client.CloseClient();
 
     public void Resume()
     {

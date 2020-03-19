@@ -6,9 +6,15 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
 
     public GameObject PauseMenuUI;
+    public GameObject chess;
 
-    public KeyCode pauseKeyCode1 = KeyCode.Space;
+    public string pauseKeyCode1;
     public KeyCode pauseKeyCode2 = KeyCode.Escape;
+
+    private void Awake()
+    {
+        pauseKeyCode1 = PlayerPrefs.GetString("PauseKey", "space");
+    }
 
     // Update is called once per frame
     void Update()
@@ -18,6 +24,8 @@ public class PauseMenu : MonoBehaviour
             if (GameIsPaused)
             {
                 Resume();
+                Graphiques sn = chess.gameObject.GetComponent<Graphiques>();
+                sn.Resume();
             }
             else
             {
@@ -49,6 +57,7 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame()
     {
+        Debug.Log("Quitting");
         Application.Quit();
     }
 }
