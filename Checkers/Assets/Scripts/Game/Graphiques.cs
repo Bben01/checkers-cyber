@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Threading;
+using System.Collections;
 
 public class Graphiques : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class Graphiques : MonoBehaviour
 
     private bool isWhiteTurn;
 
-    private bool isVictory;
+    private string VictoryString;
 
     private string[][] interThread = null;
 
@@ -38,7 +39,6 @@ public class Graphiques : MonoBehaviour
         GenerateBoard();
         clicked = false;
         isWhiteTurn = true;
-        isVictory = false;
     }
 
     // Update is called once per frame
@@ -49,9 +49,10 @@ public class Graphiques : MonoBehaviour
             enabled = false;
         }
 
-        if (isVictory)
+        if (VictoryString != null)
         {
             // TODO: Appeler la prochaine scene ici
+            FindObjectOfType<AudioManager>().Play("Victory");
             return;
         }
 
@@ -105,6 +106,18 @@ public class Graphiques : MonoBehaviour
         enabled = true;
     }
 
+    public IEnumerator MoveTo(Piece piece, Vector3 position, float speed)
+    {
+        float treshold = 0.02f;
+        while (true)
+        {
+            piece.transform.position = Vector3.MoveTowards(piece.transform.position, position, speed);
+            if (Vector3.Distance(piece.transform.position, position) < treshold)
+                break;
+            yield return null;
+        }
+    }
+
     private void IACom()
     {
         interThread = Client.IAPlay();
@@ -138,8 +151,8 @@ public class Graphiques : MonoBehaviour
         Vector2Int lastDeplacement = Helper.GetLastDeplacementDest(returnInfos[4]);
         if (iaPlay)
         {
-            int x = (int)char.GetNumericValue(returnInfos[6], 1);
-            int y = (int)char.GetNumericValue(returnInfos[6], 2);
+            int x = (int) char.GetNumericValue(returnInfos[6], 1);
+            int y = (int) char.GetNumericValue(returnInfos[6], 2);
             if (firstTime)
             {
                 startClick = new Vector2Int(x, y);
@@ -147,7 +160,7 @@ public class Graphiques : MonoBehaviour
             selectedPiece = board[x, y];
         }
 
-        MovePieceVisual(selectedPiece, lastDeplacement.x, lastDeplacement.y);
+        MovePieceVisual(selectedPiece, lastDeplacement.x, lastDeplacement.y, false);
         // Killed
         if (Helper.Activate(returnInfos[2], 0))
         {
@@ -187,8 +200,8 @@ public class Graphiques : MonoBehaviour
         // Victory
         if (Helper.Activate(returnInfos[5], 0))
         {
-            Debug.Log(returnInfos[5].Substring(1));
-            isVictory = true;
+            VictoryString = returnInfos[5].Substring(1);
+            Debug.Log(VictoryString);
         }
     }
 
@@ -208,7 +221,7 @@ public class Graphiques : MonoBehaviour
         clicked = false;
         if (selectedPiece != null)
         {
-            MovePieceVisual(selectedPiece, startClick.x, startClick.y);
+            MovePieceVisual(selectedPiece, startClick.x, startClick.y, false);
             selectedPiece = null;
         }
         startClick = Vector2Int.zero;
@@ -266,13 +279,14 @@ public class Graphiques : MonoBehaviour
         Piece p = go.GetComponent<Piece>();
         p.IsWhite = isWhite;
         board[x, y] = p;
-        MovePieceVisual(p, x, y);
+        MovePieceVisual(p, x, y, true);
         Client.SendAndResponseWithoutFormat("generate_board_submethod", new string[3] { $"{x}", $"{y}", $"{isWhite}" });
     }
 
-    private void MovePieceVisual(Piece p, int x, int y)
+    private void MovePieceVisual(Piece p, int x, int y, bool urgent)
     {
-        p.transform.position = (Vector3.right * x) + (Vector3.forward * y) + boardOffset + pieceOffset;
+        IEnumerator coroutine = MoveTo(p, (Vector3.right * x) + (Vector3.forward * y) + boardOffset + pieceOffset, Time.deltaTime * (urgent ? 60 : 1));
+        StartCoroutine(coroutine);
     }
 
     private void UpdateMouseOver()
