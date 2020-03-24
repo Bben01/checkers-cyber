@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Threading;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Graphiques : MonoBehaviour
 {
@@ -31,6 +32,10 @@ public class Graphiques : MonoBehaviour
     private string[][] interThread = null;
 
     private bool isIAing = false;
+    private Queue<Tuple<Piece, Vector3>> IAQueue = new Queue<Tuple<Piece, Vector3>>();
+    private Coroutine IAMoveCoroutine;
+
+    private bool IsPieceToQueen = false;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +58,7 @@ public class Graphiques : MonoBehaviour
         {
             // TODO: Appeler la prochaine scene ici
             FindObjectOfType<AudioManager>().Play("Victory");
+            VictoryString = null;
             return;
         }
 
@@ -109,12 +115,27 @@ public class Graphiques : MonoBehaviour
     public IEnumerator MoveTo(Piece piece, Vector3 position, float speed)
     {
         float treshold = 0.02f;
+        float acceleration = Time.deltaTime / 60;
         while (true)
         {
-            piece.transform.position = Vector3.MoveTowards(piece.transform.position, position, speed);
+            piece.transform.position = Vector3.MoveTowards(piece.transform.position, position, speed += acceleration);
             if (Vector3.Distance(piece.transform.position, position) < treshold)
                 break;
             yield return null;
+        }
+        if (IAQueue.Count != 0)
+        {
+            Tuple<Piece, Vector3> args = IAQueue.Dequeue();
+            StartCoroutine(MoveTo(args.Item1, args.Item2, speed));
+        }
+        else
+        {
+            IAMoveCoroutine = null;
+            if (IsPieceToQueen)
+            {
+                piece.ActivateAnimation();
+                IsPieceToQueen = false;
+            }
         }
     }
 
@@ -151,8 +172,8 @@ public class Graphiques : MonoBehaviour
         Vector2Int lastDeplacement = Helper.GetLastDeplacementDest(returnInfos[4]);
         if (iaPlay)
         {
-            int x = (int) char.GetNumericValue(returnInfos[6], 1);
-            int y = (int) char.GetNumericValue(returnInfos[6], 2);
+            int x = (int)char.GetNumericValue(returnInfos[6], 1);
+            int y = (int)char.GetNumericValue(returnInfos[6], 2);
             if (firstTime)
             {
                 startClick = new Vector2Int(x, y);
@@ -285,8 +306,26 @@ public class Graphiques : MonoBehaviour
 
     private void MovePieceVisual(Piece p, int x, int y, bool urgent)
     {
-        IEnumerator coroutine = MoveTo(p, (Vector3.right * x) + (Vector3.forward * y) + boardOffset + pieceOffset, Time.deltaTime * (urgent ? 60 : 1));
-        StartCoroutine(coroutine);
+        Debug.Log("Moving to " + x + ", " + y);
+        Vector3 position = (Vector3.right * x) + (Vector3.forward * y) + boardOffset + pieceOffset;
+        float speed = Time.deltaTime * (urgent ? 60 : 1);
+        if (isIAing)
+        {
+            if (IAMoveCoroutine != null)
+            {
+                IAQueue.Enqueue(new Tuple<Piece, Vector3>(p, position));
+            }
+            else
+            {
+                IEnumerator coroutine = MoveTo(p, position, speed);
+                IAMoveCoroutine = StartCoroutine(coroutine);
+            }
+        }
+        else
+        {
+            IEnumerator coroutine = MoveTo(p, position, speed);
+            StartCoroutine(coroutine);
+        }
     }
 
     private void UpdateMouseOver()
@@ -386,7 +425,14 @@ public class Graphiques : MonoBehaviour
         Debug.Log("New Queen!");
         Piece p = board[pos.Item1, pos.Item2];
         p.IsKing = true;
-        p.ActivateAnimation();
+        if (isIAing)
+        {
+            IsPieceToQueen = true;
+        }
+        else
+        {
+            p.ActivateAnimation();
+        }
     }
 
     public static void AfficherError(string errorMessage)

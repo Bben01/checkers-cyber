@@ -3,6 +3,16 @@ using UnityEngine;
 
 public class Helper
 {
+    public static string arrayToStr(string[] array)
+    {
+        string returnStr = "";
+        foreach (string str in array)
+        {
+            returnStr += str;
+        }
+        return returnStr;
+    }
+
     public static Tuple<int, int> GetPosNewQueen(string infos)
     {
         if (int.TryParse(infos.Substring(1, 1), out int x) && int.TryParse(infos.Substring(2, 1), out int y))
