@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class OptionMenu : MonoBehaviour
 {
@@ -9,11 +10,13 @@ public class OptionMenu : MonoBehaviour
     public GameObject KeyBinding;
     public GameObject TextGameObject;
     public TMP_Text text;
+    public Slider Slider;
 
     private void Awake()
     {
         values = KeyCodes.keys;
         UpdateText();
+        LoadVolume();
     }
 
     private void Update()
@@ -44,5 +47,18 @@ public class OptionMenu : MonoBehaviour
     private void UpdateText()
     {
         text.text = PlayerPrefs.GetString("PauseKey", "Space").ToUpper();
+    }
+
+    public void UpdateVolume()
+    {
+        float volume = Slider.value;
+        PlayerPrefs.SetFloat("Volume", volume);
+        FindObjectOfType<AudioManager>().SetVolume(volume);
+    }
+
+    private void LoadVolume()
+    {
+        float volume = PlayerPrefs.GetFloat("Volume", 0.5f);
+        Slider.value = volume;
     }
 }

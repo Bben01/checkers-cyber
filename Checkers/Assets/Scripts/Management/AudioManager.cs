@@ -11,7 +11,12 @@ public class AudioManager : MonoBehaviour
 
 	public Sound[] sounds;
 
-	void Awake()
+    private void Start()
+    {
+        SetVolume(PlayerPrefs.GetFloat("Volume", 0.5f));
+    }
+
+    void Awake()
 	{
 		if (instance != null)
 		{
@@ -47,5 +52,10 @@ public class AudioManager : MonoBehaviour
 
 		s.source.Play();
 	}
+
+    public void SetVolume(float volume)
+    {
+        mixerGroup.audioMixer.SetFloat("Volume", Mathf.Log(volume) * 20);
+    }
 
 }
