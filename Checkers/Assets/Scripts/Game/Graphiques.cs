@@ -189,7 +189,14 @@ public class Graphiques : MonoBehaviour
             Debug.Log($"Piece Killed: { posKilled }");
             Piece p = board[posKilled.x, posKilled.y];
             board[posKilled.x, posKilled.y] = null;
-            Destroy(p.gameObject);
+            if (iaPlay)
+            {
+                p.DestroyOnCollision = true;
+            }
+            else
+            {
+                Destroy(p.gameObject);
+            }
             // Has to play again
             if (Helper.Activate(returnInfos[2], 3))
             {

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7129982876447323064}
   - component: {fileID: -1869398668223472109}
   - component: {fileID: 1456266836629913885}
+  - component: {fileID: 3540281258135404999}
+  - component: {fileID: 876156824604823374}
   m_Layer: 0
   m_Name: BlackPiece
   m_TagString: Untagged
@@ -46,6 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1456266836629913885}
+  plasmaExplosion: {fileID: 1615991341414239050, guid: 615f6f5924be9004c810a94c0cd7119c,
+    type: 3}
 --- !u!95 &1456266836629913885
 Animator:
   serializedVersion: 3
@@ -65,6 +69,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &3540281258135404999
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7129982876447323065}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 0.5, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &876156824604823374
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7129982876447323065}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &7129982876924666644
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -72,11 +105,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7129982876447323064}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: f3de9705ebe71d7428e7353202caac2d,
-        type: 3}
-      propertyPath: m_Name
-      value: BlackPiece
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f3de9705ebe71d7428e7353202caac2d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -141,6 +169,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: f3de9705ebe71d7428e7353202caac2d,
+        type: 3}
+      propertyPath: m_Name
+      value: BlackPiece
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3de9705ebe71d7428e7353202caac2d, type: 3}
