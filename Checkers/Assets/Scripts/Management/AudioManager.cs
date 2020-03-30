@@ -14,6 +14,7 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         SetVolume(PlayerPrefs.GetFloat("Volume", 0.5f));
+        Play("Theme");
     }
 
     void Awake()
