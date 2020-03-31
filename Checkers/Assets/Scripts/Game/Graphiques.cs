@@ -330,6 +330,10 @@ public class Graphiques : MonoBehaviour
         }
         else
         {
+            if (!urgent)
+            {
+                StopAllCoroutines();
+            }
             IEnumerator coroutine = MoveTo(p, position, speed);
             StartCoroutine(coroutine);
         }

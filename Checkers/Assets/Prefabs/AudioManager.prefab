@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3466412883678965644
+--- !u!1 &2698550807833111942
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3466412883678965642}
-  - component: {fileID: 3466412883678965645}
+  - component: {fileID: 2698550807833111936}
+  - component: {fileID: 2698550807833111943}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -17,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3466412883678965642
+--- !u!4 &2698550807833111936
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466412883678965644}
+  m_GameObject: {fileID: 2698550807833111942}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,19 +31,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3466412883678965645
+--- !u!114 &2698550807833111943
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466412883678965644}
+  m_GameObject: {fileID: 2698550807833111942}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f50a1eb2e34008a4abedffc9c1fa76cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mixerGroup: {fileID: 0}
+  mixerGroup: {fileID: 24300002, guid: 930e4bc4e5de7d64f97df2d2be0038a9, type: 2}
   sounds:
   - name: Transition
     clip: {fileID: 8300000, guid: 7afca98a49d984070864412940747f32, type: 3}
@@ -54,23 +54,25 @@ MonoBehaviour:
     loop: 0
     mixerGroup: {fileID: 0}
     source: {fileID: 0}
-  - name: PassOver Button
+  - name: ButtonHover
     clip: {fileID: 8300000, guid: 030515f205b54fc478961cbe39c4e75e, type: 3}
-    volume: 0.7
+    volume: 0.5
     volumeVariance: 0.1
     pitch: 1
     pitchVariance: 0.05
     loop: 0
-    mixerGroup: {fileID: 0}
+    mixerGroup: {fileID: -2690379543979836213, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
     source: {fileID: 0}
-  - name: Item selection
+  - name: ButtonClick
     clip: {fileID: 8300000, guid: 8f2b2e1c442246f42a67785c64e78a78, type: 3}
     volume: 0.7
     volumeVariance: 0.1
     pitch: 1
     pitchVariance: 0.05
     loop: 0
-    mixerGroup: {fileID: 0}
+    mixerGroup: {fileID: -2690379543979836213, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
     source: {fileID: 0}
   - name: Check
     clip: {fileID: 8300000, guid: a765109e0e9954bbfbec6ff4a77c527b, type: 3}
@@ -79,7 +81,8 @@ MonoBehaviour:
     pitch: 1
     pitchVariance: 0.05
     loop: 0
-    mixerGroup: {fileID: 0}
+    mixerGroup: {fileID: -2690379543979836213, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
     source: {fileID: 0}
   - name: StoneSlide
     clip: {fileID: 8300000, guid: 967dd29a6cbcaa645bc846f3823616d6, type: 3}
@@ -88,7 +91,8 @@ MonoBehaviour:
     pitch: 1
     pitchVariance: 0.05
     loop: 0
-    mixerGroup: {fileID: 0}
+    mixerGroup: {fileID: 123129719862759640, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
     source: {fileID: 0}
   - name: Victory
     clip: {fileID: 8300000, guid: 2edfbc5b4f020994b9ae0c0a0c051d9e, type: 3}
@@ -97,5 +101,36 @@ MonoBehaviour:
     pitch: 1
     pitchVariance: 0.05
     loop: 0
-    mixerGroup: {fileID: 0}
+    mixerGroup: {fileID: 123129719862759640, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
+    source: {fileID: 0}
+  - name: Theme
+    clip: {fileID: 8300000, guid: e0042aeb89a628345b0f0ebabb4db95f, type: 3}
+    volume: 0.5
+    volumeVariance: 0.1
+    pitch: 1
+    pitchVariance: 0.05
+    loop: 1
+    mixerGroup: {fileID: 123129719862759640, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
+    source: {fileID: 0}
+  - name: Whoosh
+    clip: {fileID: 8300000, guid: cdbbe496ac59f429d86f8013a321e038, type: 3}
+    volume: 0.5
+    volumeVariance: 0.1
+    pitch: 1
+    pitchVariance: 0.05
+    loop: 0
+    mixerGroup: {fileID: 123129719862759640, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
+    source: {fileID: 0}
+  - name: Explosion
+    clip: {fileID: 8300000, guid: bdde28b62f526f64ab868dab7d580265, type: 3}
+    volume: 0.2
+    volumeVariance: 0.05
+    pitch: 1
+    pitchVariance: 0.05
+    loop: 0
+    mixerGroup: {fileID: 123129719862759640, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
     source: {fileID: 0}

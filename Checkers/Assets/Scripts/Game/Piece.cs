@@ -31,10 +31,10 @@ public class Piece : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("New Collision");
         if (DestroyOnCollision && collider.gameObject.GetType() == gameObject.GetType())
         {
             var explosion = Instantiate(plasmaExplosion, gameObject.transform.position, Quaternion.identity);
+            FindObjectOfType<AudioManager>().Play("Explosion");
             Destroy(gameObject);
         }
     }
