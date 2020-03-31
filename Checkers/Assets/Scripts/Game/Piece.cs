@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Piece : MonoBehaviour
 {
     public Animator animator;
     public ParticleSystem plasmaExplosion;
+    public Rigidbody rb;
 
     public bool IsKing { get; set; }
     public bool IsWhite { get; set; }
@@ -26,7 +28,9 @@ public class Piece : MonoBehaviour
 
     public void ActivateAnimation()
     {
+        Destroy(gameObject.GetComponent<Rigidbody>());
         animator.SetTrigger("AnimateKing");
+        StartCoroutine(AddRb());
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -37,5 +41,13 @@ public class Piece : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("Explosion");
             Destroy(gameObject);
         }
+    }
+
+    public IEnumerator AddRb()
+    {
+        yield return new WaitForSeconds(3f);
+        Rigidbody newRb = gameObject.AddComponent<Rigidbody>();
+        newRb.angularDrag = 0;
+        newRb.isKinematic = true;
     }
 }

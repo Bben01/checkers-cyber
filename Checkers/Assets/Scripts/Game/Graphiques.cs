@@ -114,7 +114,7 @@ public class Graphiques : MonoBehaviour
 
     public IEnumerator MoveTo(Piece piece, Vector3 position, float speed)
     {
-        float treshold = 0.02f;
+        float treshold = 0.025f;
         float acceleration = Time.deltaTime / 60;
         while (true)
         {

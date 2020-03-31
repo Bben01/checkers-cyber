@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7129982876447323064}
   - component: {fileID: -1869398668223472109}
   - component: {fileID: 1456266836629913885}
-  - component: {fileID: 3540281258135404999}
-  - component: {fileID: 876156824604823374}
+  - component: {fileID: 873171626142809197}
+  - component: {fileID: -6163197512916892580}
   m_Layer: 0
   m_Name: BlackPiece
   m_TagString: Untagged
@@ -27,14 +27,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7129982876447323065}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children:
   - {fileID: 2848664654105790478}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &-1869398668223472109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50,6 +50,7 @@ MonoBehaviour:
   animator: {fileID: 1456266836629913885}
   plasmaExplosion: {fileID: 1615991341414239050, guid: 615f6f5924be9004c810a94c0cd7119c,
     type: 3}
+  rb: {fileID: 0}
 --- !u!95 &1456266836629913885
 Animator:
   serializedVersion: 3
@@ -69,7 +70,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!65 &3540281258135404999
+--- !u!65 &873171626142809197
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -82,7 +83,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 0.5, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &876156824604823374
+--- !u!54 &-6163197512916892580
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +97,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!1001 &7129982876924666644
 PrefabInstance:
@@ -123,22 +124,22 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: f3de9705ebe71d7428e7353202caac2d,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.7071068
+      value: 0.6903456
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f3de9705ebe71d7428e7353202caac2d,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.15304591
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f3de9705ebe71d7428e7353202caac2d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.15304591
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f3de9705ebe71d7428e7353202caac2d,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.6903456
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f3de9705ebe71d7428e7353202caac2d,
         type: 3}
@@ -158,7 +159,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: f3de9705ebe71d7428e7353202caac2d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f3de9705ebe71d7428e7353202caac2d,
         type: 3}
