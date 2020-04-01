@@ -57,7 +57,15 @@ public class Graphiques : MonoBehaviour
         if (VictoryString != null)
         {
             // TODO: Appeler la prochaine scene ici
-            FindObjectOfType<AudioManager>().Play("Victory");
+            if (VictoryString.Contains("White"))
+            {
+                FindObjectOfType<AudioManager>().Play("Victory");
+            }
+            else
+            {
+                FindObjectOfType<AudioManager>().Play("Lose");
+            }
+            FindObjectOfType<ChangeSceneOnClickScript>().FadeToNextLevel();
             VictoryString = null;
             return;
         }
