@@ -56,17 +56,7 @@ public class Graphiques : MonoBehaviour
 
         if (VictoryString != null)
         {
-            // TODO: Appeler la prochaine scene ici
-            if (VictoryString.Contains("White"))
-            {
-                FindObjectOfType<AudioManager>().Play("Victory");
-            }
-            else
-            {
-                FindObjectOfType<AudioManager>().Play("Lose");
-            }
-            FindObjectOfType<ChangeSceneOnClickScript>().FadeToNextLevel();
-            VictoryString = null;
+            Victory();
             return;
         }
 
@@ -111,6 +101,12 @@ public class Graphiques : MonoBehaviour
                 }
             }
         }
+    }
+
+    void OnDestroy()
+    {
+        Client.CloseClient();
+        Debug.Log("Destroying");
     }
 
     void OnApplicationQuit() => Client.CloseClient();
@@ -459,5 +455,35 @@ public class Graphiques : MonoBehaviour
         // TODO: a implementer
         // Just for now:
         Debug.Log(errorMessage);
+    }
+
+    private void Victory()
+    {
+        string sound;
+        if (VictoryString.Contains("White"))
+        {
+            if (FindObjectOfType<TrollScript>().isTroll)
+            {
+                sound = UnityEngine.Random.value > 0.5f ? "TROLL_VICTORY" : "TROLL_TADA";
+            }
+            else
+            {
+                sound = "Victory";
+            }
+        }
+        else
+        {
+            if (FindObjectOfType<TrollScript>().isTroll)
+            {
+                sound = UnityEngine.Random.value > 0.5f ? "TROLL_LOSE" : "TROLL_SAD";
+            }
+            else
+            {
+                sound = "Lose";
+            }
+        }
+        FindObjectOfType<AudioManager>().Play(sound);
+        FindObjectOfType<ChangeSceneOnClickScript>().FadeToNextLevel();
+        VictoryString = null;
     }
 }

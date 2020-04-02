@@ -144,3 +144,43 @@ MonoBehaviour:
     mixerGroup: {fileID: 123129719862759640, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
       type: 2}
     source: {fileID: 0}
+  - name: TROLL_LOSE
+    clip: {fileID: 8300000, guid: a557e5772edbf104a90d2f4360a527da, type: 3}
+    volume: 0.3
+    volumeVariance: 0.05
+    pitch: 1
+    pitchVariance: 0.05
+    loop: 0
+    mixerGroup: {fileID: 123129719862759640, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
+    source: {fileID: 0}
+  - name: TROLL_SAD
+    clip: {fileID: 8300000, guid: 3dcd1972ff0213d4e9b6a88ca9625ce9, type: 3}
+    volume: 0.3
+    volumeVariance: 0.05
+    pitch: 1
+    pitchVariance: 0.05
+    loop: 0
+    mixerGroup: {fileID: 123129719862759640, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
+    source: {fileID: 0}
+  - name: TROLL_VICTORY
+    clip: {fileID: 8300000, guid: 640046f3af747f24a9a61bc76787fcdb, type: 3}
+    volume: 0.3
+    volumeVariance: 0.05
+    pitch: 1
+    pitchVariance: 0.05
+    loop: 0
+    mixerGroup: {fileID: 123129719862759640, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
+    source: {fileID: 0}
+  - name: TROLL_TADA
+    clip: {fileID: 8300000, guid: 3003f5e6c35e76e45aed127ed57e0945, type: 3}
+    volume: 0.5
+    volumeVariance: 0.05
+    pitch: 1
+    pitchVariance: 0.05
+    loop: 0
+    mixerGroup: {fileID: 123129719862759640, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
+    source: {fileID: 0}
