@@ -94,6 +94,8 @@ def ia_play(game_instance: Jeu):
     return_string = []
     has_to_play_again = False
     list_actions = IAController.list_actions(IAController.controller(game_instance))
+    if not list_actions:
+        return "null"
     for i, move in enumerate(list_actions):
         x1 = move[0][0]
         y1 = move[0][1]

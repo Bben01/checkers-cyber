@@ -34,6 +34,7 @@ public class Graphiques : MonoBehaviour
     private bool isIAing = false;
     private Queue<Tuple<Piece, Vector3>> IAQueue = new Queue<Tuple<Piece, Vector3>>();
     private Coroutine IAMoveCoroutine;
+    private Coroutine MoveCoroutine;
 
     private bool IsPieceToQueen = false;
 
@@ -56,7 +57,8 @@ public class Graphiques : MonoBehaviour
 
         if (VictoryString != null)
         {
-            Victory();
+            StartCoroutine(Victory());
+            enabled = false;
             return;
         }
 
@@ -106,7 +108,6 @@ public class Graphiques : MonoBehaviour
     void OnDestroy()
     {
         Client.CloseClient();
-        Debug.Log("Destroying");
     }
 
     void OnApplicationQuit() => Client.CloseClient();
@@ -162,7 +163,6 @@ public class Graphiques : MonoBehaviour
     private void AnalizeInfo(string[] returnInfos, bool iaPlay = false, bool firstTime = false)
     {
         // Error
-        // TODO: There is an error here when the last piece is eaten
         if (Helper.Activate(returnInfos[0], 0))
         {
             AfficherError(returnInfos[1].Substring(1));
@@ -339,7 +339,7 @@ public class Graphiques : MonoBehaviour
                 StopAllCoroutines();
             }
             IEnumerator coroutine = MoveTo(p, position, speed);
-            StartCoroutine(coroutine);
+            MoveCoroutine = StartCoroutine(coroutine);
         }
     }
 
@@ -415,7 +415,7 @@ public class Graphiques : MonoBehaviour
         {
             SelectCorrectPiece(p, x, y);
         }
-        else
+        else if (p != null)
         {
             AfficherError("This piece cannot be selected!");
         }
@@ -440,7 +440,7 @@ public class Graphiques : MonoBehaviour
         Debug.Log("New Queen!");
         Piece p = board[pos.Item1, pos.Item2];
         p.IsKing = true;
-        if (isIAing)
+        if (MoveCoroutine != null || IAMoveCoroutine != null)
         {
             IsPieceToQueen = true;
         }
@@ -452,12 +452,11 @@ public class Graphiques : MonoBehaviour
 
     public static void AfficherError(string errorMessage)
     {
-        // TODO: a implementer
-        // Just for now:
-        Debug.Log(errorMessage);
+        IEnumerator coroutine = FindObjectOfType<Toast>().ShowToast(errorMessage, 1f);
+        FindObjectOfType<Toast>().StartCoroutine(coroutine);
     }
 
-    private void Victory()
+    private IEnumerator Victory()
     {
         string sound;
         if (VictoryString.Contains("White"))
@@ -482,8 +481,11 @@ public class Graphiques : MonoBehaviour
                 sound = "Lose";
             }
         }
+
+        VictoryString = null;
+        yield return new WaitForSeconds(1f);
+
         FindObjectOfType<AudioManager>().Play(sound);
         FindObjectOfType<ChangeSceneOnClickScript>().FadeToNextLevel();
-        VictoryString = null;
     }
 }
