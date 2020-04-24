@@ -46,9 +46,9 @@ MonoBehaviour:
   mixerGroup: {fileID: 24300002, guid: 930e4bc4e5de7d64f97df2d2be0038a9, type: 2}
   sounds:
   - name: Transition
-    clip: {fileID: 8300000, guid: 7afca98a49d984070864412940747f32, type: 3}
-    volume: 0.5
-    volumeVariance: 0.2
+    clip: {fileID: 8300000, guid: 0d5e1b474fbc34b93a605fb0ae777c23, type: 3}
+    volume: 0.25
+    volumeVariance: 0.1
     pitch: 1
     pitchVariance: 0.1
     loop: 0

@@ -14,6 +14,8 @@ def controller(game_state):
 
 
 def list_actions(best_move):
+    if best_move is None:
+        return
     list_moves = []
     previous_move = None
     disponible_moves = best_move.get_moves()

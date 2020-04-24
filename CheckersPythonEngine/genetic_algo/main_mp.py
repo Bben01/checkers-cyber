@@ -11,8 +11,8 @@ generation_count = 0
 
 def selection():
     global selected
-    random.shuffle(population.population)
-    selected.extend(pit_mp.tournament(population.population))
+    population.shuffle()
+    selected.extend(pit_mp.alternalted(population.population))
 
 
 def crossover():
@@ -37,6 +37,8 @@ def mutation():
 
 def main():
     global generation_count, population, selected
+    # TODO: Change this when testing new strats
+    # The game seems to last 39 turns exactly everytime, so debugging would be nice
     if Population.is_saved():
         population.load_population()
     else:
@@ -54,7 +56,7 @@ def main():
 
         mutation()
 
-        print(f"Generation {generation_count} - {population.best_score()}")
+        print(f"[INFO]\tGeneration {generation_count} - {population.best_score()}")
 
         population.save_fit()
 

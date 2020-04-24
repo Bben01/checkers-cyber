@@ -96,7 +96,7 @@ def evaluate(state, color):
     computed_sum = 0
     for i in range(len(ally) - 1):
         computed_sum += param.WEIGHTS[0][i][0] * ally[i] + param.WEIGHTS[0][i][1]
-        computed_sum += param.WEIGHTS[1][i][0] * ally[i] + param.WEIGHTS[1][i][1]
+        computed_sum += param.WEIGHTS[1][i][0] * enemy[i] + param.WEIGHTS[1][i][1]
 
     return computed_sum
 

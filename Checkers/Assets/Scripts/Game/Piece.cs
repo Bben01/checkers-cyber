@@ -5,7 +5,6 @@ public class Piece : MonoBehaviour
 {
     public Animator animator;
     public ParticleSystem plasmaExplosion;
-    public Rigidbody rb;
 
     public bool IsKing { get; set; }
     public bool IsWhite { get; set; }
@@ -37,10 +36,15 @@ public class Piece : MonoBehaviour
     {
         if (DestroyOnCollision && collider.gameObject.GetType() == gameObject.GetType())
         {
-            var explosion = Instantiate(plasmaExplosion, gameObject.transform.position, Quaternion.identity);
-            FindObjectOfType<AudioManager>().Play("Explosion");
-            Destroy(gameObject);
+            Explosion();
         }
+    }
+
+    public void Explosion()
+    {
+        var explosion = Instantiate(plasmaExplosion, gameObject.transform.position, Quaternion.identity);
+        FindObjectOfType<AudioManager>().Play("Explosion");
+        Destroy(gameObject);
     }
 
     public IEnumerator AddRb()

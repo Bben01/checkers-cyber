@@ -1,6 +1,7 @@
 import os
 import random
 import pickle
+import heapq
 
 from genetic_algo.Individual import Individual
 
@@ -37,6 +38,13 @@ class Population:
     def best_score(self):
         return max(self.population, key=lambda individual: individual.score)
 
+    def reset(self):
+        for individual in self.population:
+            individual.reset()
+
+    def shuffle(self):
+        random.shuffle(self.population)
+
     def save_fit(self):
         best_individual = self.best_score()
         with open(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\genetic_algo\serialized", 'wb') as f:
@@ -66,3 +74,9 @@ class Population:
     @staticmethod
     def is_saved():
         return os.path.isfile(r"../Temp/ArchiveGenerations/0")
+
+    @staticmethod
+    def pick_best(population, amount):
+        if amount >= len(population):
+            return population
+        return heapq.nlargest(amount, population, key=lambda individual: individual.score)

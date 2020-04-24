@@ -151,6 +151,13 @@ public class Graphiques : MonoBehaviour
 
     private void IAPlay(string[][] infos)
     {
+        // The ia cant move a piece
+        if (infos.Length == 100)
+        {
+            AfficherError("The player couldn't play, it's your turn!");
+            isWhiteTurn = true;
+            return;
+        }
         bool firstTime = true;
         foreach (string[] info in infos)
         {
@@ -199,7 +206,7 @@ public class Graphiques : MonoBehaviour
             }
             else
             {
-                Destroy(p.gameObject);
+                p.Explosion();
             }
             // Has to play again
             if (Helper.Activate(returnInfos[2], 3))

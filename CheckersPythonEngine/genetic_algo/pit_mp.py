@@ -1,4 +1,5 @@
 import concurrent.futures
+from random import shuffle
 
 from deep_learning_algorithms.MctsMethods import State
 from genetic_algo import Alphabeta
@@ -11,13 +12,16 @@ nb_games = args["nb_games"]
 def game(warriors):
     state = State.initial_state()
     color = True
+    nb_turns = 0
     while "state is not terminal":
         state = state.takeAction(Alphabeta.get_best_action(state, warriors[0] if color else warriors[1]))
+        nb_turns += 1
         if state.isTerminal():
             break
         Alphabeta.change_player()
         color = not color
 
+    print(f"[INFO]\tThe game lasted {nb_turns} turns")
     return color
 
 
@@ -44,7 +48,7 @@ def generate_tournament_round(warriors):
 
 def tournament(participants):
     """
-    Organize a all man tournament and return the winner
+    Organize a bracket tournament and return the winner
     :param participants: list of all individuals
     :return: the 4 individuals that won the tournament
     """
@@ -58,3 +62,21 @@ def tournament(participants):
     for result in results:
         survivors.append(result)
     return tournament(survivors)
+
+
+def alternalted(participants, tournaments_left=24):
+    """
+    Organize a all man tournament and return the winner
+    :param tournaments_left: the number of tournaments to do
+    :param participants: list of all individuals
+    :return: the 4 individuals that won the tournament
+    """
+    if tournaments_left == 0:
+        from genetic_algo.Population import Population
+        return Population.pick_best(participants, 4)
+    shuffle(participants)
+    tuple_list = [[participants[i], participants[i + 1]] for i in range(0, len(participants) - 1, 2)]
+    with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
+        executor.map(generate_tournament_round, tuple_list)
+
+    return alternalted(participants, tournaments_left - 8)

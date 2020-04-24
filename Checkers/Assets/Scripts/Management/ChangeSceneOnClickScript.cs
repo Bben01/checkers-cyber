@@ -22,6 +22,7 @@ public class ChangeSceneOnClickScript : MonoBehaviour
 
     public void FadeToNextLevel()
     {
+        FindObjectOfType<AudioManager>().Play("Transition");
         FadeToLevel(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

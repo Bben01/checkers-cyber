@@ -95,6 +95,10 @@ def ia_play(game_instance: Jeu):
     has_to_play_again = False
     list_actions = IAController.list_actions(IAController.controller(game_instance))
     if not list_actions:
+        # ByPass the security
+        from game_engine.TourDeJeu import TourDeJeu
+        game_instance.plateau.currentTourDeJeu = TourDeJeu()
+        game_instance.plateau.end_turn(Deplacement(0, 0, 0, 0))
         return "null"
     for i, move in enumerate(list_actions):
         x1 = move[0][0]

@@ -83,6 +83,10 @@ public class Client
         IAWork = true;
         string format = FormatMessageNoArgs("ia_play");
         string[] moves = Send(format, false, true);
+        if (moves == null)
+        {
+            return new string[100][];
+        }
         string[][] tabOfMoves = new string[moves.Length][];
         for (int i = 0; i < moves.Length; i++)
         {

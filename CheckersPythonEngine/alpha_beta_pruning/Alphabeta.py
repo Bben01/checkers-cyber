@@ -58,4 +58,7 @@ def get_best_action(state):
             best_action = possible_actions[i]
             best_value = result
 
+    # with open(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\alpha_beta_pruning\Debug", "a") as f:
+    #     f.write(f'{best_value}, \t\t{best_action}\n')
+
     return best_action

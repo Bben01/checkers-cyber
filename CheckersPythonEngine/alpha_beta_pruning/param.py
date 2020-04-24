@@ -2,7 +2,7 @@ import pickle
 
 filename = r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\genetic_algo\serialized"
 
-ENNEMY_COLOR = False
+ENNEMY_COLOR = True
 WIN = float("inf")
 LOSS = float("-inf")
 
