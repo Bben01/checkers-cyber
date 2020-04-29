@@ -48,7 +48,7 @@ def get_best_action(state):
     best_action = None
     best_value = float("-inf")
     possible_actions = state.getPossibleActions()
-    state_actions = [(state.takeAction(state_action), 5, float("-inf"), float("inf"), True) for state_action in possible_actions]
+    state_actions = [(state.takeAction(state_action), 4, float("-inf"), float("inf"), True) for state_action in possible_actions]
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
         results = list(executor.map(execute_alphabeta, state_actions))
@@ -57,8 +57,5 @@ def get_best_action(state):
         if result > best_value:
             best_action = possible_actions[i]
             best_value = result
-
-    # with open(r"F:\UnityProjects\ProjectGitHub\checkers-cyber\CheckersPythonEngine\alpha_beta_pruning\Debug", "a") as f:
-    #     f.write(f'{best_value}, \t\t{best_action}\n')
 
     return best_action

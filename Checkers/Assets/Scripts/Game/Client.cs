@@ -1,16 +1,27 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
 public class Client
 {
     private static readonly string ip = "127.0.0.1";
+    private static readonly string hostname = "checkersia.ddns.net";
     private static readonly int port = 10001;
     private static bool openClient = false;
     private static TcpClient client;
     private static NetworkStream stream;
     private static bool HasToClose = false;
     private static bool IAWork = false;
+
+    private static string GetIPAddress()
+    {
+        // resolve the hostname into an iphost entry using the dns class
+        IPHostEntry iphost = Dns.GetHostEntry(hostname);
+        // get all of the possible IP addresses for this hostname
+        IPAddress[] addresses = iphost.AddressList;
+        return addresses[0].ToString();
+    }
 
     public static void CloseClient()
     {

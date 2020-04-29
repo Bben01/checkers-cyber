@@ -46,16 +46,17 @@ MonoBehaviour:
   mixerGroup: {fileID: 24300002, guid: 930e4bc4e5de7d64f97df2d2be0038a9, type: 2}
   sounds:
   - name: Transition
-    clip: {fileID: 8300000, guid: 0d5e1b474fbc34b93a605fb0ae777c23, type: 3}
+    clip: {fileID: 8300000, guid: 51284ce7c3a3c554a853bf2b86a879f5, type: 3}
     volume: 0.25
     volumeVariance: 0.1
     pitch: 1
     pitchVariance: 0.1
     loop: 0
-    mixerGroup: {fileID: 0}
+    mixerGroup: {fileID: -2690379543979836213, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
+      type: 2}
     source: {fileID: 0}
   - name: ButtonHover
-    clip: {fileID: 8300000, guid: 030515f205b54fc478961cbe39c4e75e, type: 3}
+    clip: {fileID: 8300000, guid: 987c7cd594fd58143b5101a1a3fbbe95, type: 3}
     volume: 0.5
     volumeVariance: 0.1
     pitch: 1
@@ -65,17 +66,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: ButtonClick
-    clip: {fileID: 8300000, guid: 8f2b2e1c442246f42a67785c64e78a78, type: 3}
-    volume: 0.7
-    volumeVariance: 0.1
-    pitch: 1
-    pitchVariance: 0.05
-    loop: 0
-    mixerGroup: {fileID: -2690379543979836213, guid: 930e4bc4e5de7d64f97df2d2be0038a9,
-      type: 2}
-    source: {fileID: 0}
-  - name: Check
-    clip: {fileID: 8300000, guid: a765109e0e9954bbfbec6ff4a77c527b, type: 3}
+    clip: {fileID: 8300000, guid: 8a30aa348200b2f4196dd1d9ea219179, type: 3}
     volume: 0.7
     volumeVariance: 0.1
     pitch: 1
@@ -85,7 +76,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: StoneSlide
-    clip: {fileID: 8300000, guid: 967dd29a6cbcaa645bc846f3823616d6, type: 3}
+    clip: {fileID: 8300000, guid: 7b1ee837229b79541a4e379150a0f868, type: 3}
     volume: 1
     volumeVariance: 0
     pitch: 1
@@ -95,7 +86,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: Victory
-    clip: {fileID: 8300000, guid: 2edfbc5b4f020994b9ae0c0a0c051d9e, type: 3}
+    clip: {fileID: 8300000, guid: 04418d78752337e488444ed1981d5008, type: 3}
     volume: 1
     volumeVariance: 0
     pitch: 1
@@ -105,7 +96,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: Theme
-    clip: {fileID: 8300000, guid: e0042aeb89a628345b0f0ebabb4db95f, type: 3}
+    clip: {fileID: 8300000, guid: 9460c45823f56404cbfdba163a35ada5, type: 3}
     volume: 0.5
     volumeVariance: 0.1
     pitch: 1
@@ -115,7 +106,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: Whoosh
-    clip: {fileID: 8300000, guid: cdbbe496ac59f429d86f8013a321e038, type: 3}
+    clip: {fileID: 8300000, guid: 51284ce7c3a3c554a853bf2b86a879f5, type: 3}
     volume: 0.5
     volumeVariance: 0.1
     pitch: 1
@@ -125,7 +116,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: Explosion
-    clip: {fileID: 8300000, guid: bdde28b62f526f64ab868dab7d580265, type: 3}
+    clip: {fileID: 8300000, guid: 05c32a44c7081da48862b36da8454de4, type: 3}
     volume: 0.2
     volumeVariance: 0.05
     pitch: 1
@@ -135,7 +126,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: Lose
-    clip: {fileID: 8300000, guid: a86dae55fe0a56646861657e8c2fe6eb, type: 3}
+    clip: {fileID: 8300000, guid: d726f3e936bfbaf499256c3e6684c6d8, type: 3}
     volume: 0.3
     volumeVariance: 0.05
     pitch: 1
@@ -145,7 +136,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: TROLL_LOSE
-    clip: {fileID: 8300000, guid: a557e5772edbf104a90d2f4360a527da, type: 3}
+    clip: {fileID: 8300000, guid: 35bea686c29af814680dc0874bf06a3a, type: 3}
     volume: 0.3
     volumeVariance: 0.05
     pitch: 1
@@ -155,7 +146,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: TROLL_SAD
-    clip: {fileID: 8300000, guid: 3dcd1972ff0213d4e9b6a88ca9625ce9, type: 3}
+    clip: {fileID: 8300000, guid: 0fa15f90a5abe694cb14ac22195bf928, type: 3}
     volume: 0.3
     volumeVariance: 0.05
     pitch: 1
@@ -165,7 +156,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: TROLL_VICTORY
-    clip: {fileID: 8300000, guid: 640046f3af747f24a9a61bc76787fcdb, type: 3}
+    clip: {fileID: 8300000, guid: 25d3fe57efb40d249b64ff5590117371, type: 3}
     volume: 0.3
     volumeVariance: 0.05
     pitch: 1
@@ -175,7 +166,7 @@ MonoBehaviour:
       type: 2}
     source: {fileID: 0}
   - name: TROLL_TADA
-    clip: {fileID: 8300000, guid: 3003f5e6c35e76e45aed127ed57e0945, type: 3}
+    clip: {fileID: 8300000, guid: 37a92f3ff16c1ca4593dcff58effb8d0, type: 3}
     volume: 0.5
     volumeVariance: 0.05
     pitch: 1
