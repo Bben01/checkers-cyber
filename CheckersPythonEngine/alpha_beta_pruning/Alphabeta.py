@@ -50,7 +50,7 @@ def get_best_action(state):
     possible_actions = state.getPossibleActions()
     state_actions = [(state.takeAction(state_action), 4, float("-inf"), float("inf"), True) for state_action in possible_actions]
 
-    with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
         results = list(executor.map(execute_alphabeta, state_actions))
 
     for i, result in enumerate(results):

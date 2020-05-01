@@ -105,13 +105,6 @@ public class Graphiques : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        Client.CloseClient();
-    }
-
-    void OnApplicationQuit() => Client.CloseClient();
-
     public void Resume()
     {
         enabled = true;
@@ -271,7 +264,7 @@ public class Graphiques : MonoBehaviour
         clicked = false;
         selectedPiece = null;
         hasToPlayAgain = false;
-        isWhiteTurn = PlayAgain() ? !isWhiteTurn : isWhiteTurn;
+        isWhiteTurn = PlayAgain() ? isWhiteTurn : !isWhiteTurn;
         startClick = Vector2Int.zero;
     }
 
