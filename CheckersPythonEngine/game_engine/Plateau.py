@@ -88,7 +88,6 @@ class Plateau:
 
     def move_piece_board(self, d: Deplacement):
         self.pieces = self.update_piece_board(self.pieces, d)
-        print("Piece moved")
 
     def get_killed_piece(self, d: Deplacement):
         eaten = d.eaten_piece()
