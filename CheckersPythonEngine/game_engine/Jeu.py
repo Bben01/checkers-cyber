@@ -10,9 +10,9 @@ class Jeu:
     hasToPlayAgain: bool = False
     posPieceToPlay: ()
 
-    def __init__(self):
-        self.plateau = Plateau()
-        self.hasToPlayAgain = False
+    def __init__(self, board=None, hasToPlayAgain=False):
+        self.plateau = Plateau() if board is None else board
+        self.hasToPlayAgain = hasToPlayAgain
         self.posPieceToPlay = ()
 
     def check_victory(self, ennemy_color: bool):
@@ -33,7 +33,7 @@ class Jeu:
         is_false = "0" + separator
         # There was an error
         if infos.errorMsg != "":
-            return "1" + separator + ("1" if not self.hasToPlayAgain else "0") + infos.errorMsg + separator + "0"\
+            return "1" + separator + ("1" if not self.hasToPlayAgain else "0") + infos.errorMsg + separator + "0" \
                    + separator + "0" + separator + "0" + separator + "0" + separator + "0"
         else:
             return_message += is_false

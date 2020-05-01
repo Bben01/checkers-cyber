@@ -104,3 +104,16 @@ class Plateau:
 
     def has_pieces_left(self, check_white: bool):
         return self.numWhite != 0 if check_white else self.numBlack != 0
+
+    def update_pieces(self):
+        """
+        Update the number of black and white pieces
+        :return: null
+        """
+        from game_engine.Piece import Piece
+        piece: Piece
+        for row in self.pieces:
+            for piece in row:
+                if piece:
+                    self.numWhite += 1 if piece.isWhite else 0
+                    self.numBlack += 1 if not piece.isWhite else 0

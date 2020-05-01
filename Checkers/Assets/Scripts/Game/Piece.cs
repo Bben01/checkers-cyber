@@ -9,6 +9,12 @@ public class Piece : MonoBehaviour
     public bool IsKing { get; set; }
     public bool IsWhite { get; set; }
 
+    public override string ToString()
+    {
+        string str = IsWhite ? "w" : "b";
+        return IsKing ? str.ToUpper() : str;
+    }
+
     public bool DestroyOnCollision { get; set; }
 
     public Piece(bool white)
