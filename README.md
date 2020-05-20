@@ -1,6 +1,5 @@
 # Checkers Game using Unity and Minimax
 
----
 
 The game is composed of multiple parts:  
   - A graphic interface in Unity  
