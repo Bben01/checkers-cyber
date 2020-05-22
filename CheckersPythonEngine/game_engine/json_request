@@ -1,7 +1,0 @@
-{
-  "has_to_play_again": false,
-  "is_white_turn": true,
-  "board": "BBBBBbbbbWWWWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
-  "method": "generate_board_submethod",
-  "args": [7, 7, false]
-}

@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Deplacement" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAEAAAAAAEAAAAAAgAAAA=</HashCode>
+      <FileName>Assets\Scripts\Game\Deplacement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Helper" Collapsed="true">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAEAhAEAAAAAABACAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Game\Helper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Piece" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAACAgAAAAAAAAEAAAAEAAEBAAAAAAAQACAAAAABAA=</HashCode>
+      <FileName>Assets\Scripts\Game\Piece.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RESTClient" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAQAAgiAAAACAAAAAAAAAAAAAQAAAAAAAAAAAEAAQ=</HashCode>
+      <FileName>Assets\Scripts\Game\RESTClient.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RESTGraphiques" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gRQAAAAQBOACBACRsEABEBCBAQAJECgAIgAgAkgAIIA=</HashCode>
+      <FileName>Assets\Scripts\Game\RESTGraphiques.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioManager" Collapsed="true">
+    <Position X="13.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAQAAAAAAAAAABEAACAgAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Management\AudioManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChangeSceneAfterDelayScript" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAABAAEQCIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Management\ChangeSceneAfterDelayScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChangeSceneOnClickScript" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQABAAAQAIAAAAAAAAAAAgAAAAAABAAAAAAAAAAIAA=</HashCode>
+      <FileName>Assets\Scripts\Management\ChangeSceneOnClickScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MSCameraController" Collapsed="true">
+    <Position X="9.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>MAwQAAAAYqELCAgAIEFEcAAAAQAsAACAAAACABCFAEE=</HashCode>
+      <FileName>Assets\Scripts\Management\MSCameraController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sound" Collapsed="true">
+    <Position X="12" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAACAIQAAAAAAAAAAAECEAgAAAAAAACAAA=</HashCode>
+      <FileName>Assets\Scripts\Management\Sound.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Toast" Collapsed="true">
+    <Position X="13.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACABAAAA=</HashCode>
+      <FileName>Assets\Scripts\Management\Toast.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MainMenu" Collapsed="true">
+    <Position X="13.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Menu\MainMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptionMenu" Collapsed="true">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAgAAAgAAAAAAAEgAACAAgAAACAIAgAAAAAABEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\OptionMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PauseMenu" Collapsed="true">
+    <Position X="12" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAAAIAAAAAAAAAAAAIAAAAAAgAAgAADAAAgQAEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\PauseMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundManagerUI" Collapsed="true">
+    <Position X="13.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Menu\SoundManagerUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityTemplateProjects.SimpleCameraController" Collapsed="true">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAwgAAAAAAAAAIJAAAAAAAAAAAAAAAAAECAACAA=</HashCode>
+      <FileName>Assets\Scripts\Management\SimpleCameraController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

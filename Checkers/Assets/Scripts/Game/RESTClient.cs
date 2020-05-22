@@ -31,6 +31,7 @@ public class RESTClient
 
     private static string BoardToString(Piece[,] board)
     {
+        // Serializes the board to a string.
         StringBuilder sb = new StringBuilder((int) Math.Pow(board.Length, 2));
         for (int i = 0; i < board.GetLength(0); i++)
         {

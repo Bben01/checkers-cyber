@@ -507,7 +507,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1508007874}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: Resume
         m_Mode: 1
@@ -1890,22 +1890,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.08, y: 0.08, z: 0.001}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1508007874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508007872}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af781f98dd628c94899697d94498f8d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  whitePiecePrefab: {fileID: 3183722432954913607, guid: 9139b2071eb657c428435475c6339a65,
-    type: 3}
-  blackPiecePrefab: {fileID: 7129982876447323065, guid: 960f0f4e7d7fe414eb12d8a6ff7979dd,
-    type: 3}
 --- !u!114 &1508007875
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,10 +1,10 @@
 from game_engine import Controller
-from game_engine.Jeu import Jeu
+from game_engine.Game import Game
 
 
 def analyse_request(json_request):
     board = load_board(json_request["board"], json_request["is_white_turn"])
-    state = Jeu(board, json_request["has_to_play_again"])
+    state = Game(board, json_request["has_to_play_again"])
     args = json_request["args"]
     func = getattr(Controller, json_request["method"])
     return func(state, *args)
@@ -17,7 +17,7 @@ def load_board(board_str, is_white_turn):
     for position, piece in enumerate(board_str):
         x, y = position // 8, position % 8
         if piece != "E":
-            plateau.pieces[x][y] = Piece(piece.lower() == "w", piece.isupper())
+            plateau.board[x][y] = Piece(piece.lower() == "w", piece.isupper())
 
     plateau.isWhiteTurn = is_white_turn
     plateau.update_pieces()

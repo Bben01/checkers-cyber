@@ -8,7 +8,6 @@ class Deplacement:
 
     def eaten_piece(self):
         """
-
         :return: Returns the position of the eaten piece, if there is no, the return is None.
         """
         sum_x = self.origin[0] + self.destination[0]

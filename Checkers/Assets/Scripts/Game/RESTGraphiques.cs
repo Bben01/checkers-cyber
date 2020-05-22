@@ -245,7 +245,6 @@ public class RESTGraphiques : MonoBehaviour
     {
         board[lastDeplacement.Destination.x, lastDeplacement.Destination.y] = board[lastDeplacement.Origin.x, lastDeplacement.Origin.y];
         board[lastDeplacement.Origin.x, lastDeplacement.Origin.y] = null;
-
     }
 
     private void Reset()
@@ -440,14 +439,7 @@ public class RESTGraphiques : MonoBehaviour
         Debug.Log("New Queen!");
         Piece p = board[pos.Item1, pos.Item2];
         p.IsKing = true;
-        if (MoveCoroutine != null || IAMoveCoroutine != null)
-        {
-            IsPieceToQueen = true;
-        }
-        else
-        {
-            p.ActivateAnimation();
-        }
+        IsPieceToQueen = true;
     }
 
     public static void AfficherError(string errorMessage)

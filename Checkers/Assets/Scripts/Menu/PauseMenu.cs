@@ -24,7 +24,7 @@ public class PauseMenu : MonoBehaviour
             if (GameIsPaused)
             {
                 Resume();
-                Graphiques sn = chess.gameObject.GetComponent<Graphiques>();
+                RESTGraphiques sn = chess.gameObject.GetComponent<RESTGraphiques>();
                 sn.Resume();
             }
             else

@@ -2,38 +2,35 @@ import copy
 
 from deep_learning_algorithms import Helper
 from deep_learning_algorithms.Move import Move
-from deep_learning_algorithms.Plateau import Plateau
+from deep_learning_algorithms.Board import Board
 from game_engine import ValidMoveMethods
 from game_engine.Deplacement import Deplacement
 from game_engine.Piece import Piece
 
 
 class State:
-    plateau: Plateau
+    plateau: Board
 
     isWhiteTurn: bool
 
-    def __init__(self, is_white_turn=True, plateau=Plateau()):
+    def __init__(self, is_white_turn=True, plateau=Board()):
         self.isWhiteTurn = is_white_turn
         self.plateau = plateau
 
     @staticmethod
     def initial_state():
-        plateau = Plateau()
-        for y in range(int(Plateau.taillePlateau - 1 / 2)):
+        plateau = Board()
+        for y in range(int(Board.size - 1 / 2)):
             odd_row = y % 2 == 0
-            for x in range(0, Plateau.taillePlateau, 2):
+            for x in range(0, Board.size, 2):
                 if odd_row:
                     plateau.board[x][y] = Piece(True)
 
-        for y in range(Plateau.taillePlateau - 1, int(Plateau.taillePlateau - 1 / 2) + 1, -1):
+        for y in range(Board.size - 1, int(Board.size - 1 / 2) + 1, -1):
             odd_row = y % 2 == 0
-            for x in range(Plateau.taillePlateau, step=2):
+            for x in range(Board.size, step=2):
                 if odd_row:
                     plateau.board[x][y] = Piece(False)
-
-        # TODO: remove this when finished
-        State.print_board(plateau.board)
 
         return State(plateau=plateau)
 
@@ -60,8 +57,8 @@ class State:
         return ValidMoveMethods.has_something_to_eat(self.plateau.board, self.isWhiteTurn, False)
 
     def has_something_to_play(self, check_other=False):
-        for x in range(self.plateau.taillePlateau):
-            for y in range(self.plateau.taillePlateau):
+        for x in range(self.plateau.size):
+            for y in range(self.plateau.size):
                 current_piece = self.plateau.board[x][y]
                 if current_piece is not None and (check_other or current_piece.isWhite == self.isWhiteTurn) and \
                         ValidMoveMethods.calculate_eat_positions(self.plateau.board, x, y, True, True,
@@ -82,8 +79,8 @@ class State:
         """
         has_to_eat_something = self.has_to_eat()
         plays = []
-        for x in range(self.plateau.taillePlateau):
-            for y in range(self.plateau.taillePlateau):
+        for x in range(self.plateau.size):
+            for y in range(self.plateau.size):
                 current_piece = self.plateau.board[x][y]
                 if current_piece is not None and current_piece.isWhite == self.isWhiteTurn:
                     if has_to_eat_something:

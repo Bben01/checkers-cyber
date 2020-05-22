@@ -1,33 +1,27 @@
 from game_engine import ValidMoveMethods
 from game_engine.Deplacement import Deplacement
-from game_engine.InformationCoup import InformationCoup
-from game_engine.TourDeJeu import TourDeJeu
+from game_engine.MoveInfos import MoveInfos
 
 
 class Plateau:
-    taillePlateau = 8
-    pieces: [[]]
-
-    historique = []
-
-    currentTourDeJeu: TourDeJeu
+    size = 8
+    board: [[]]
 
     isWhiteTurn: bool
 
-    # Keeps track of the number of pieces on-board
+    # Keeps track of the number of board on-board
     numWhite: int
     numBlack: int
 
     def __init__(self):
-        self.pieces = [[None for _ in range(self.taillePlateau)] for _ in range(self.taillePlateau)]
+        self.board = [[None for _ in range(self.size)] for _ in range(self.size)]
         self.isWhiteTurn = True
         self.numBlack = 0
         self.numWhite = 0
-        self.currentTourDeJeu = None
 
     @staticmethod
     def out_of_bounds(x: int, y: int):
-        return x < 0 or y < 0 or x >= Plateau.taillePlateau or y >= Plateau.taillePlateau
+        return x < 0 or y < 0 or x >= Plateau.size or y >= Plateau.size
 
     @staticmethod
     def occupied(board: [], x: int, y: int):
@@ -37,19 +31,17 @@ class Plateau:
             return True
 
     def try_move(self, d: Deplacement, has_to_eat_again: bool, last_deplacement=True):
-        status = ValidMoveMethods.valid_move(self.pieces, d, has_to_eat_again)
-        if self.currentTourDeJeu is None:
-            self.currentTourDeJeu = TourDeJeu()
+        status = ValidMoveMethods.valid_move(self.board, d, has_to_eat_again)
 
         # Didn't move
         if status.didntMove:
-            return InformationCoup.create_didnt_move()
+            return MoveInfos.create_didnt_move()
 
         # Invalid move
         if not status.validMove:
-            return InformationCoup.create_invalid_move(status.errorMessage)
+            return MoveInfos.create_invalid_move(status.errorMessage)
         else:
-            is_new_queen = not self.pieces[d.origin[0]][d.origin[1]].isKing and \
+            is_new_queen = not self.board[d.origin[0]][d.origin[1]].isKing and \
                            ValidMoveMethods.check_new_queen(d, self.isWhiteTurn) and last_deplacement
             # Killed
             if status.killed:
@@ -59,23 +51,22 @@ class Plateau:
                 self.move_piece_board(d)
 
                 # If the player does not have to eat again
-                if ValidMoveMethods.calculate_eat_positions(self.pieces, d.destination[0], d.destination[1], False,
+                if ValidMoveMethods.calculate_eat_positions(self.board, d.destination[0], d.destination[1], False,
                                                             True, True) is None:
-                    return InformationCoup.create_kill_move(status.killPosition, False, d, p_killed).add_new_queen(
+                    return MoveInfos.create_kill_move(status.killPosition, False, d, p_killed).add_new_queen(
                         is_new_queen, ValidMoveMethods.pos_new_queen(is_new_queen, d))
                 else:
-                    self.currentTourDeJeu.add_deplacement(d)
-                    return InformationCoup.create_kill_move(status.killPosition, True, d, p_killed).add_new_queen(
+                    return MoveInfos.create_kill_move(status.killPosition, True, d, p_killed).add_new_queen(
                         is_new_queen, ValidMoveMethods.pos_new_queen(is_new_queen, d))
 
             # Normal move
             if status.normalMove:
                 self.move_piece_board(d)
-                return InformationCoup.create_normal_move(d).add_new_queen(is_new_queen,
-                                                                           ValidMoveMethods.pos_new_queen(is_new_queen,
+                return MoveInfos.create_normal_move(d).add_new_queen(is_new_queen,
+                                                                     ValidMoveMethods.pos_new_queen(is_new_queen,
                                                                                                           d))
 
-        return InformationCoup.create_invalid_move("something went wrong...")
+        return MoveInfos.create_invalid_move("something went wrong...")
 
     @staticmethod
     def update_piece_board(board: [[]], d: Deplacement):
@@ -87,31 +78,26 @@ class Plateau:
         return board
 
     def move_piece_board(self, d: Deplacement):
-        self.pieces = self.update_piece_board(self.pieces, d)
+        self.board = self.update_piece_board(self.board, d)
 
     def get_killed_piece(self, d: Deplacement):
         eaten = d.eaten_piece()
-        return self.pieces[eaten[0]][eaten[1]] if eaten is not None else None
+        return self.board[eaten[0]][eaten[1]] if eaten is not None else None
 
-    def end_turn(self, last_deplacement: Deplacement):
-        if self.currentTourDeJeu is None:
-            return
-        self.currentTourDeJeu.add_deplacement(d=last_deplacement)
+    def end_turn(self):
         self.isWhiteTurn = not self.isWhiteTurn
-        self.historique.append(self.currentTourDeJeu)
-        self.currentTourDeJeu = None
 
     def has_pieces_left(self, check_white: bool):
         return self.numWhite != 0 if check_white else self.numBlack != 0
 
     def update_pieces(self):
         """
-        Update the number of black and white pieces
+        Update the number of black and white board
         :return: null
         """
         from game_engine.Piece import Piece
         piece: Piece
-        for row in self.pieces:
+        for row in self.board:
             for piece in row:
                 if piece:
                     self.numWhite += 1 if piece.isWhite else 0

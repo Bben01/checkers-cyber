@@ -19,7 +19,7 @@ def number_moveable(state, color):
     :param color: the player to check
     :return: the number of moveable pawns and kings in form of a tuple (pawn, king)
     """
-    size = state.plateau.taillePlateau
+    size = state.plateau.size
     pawn = 0
     king = 0
     for i in range(size):
@@ -38,7 +38,7 @@ def number_moveable(state, color):
 
 
 def number_safe(state, color):
-    size = state.plateau.taillePlateau
+    size = state.plateau.size
     pawn = 0
     king = 0
     for i in range(size):
@@ -75,7 +75,7 @@ def prom_line(state, color):
     :param color: the player to check
     :return: a tuple (distance, unoccupied_field)
     """
-    size = state.plateau.taillePlateau
+    size = state.plateau.size
     if color:
         prom_line_number = size - 1
     else:

@@ -151,7 +151,7 @@ def check(board: [[]], v: (), direction: ()):
 
 
 def check_new_queen(d: Deplacement, check_white: bool):
-    zone_dames = Plateau.taillePlateau - 1 if check_white else 0
+    zone_dames = Plateau.size - 1 if check_white else 0
     if d.destination[1] == zone_dames:
         return True
     return False
